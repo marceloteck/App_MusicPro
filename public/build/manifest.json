@@ -20,7 +20,7 @@
     "css": [
       "assets/ForgotPassword-a4621846.css"
     ],
-    "file": "assets/ForgotPassword-8e1d8b30.js",
+    "file": "assets/ForgotPassword-ea76133d.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -35,7 +35,7 @@
     "css": [
       "assets/Login-472ef7c3.css"
     ],
-    "file": "assets/Login-a37a709b.js",
+    "file": "assets/Login-7ba94c38.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -50,7 +50,7 @@
     "css": [
       "assets/Register-b4e0b530.css"
     ],
-    "file": "assets/Register-8d2adacc.js",
+    "file": "assets/Register-aef5d9ed.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -65,7 +65,7 @@
     "css": [
       "assets/RegisterSucess-90dd207d.css"
     ],
-    "file": "assets/RegisterSucess-64c44ba1.js",
+    "file": "assets/RegisterSucess-a5cc54b5.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -80,7 +80,7 @@
     "css": [
       "assets/ResetPassword-ced1b0a4.css"
     ],
-    "file": "assets/ResetPassword-7d4d47c8.js",
+    "file": "assets/ResetPassword-99f9defa.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -95,7 +95,7 @@
     "css": [
       "assets/Index-b2f406f4.css"
     ],
-    "file": "assets/Index-21ecb173.js",
+    "file": "assets/Index-922f6ba8.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -103,7 +103,7 @@
     "src": "resources/PagesVuejs/Pages/Admin/Corrections/Index.vue"
   },
   "resources/PagesVuejs/Pages/Admin/Imports/Index.vue": {
-    "file": "assets/Index-c3102b36.js",
+    "file": "assets/Index-deb891f6.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -118,7 +118,7 @@
     "css": [
       "assets/Index-a60c9340.css"
     ],
-    "file": "assets/Index-65ed25f4.js",
+    "file": "assets/Index-f074c916.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -126,14 +126,14 @@
     "src": "resources/PagesVuejs/Pages/Admin/Sources/Index.vue"
   },
   "resources/PagesVuejs/Pages/Bands/Index.css": {
-    "file": "assets/Index-94554fc4.css",
+    "file": "assets/Index-6971f5c4.css",
     "src": "resources/PagesVuejs/Pages/Bands/Index.css"
   },
   "resources/PagesVuejs/Pages/Bands/Index.vue": {
     "css": [
-      "assets/Index-94554fc4.css"
+      "assets/Index-6971f5c4.css"
     ],
-    "file": "assets/Index-7d0b15b4.js",
+    "file": "assets/Index-b9a46db4.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -148,7 +148,7 @@
     "css": [
       "assets/Show copy-59d5928d.css"
     ],
-    "file": "assets/Show copy-e7ab441b.js",
+    "file": "assets/Show copy-8f271d45.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -163,7 +163,7 @@
     "css": [
       "assets/Show-8917385a.css"
     ],
-    "file": "assets/Show-ed672e75.js",
+    "file": "assets/Show-ff8bff68.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -178,7 +178,7 @@
     "css": [
       "assets/Show-5770b747.css"
     ],
-    "file": "assets/Show-d45c65bd.js",
+    "file": "assets/Show-1d846e9f.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -186,7 +186,7 @@
     "src": "resources/PagesVuejs/Pages/Events/Show.vue"
   },
   "resources/PagesVuejs/Pages/More/indexMore.vue": {
-    "file": "assets/indexMore-4d829fe8.js",
+    "file": "assets/indexMore-9b469707.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -201,7 +201,7 @@
     "css": [
       "assets/userProfile-a2b86bc7.css"
     ],
-    "file": "assets/userProfile-5201d4e3.js",
+    "file": "assets/userProfile-8372b980.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -216,7 +216,7 @@
     "css": [
       "assets/search-df1b0ceb.css"
     ],
-    "file": "assets/search-5d270a46.js",
+    "file": "assets/search-a35671a3.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -224,7 +224,7 @@
     "src": "resources/PagesVuejs/Pages/Search/search.vue"
   },
   "resources/PagesVuejs/Pages/Settings/FavoritesSettings.vue": {
-    "file": "assets/FavoritesSettings-55f9193a.js",
+    "file": "assets/FavoritesSettings-9586e02a.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -232,7 +232,7 @@
     "src": "resources/PagesVuejs/Pages/Settings/FavoritesSettings.vue"
   },
   "resources/PagesVuejs/Pages/Settings/SettingsIndex.vue": {
-    "file": "assets/SettingsIndex-d18cd3d1.js",
+    "file": "assets/SettingsIndex-530d6140.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -240,7 +240,7 @@
     "src": "resources/PagesVuejs/Pages/Settings/SettingsIndex.vue"
   },
   "resources/PagesVuejs/Pages/about/about.vue": {
-    "file": "assets/about-ceaba055.js",
+    "file": "assets/about-a5506272.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -248,14 +248,14 @@
     "src": "resources/PagesVuejs/Pages/about/about.vue"
   },
   "resources/PagesVuejs/Pages/index/index.css": {
-    "file": "assets/index-c7dad827.css",
+    "file": "assets/index-99c15a45.css",
     "src": "resources/PagesVuejs/Pages/index/index.css"
   },
   "resources/PagesVuejs/Pages/index/index.vue": {
     "css": [
-      "assets/index-c7dad827.css"
+      "assets/index-99c15a45.css"
     ],
-    "file": "assets/index-810e37a7.js",
+    "file": "assets/index-67b16adb.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -263,7 +263,7 @@
     "src": "resources/PagesVuejs/Pages/index/index.vue"
   },
   "resources/PagesVuejs/Pages/index/mainIndex.vue": {
-    "file": "assets/mainIndex-5c925628.js",
+    "file": "assets/mainIndex-cc69ed3b.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -278,7 +278,7 @@
     "css": [
       "assets/indexPlayer-ead263a0.css"
     ],
-    "file": "assets/indexPlayer-ba31dbdc.js",
+    "file": "assets/indexPlayer-3b36a3dd.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -286,7 +286,7 @@
     "src": "resources/PagesVuejs/Pages/player/indexPlayer.vue"
   },
   "resources/PagesVuejs/Pages/player/library.vue": {
-    "file": "assets/library-a7b861ee.js",
+    "file": "assets/library-0d3f57c2.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -294,7 +294,7 @@
     "src": "resources/PagesVuejs/Pages/player/library.vue"
   },
   "resources/PagesVuejs/Pages/player/searchPlayer.vue": {
-    "file": "assets/searchPlayer-9cb92aee.js",
+    "file": "assets/searchPlayer-b71792c4.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -309,7 +309,7 @@
     "css": [
       "assets/Create-561fa208.css"
     ],
-    "file": "assets/Create-07b60c54.js",
+    "file": "assets/Create-b0f24f2f.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -317,7 +317,7 @@
     "src": "resources/PagesVuejs/Songs/Create.vue"
   },
   "resources/PagesVuejs/Songs/Index.vue": {
-    "file": "assets/Index-3c7e3fc3.js",
+    "file": "assets/Index-370d133c.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -332,7 +332,7 @@
     "css": [
       "assets/Musica-b43e603e.css"
     ],
-    "file": "assets/Musica-582127fc.js",
+    "file": "assets/Musica-19157dd5.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -340,7 +340,7 @@
     "src": "resources/PagesVuejs/Songs/Musica.vue"
   },
   "resources/PagesVuejs/Songs/Show.vue": {
-    "file": "assets/Show-dd3353da.js",
+    "file": "assets/Show-0c808ff4.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -348,7 +348,7 @@
     "src": "resources/PagesVuejs/Songs/Show.vue"
   },
   "resources/PagesVuejs/components/Applications/AppHead.vue": {
-    "file": "assets/AppHead-ae87df76.js",
+    "file": "assets/AppHead-9d95b045.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -363,7 +363,7 @@
     "css": [
       "assets/CapaAbertura-d8c7c325.css"
     ],
-    "file": "assets/CapaAbertura-8e31e45d.js",
+    "file": "assets/CapaAbertura-a616f4a8.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -378,7 +378,7 @@
     "css": [
       "assets/Loading-6c2c9b8f.css"
     ],
-    "file": "assets/Loading-c01d13a2.js",
+    "file": "assets/Loading-b1a91b33.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -393,7 +393,7 @@
     "css": [
       "assets/LoadingContainer-183f3466.css"
     ],
-    "file": "assets/LoadingContainer-a1b00574.js",
+    "file": "assets/LoadingContainer-7b9daa12.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -408,7 +408,7 @@
     "css": [
       "assets/LoadingContainerDiv-2cffb49a.css"
     ],
-    "file": "assets/LoadingContainerDiv-b6d101df.js",
+    "file": "assets/LoadingContainerDiv-10552e09.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -423,7 +423,7 @@
     "css": [
       "assets/LogoApp-bcdf6baa.css"
     ],
-    "file": "assets/LogoApp-c1a4d5c3.js",
+    "file": "assets/LogoApp-bb325673.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -438,7 +438,7 @@
     "css": [
       "assets/LogoInicial-440b43dd.css"
     ],
-    "file": "assets/LogoInicial-b33fc593.js",
+    "file": "assets/LogoInicial-a6dd3f0d.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -453,7 +453,7 @@
     "css": [
       "assets/OfflineStatus-6272cc28.css"
     ],
-    "file": "assets/OfflineStatus-f4c65e13.js",
+    "file": "assets/OfflineStatus-c8a212b9.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -468,7 +468,7 @@
     "css": [
       "assets/SplashScreen-03aff59f.css"
     ],
-    "file": "assets/SplashScreen-325a3082.js",
+    "file": "assets/SplashScreen-3ed8299e.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -483,7 +483,7 @@
     "css": [
       "assets/logout-13d14ef6.css"
     ],
-    "file": "assets/logout-f0f0a089.js",
+    "file": "assets/logout-f6ace6a3.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -498,7 +498,7 @@
     "css": [
       "assets/particles-f6e9213a.css"
     ],
-    "file": "assets/particles-22110de0.js",
+    "file": "assets/particles-d5893347.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -513,7 +513,7 @@
     "css": [
       "assets/particlesCircles-eb0825f6.css"
     ],
-    "file": "assets/particlesCircles-6b6c13fa.js",
+    "file": "assets/particlesCircles-41335ab5.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -528,7 +528,7 @@
     "css": [
       "assets/LayoutIndexPages-413015ba.css"
     ],
-    "file": "assets/LayoutIndexPages-dbe6dbe9.js",
+    "file": "assets/LayoutIndexPages-2833de5d.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -543,7 +543,7 @@
     "css": [
       "assets/LayoutIndexPlayer-763d446f.css"
     ],
-    "file": "assets/LayoutIndexPlayer-9c6252ef.js",
+    "file": "assets/LayoutIndexPlayer-24d9e13c.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -558,7 +558,7 @@
     "css": [
       "assets/LayoutModalMobile-f5f333c9.css"
     ],
-    "file": "assets/LayoutModalMobile-6d112cf2.js",
+    "file": "assets/LayoutModalMobile-520e3de2.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -573,7 +573,7 @@
     "css": [
       "assets/LayoutPageAcess-3d09b16f.css"
     ],
-    "file": "assets/LayoutPageAcess-2a8024ae.js",
+    "file": "assets/LayoutPageAcess-3bcfee96.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -588,7 +588,7 @@
     "css": [
       "assets/LayoutSubPages-a900a312.css"
     ],
-    "file": "assets/LayoutSubPages-6b041ce5.js",
+    "file": "assets/LayoutSubPages-f2987b5b.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -603,7 +603,7 @@
     "css": [
       "assets/CreateBandModal-15eebb3a.css"
     ],
-    "file": "assets/CreateBandModal-8f5dd074.js",
+    "file": "assets/CreateBandModal-98532960.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -618,7 +618,7 @@
     "css": [
       "assets/InfoBandModal-04daae23.css"
     ],
-    "file": "assets/InfoBandModal-74a51454.js",
+    "file": "assets/InfoBandModal-1fb404fe.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -633,7 +633,7 @@
     "css": [
       "assets/ManageBandModal-601be104.css"
     ],
-    "file": "assets/ManageBandModal-72dec94a.js",
+    "file": "assets/ManageBandModal-c0d5258c.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -648,7 +648,7 @@
     "css": [
       "assets/UserModal copy-6549a06f.css"
     ],
-    "file": "assets/UserModal copy-d76bd245.js",
+    "file": "assets/UserModal copy-60b052e0.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -663,7 +663,7 @@
     "css": [
       "assets/UserModal-1eb97d01.css"
     ],
-    "file": "assets/UserModal-1bcc62c9.js",
+    "file": "assets/UserModal-e0cdc04a.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -671,7 +671,7 @@
     "src": "resources/PagesVuejs/components/Modals/UserModal.vue"
   },
   "resources/PagesVuejs/components/Navs/ColorNav.vue": {
-    "file": "assets/ColorNav-8a1e1d00.js",
+    "file": "assets/ColorNav-ffac7cff.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -679,7 +679,7 @@
     "src": "resources/PagesVuejs/components/Navs/ColorNav.vue"
   },
   "resources/PagesVuejs/components/Navs/NavBarMobile.vue": {
-    "file": "assets/NavBarMobile-443b15da.js",
+    "file": "assets/NavBarMobile-5fa3124d.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -694,7 +694,7 @@
     "css": [
       "assets/NavBarPageAcess-94368939.css"
     ],
-    "file": "assets/NavBarPageAcess-e6c8213d.js",
+    "file": "assets/NavBarPageAcess-c47e0a15.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -709,7 +709,7 @@
     "css": [
       "assets/NavBarPlayer-ec785b27.css"
     ],
-    "file": "assets/NavBarPlayer-71c82740.js",
+    "file": "assets/NavBarPlayer-1b3c8a35.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -724,7 +724,7 @@
     "css": [
       "assets/NavBarSubPage-15dc72aa.css"
     ],
-    "file": "assets/NavBarSubPage-bfd978ea.js",
+    "file": "assets/NavBarSubPage-5773042f.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -739,7 +739,7 @@
     "css": [
       "assets/NavbarTop-f0bcd44c.css"
     ],
-    "file": "assets/NavbarTop-7b815426.js",
+    "file": "assets/NavbarTop-d97fbd34.js",
     "imports": [
       "resources/js/config/app.js"
     ],
@@ -816,7 +816,7 @@
       "resources/PagesVuejs/components/Navs/NavBarSubPage.vue",
       "resources/PagesVuejs/components/Navs/NavbarTop.vue"
     ],
-    "file": "assets/app-0b8657a5.js",
+    "file": "assets/app-76e40468.js",
     "isEntry": true,
     "src": "resources/js/config/app.js"
   }

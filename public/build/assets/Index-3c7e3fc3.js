@@ -1,1 +1,0 @@
-import{_ as n,c as o,d as t,h as r,o as c}from"./app-0b8657a5.js";const s={};function a(d,e){return c(),o("div",null,e[0]||(e[0]=[t("h1",null,"inicio",-1),r(" index ")]))}const l=n(s,[["render",a]]);export{l as default};

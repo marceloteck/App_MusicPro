@@ -1,1 +1,0 @@
-import{c as t,o as e,N as n}from"./app-0b8657a5.js";const a={__name:"logout",setup(_){const o=()=>{n.post("/logout")};return(s,c)=>(e(),t("button",{onClick:o,class:"btn btn-logout"}," Sair "))}};export{a as default};
