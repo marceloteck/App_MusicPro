@@ -89,6 +89,12 @@ const baixarTudoOffline = async () => {
                   <a :href="route('admin.imports.index')" class="list-group-item list-group-item-action">
                     Importar músicas (Admin)
                   </a>
+                  <a :href="route('admin.sources.index')" class="list-group-item list-group-item-action">
+                    Gerenciar fontes externas
+                  </a>
+                  <a :href="route('admin.corrections.index')" class="list-group-item list-group-item-action">
+                    Revisar correções de cifras
+                  </a>
                 </div>
            </div>
         </LayoutSubPages>
