@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, nextTick, computed } from 'vue'
+import { useForm } from '@inertiajs/vue3';
 import { useAuthStore } from '@resources/plugins/stores/auth.js'
 import { user, avatarUrl } from "@resources/plugins/DadosUser.js";
 import { usePage } from '@inertiajs/vue3';
@@ -25,6 +26,14 @@ const authStore = useAuthStore()
 const createBandModalRef = ref(null);
 const manageBandModalRef = ref(null);
 const selectedBand = ref(null);
+const showListForm = ref(false);
+const editingList = ref(null);
+
+const listForm = useForm({
+  name: '',
+  description: '',
+  is_public: false,
+});
 
 onMounted(() => {
   // Inicializa o store com os dados do usuário
@@ -37,21 +46,38 @@ const userRole = (band) => {
   return authStore.checkUserRole(band)
 }
 
+const canManageList = (list) => {
+  return list?.user_id === user.value?.id;
+};
+
 const shareBand = (band) => {
   // Implementar lógica de compartilhamento
-  navigator.clipboard.writeText(`${window.location.origin}/bands/${band.id}`)
+  const link = `${window.location.origin}/bands/${band.id}`;
+  navigator.clipboard.writeText(link).catch(() => {
+    window.prompt('Copie o link da banda:', link);
+  });
 }
 
 const deleteList = (listId) => {
-  // Implementar lógica de exclusão
+  if (!confirm('Deseja excluir esta lista?')) return;
+  listForm.delete(route('playlists.destroy', listId), {
+    preserveScroll: true,
+  });
 }
 
-const editList = (listId) => {
-  // Implementar lógica de edição
-}
+const editList = (list) => {
+  editingList.value = list;
+  listForm.name = list.name;
+  listForm.description = list.description || '';
+  listForm.is_public = !!list.is_public;
+  showListForm.value = true;
+};
 
 const shareList = (listId) => {
-  // Implementar lógica de compartilhamento
+  const link = `${window.location.origin}/player?playlist=${listId}`;
+  navigator.clipboard.writeText(link).catch(() => {
+    window.prompt('Copie o link da lista:', link);
+  });
 }
 
 // Função para lidar com eventos de toque
@@ -107,6 +133,34 @@ const handleBandDeleted = (bandId) => {
   
   // Limpa a banda selecionada
   selectedBand.value = null;
+};
+
+const saveList = () => {
+  if (editingList.value) {
+    listForm.put(route('playlists.update', editingList.value.id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        showListForm.value = false;
+        editingList.value = null;
+        listForm.reset();
+      },
+    });
+    return;
+  }
+
+  listForm.post(route('playlists.store'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      showListForm.value = false;
+      listForm.reset();
+    },
+  });
+};
+
+const startNewList = () => {
+  editingList.value = null;
+  listForm.reset();
+  showListForm.value = true;
 };
 
 </script>
@@ -167,15 +221,37 @@ const handleBandDeleted = (bandId) => {
       <!-- Aba de Listas -->
       <div v-if="activeTab === 'lists'" class="tab-content">
         <h1>Minhas Listas de Músicas</h1>
-        <button class="btn-create">Criar Nova Lista</button>
+        <button class="btn-create" @click="startNewList">Criar Nova Lista</button>
+        <div v-if="showListForm" class="list-form">
+          <h4>{{ editingList ? 'Editar lista' : 'Nova lista' }}</h4>
+          <input v-model="listForm.name" class="form-control" placeholder="Nome" required />
+          <textarea
+            v-model="listForm.description"
+            class="form-control"
+            placeholder="Descrição (opcional)"
+            rows="3"
+          ></textarea>
+          <label class="form-check mt-2">
+            <input v-model="listForm.is_public" class="form-check-input" type="checkbox" />
+            <span class="form-check-label">Lista pública</span>
+          </label>
+          <div class="list-form-actions">
+            <button class="btn btn-primary" @click="saveList" :disabled="listForm.processing">
+              Salvar
+            </button>
+            <button class="btn btn-outline-secondary" @click="showListForm = false">
+              Cancelar
+            </button>
+          </div>
+        </div>
         <div class="lists-grid">
           <div v-for="list in userLists" :key="list.id" class="list-card">
             <h3>{{ list.name }}</h3>
             <p>{{ list.songs?.length || 0 }} músicas</p>
             <div class="list-actions">
-              <button @click="editList(list.id)" class="btn-edit">Editar</button>
+              <button @click="editList(list)" class="btn-edit" :disabled="!canManageList(list)">Editar</button>
               <button @click="shareList(list.id)" class="btn-share">Compartilhar</button>
-              <button @click="deleteList(list.id)" class="btn-delete">Excluir</button>
+              <button @click="deleteList(list.id)" class="btn-delete" :disabled="!canManageList(list)">Excluir</button>
             </div>
           </div>
         </div>
@@ -237,6 +313,20 @@ const handleBandDeleted = (bandId) => {
   font-size: 24px;
   line-height: 1;
   margin-bottom: 0.25rem;
+}
+
+.list-form {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.list-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .tabs button.active {

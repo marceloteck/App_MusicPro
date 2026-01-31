@@ -11,9 +11,13 @@ class Song extends Model
     protected $fillable = [
         'title',
         'artist',
+        'singer',
+        'composer',
+        'description',
         'lyrics',
         'chords',
         'video_url',
+        'audio_url',
         'file_path',
         'source_url',
         'imported_at',
@@ -28,5 +32,15 @@ class Song extends Model
     public function playlists()
     {
         return $this->belongsToMany(Playlist::class);
+    }
+
+    public function corrections()
+    {
+        return $this->hasMany(SongCorrection::class);
+    }
+
+    public function versions()
+    {
+        return $this->hasMany(SongVersion::class);
     }
 }

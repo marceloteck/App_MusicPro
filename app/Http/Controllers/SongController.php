@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Song;
+use App\Models\SongCorrection;
+use App\Models\SongVersion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Chord;
@@ -30,9 +32,10 @@ class SongController extends Controller
         $song = Song::findOrFail($id);
         $songData = $this->carregarMusicaJson($id);
 
-        return response()->json([
+        return Inertia::render('Songs/Show', [
             'song' => $song,
-            'data' => $songData
+            'data' => $songData,
+            'versions' => $song->versions()->latest()->take(20)->get(),
         ]);
     }
 
@@ -49,7 +52,7 @@ class SongController extends Controller
         }
 
         return response()->json([
-            'songs' => $songsQuery->select('id', 'title', 'artist', 'source_url', 'imported_at', 'lyrics', 'video_url')
+            'songs' => $songsQuery->select('id', 'title', 'artist', 'source_url', 'imported_at', 'lyrics', 'video_url', 'audio_url')
                 ->latest()
                 ->take(200)
                 ->get(),
@@ -63,6 +66,25 @@ class SongController extends Controller
         return response()->json([
             'song' => $song,
             'data' => $this->carregarMusicaJson($id),
+        ]);
+    }
+
+    public function storeCorrection(Request $request, Song $song)
+    {
+        $data = $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        SongCorrection::create([
+            'song_id' => $song->id,
+            'user_id' => $request->user()->id,
+            'content' => $data['content'],
+            'status' => 'pending',
+        ]);
+
+        return back()->with('flash', [
+            'success' => 'Correção enviada para análise.',
+            'type' => 'success',
         ]);
     }
 
@@ -112,14 +134,36 @@ class SongController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'artist' => 'nullable|string|max:255',
-            'chords_text' => 'required|string'
+            'singer' => 'nullable|string|max:255',
+            'composer' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'video_url' => 'nullable|url',
+            'audio_url' => 'nullable|url',
+            'chords_text' => 'nullable|string',
+            'chords_file' => 'nullable|file|mimes:txt',
         ]);
 
         $title = $request->input('title');
         $artist = $request->input('artist');
-        $chords_text = $request->input('chords_text');
+        $singer = $request->input('singer');
+        $composer = $request->input('composer');
+        $description = $request->input('description');
+        $videoUrl = $request->input('video_url');
+        $audioUrl = $request->input('audio_url');
+        $chordsText = $request->input('chords_text');
 
-        $linesCifras = explode("\n", $chords_text);
+        if (!$chordsText && $request->hasFile('chords_file')) {
+            $file = $request->file('chords_file');
+            $chordsText = $file ? file_get_contents($file->getPathname()) : null;
+        }
+
+        if (!$chordsText) {
+            return response()->json([
+                'message' => 'Envie a cifra no texto ou no arquivo.',
+            ], 422);
+        }
+
+        $linesCifras = explode("\n", $chordsText);
 
         // Regex para reconhecer as cifras, agora apenas cifras válidas
         $regexCifra = '/((?!(?<=[ÇçáéíóúÁÉÍÓÚ]))(((\b([A-G]{1,1}((?!([\scefghiklnopqrtuvxwyz]))((add|ADD)|#m|#|º|b)?([2-9]|m(\B|$)|maj|sus|dim|\(|º)?(\/[A-G][2-9](#|º)?(b{1,1})?)?(\+)?(\/([A-G]|[2-9]))?(º|#|b|\([2-9]\))?([2-9]|m)?(\+|(?<=[2-9])M)?(11|13)?(\/)?([A-G])?)([Eb|Bb])?(\([0-9]?[0-9]?(\/)?[0-9]?[0-9]?)?(\/1[1-9])?\b(\(((2|4|5|6|7|9|11|13)|[bB][2-9])\))?(-|\/[A-G])?(\/[2-9])?([2-9]|\)|\((b13|b11|b5)\)|\([2-9]\)|-|\/)?(\+)?)(m|b|º|#|13|add[2-9]\))?)|\b(?(?<=(?<=\s)[A-G](?=\s)))[A-G](?!(\s)?[a-zH-Z])\b)(º)?)((\(([0-9]{1,2})?(\-)?(\+)?\))|(?!((?:[çáéíóúÇÁÉÍÓÚ])|((\t|)[a-zA-Z][A-Z]|[A-G][a-z]\w|\s[A-G]\w[H-Z])\w?)))|(?(?<=(?<=\s)[A-G]M|[A-G]m|[A-G]m(?=\s)))([A-G]m|[A-G]M(?!\s))(#|b)?([2-9]|maj|sus|dim|º|º)?(\/[A-G][2-9](#)?(b{1,1})?)?(\+)?(\/([A-G]|[2-9]))?(#|b|\([2-9]\))?([2-9])?(\+)?(\([A-G][2-9]\))?(\([1-9][1-9]?\))?(11|13)?(-|\/[A-G])?(\/[2-9])?([2-9]|-|\/)?(\+)?(b|#|13)?(?!(\s)?[a-zH-Z])(?!(?:[,çáéíóúÇÁÉÍÓÚ]))\W)/';
@@ -160,8 +204,21 @@ class SongController extends Controller
         $song = Song::create([
             'title' => $title,
             'artist' => $artist ?: 'Desconhecido',
+            'singer' => $singer,
+            'composer' => $composer,
+            'description' => $description,
             'file_path' => '',
             'lyrics' => implode("\n", $lyricsLines),
+            'chords' => $chordsText,
+            'video_url' => $videoUrl,
+            'audio_url' => $audioUrl,
+        ]);
+
+        SongVersion::create([
+            'song_id' => $song->id,
+            'user_id' => $request->user()?->id,
+            'content' => $chordsText,
+            'source' => 'manual',
         ]);
 
         $jsonPath = $this->salvarMusicaJson(
@@ -265,14 +322,6 @@ class SongController extends Controller
 
 
 }
-
-
-
-
-
-
-
-
 
 
 

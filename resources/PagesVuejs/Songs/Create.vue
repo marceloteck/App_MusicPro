@@ -1,100 +1,87 @@
+<script setup>
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 
-<style lang="css" scope>
-input{
-  margin-bottom: 15px;
-}
-  
-</style>
+const erro = ref(null);
 
+const song = useForm({
+  title: '',
+  artist: '',
+  singer: '',
+  composer: '',
+  description: '',
+  video_url: '',
+  audio_url: '',
+  chords_text: '',
+  chords_file: null,
+});
+
+const handleFileUpload = (event) => {
+  const [file] = event.target.files;
+  song.chords_file = file || null;
+};
+
+const submitForm = () => {
+  erro.value = null;
+  song.post(route('songs.store'), {
+    preserveScroll: true,
+    forceFormData: true,
+    onSuccess: () => {
+      song.reset('chords_text', 'chords_file');
+    },
+    onError: () => {
+      erro.value = 'Erro ao processar a solicitação.';
+    },
+  });
+};
+</script>
 
 <template>
   <form class="form-control" @submit.prevent="submitForm">
+    <h4 class="mb-3">Nova música</h4>
+
     <input class="form-control" v-model="song.title" placeholder="Título" required />
 
+    <input class="form-control" v-model="song.artist" placeholder="Artista (opcional)" />
 
-    <input class="form-control" v-model="song.artist" placeholder="Artista"  required/>
+    <input class="form-control" v-model="song.singer" placeholder="Cantor (opcional)" />
 
-    <input class="form-control" v-model="song.video_url" placeholder="URL do vídeo" />
+    <input class="form-control" v-model="song.composer" placeholder="Compositor (opcional)" />
 
-    <!-- Upload de arquivo TXT -->
+    <input class="form-control" v-model="song.video_url" placeholder="URL do vídeo (opcional)" />
+
+    <input class="form-control" v-model="song.audio_url" placeholder="URL do áudio (opcional)" />
+
+    <textarea
+      class="form-control"
+      v-model="song.description"
+      placeholder="Descrição extra (opcional)"
+      rows="3"
+    ></textarea>
+
+    <label class="form-label mt-3">Enviar cifra</label>
+    <textarea
+      class="form-control"
+      v-model="song.chords_text"
+      placeholder="Cole a cifra aqui"
+      rows="8"
+    ></textarea>
+
+    <div class="text-muted small mt-2">
+      Ou envie um arquivo .txt
+    </div>
     <input class="form-control" type="file" @change="handleFileUpload" accept=".txt" />
 
-    <!-- Inserção via Textarea -->
-    <textarea  class="form-control" v-model="song.chords_text" placeholder="Cole a cifra aqui"></textarea>
-
-
-    <button class="btn btn-success" type="submit">Salvar Música</button>
-    {{erro}}
+    <button class="btn btn-success mt-3" type="submit" :disabled="song.processing">
+      Salvar Música
+    </button>
+    <p v-if="erro" class="text-danger mt-2">{{ erro }}</p>
   </form>
 </template>
 
-<script setup>
-import { ref, watch } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
-
-    const song = useForm({ 
-      title: "", 
-      artist: "", 
-      video_url: "", 
-      chords_text: "", 
-      chords_file: null 
-      });
-
-const resultado = ref([]); // Armazena os links dos documentos gerados
-const erro = ref(null); // Armazena mensagens de erro      
-
-const submitForm = async () => {
-    try {
-        erro.value = null;
-        resultado.value = [];
-
-        // Enviando os dados para o backend via Inertia.js
-        song.post(route('songs.store'), {
-            preserveScroll: true,
-            onSuccess: (response) => {
-                if (song.success) {  
-                    //Inertia.visit(route('salvar.documentos'));
-                    alert("Enviado com sucesso")
-                } else {
-                    erro.value = "Erro ao gerar documentos.";
-                }
-            },
-            onError: () => {
-                erro.value = "Erro ao processar a solicitação.";
-            }
-        });
-    } catch (e) {
-        erro.value = "Ocorreu um erro inesperado.";
-    }
-};      
-
-/*
-export default {
-  setup() {
-
-
-    const handleFileUpload = (event) => {
-      song.value.chords_file = event.target.files[0];
-    };
-
-    const submitForm = async () => {
-      const formData = new FormData();
-      formData.append("title", song.value.title);
-      formData.append("artist", song.value.artist);
-      formData.append("video_url", song.value.video_url);
-      if (song.value.chords_file) {
-        formData.append("chords_file", song.value.chords_file);
-      } else {
-        formData.append("chords_text", song.value.chords_text);
-      }
-
-      await fetch("/songs", {
-        method: "POST",
-        body: formData,
-      });
-    };
-
-    return { song, handleFileUpload, submitForm };
-  },
-};*/
-</script>
+<style lang="css" scoped>
+input,
+textarea {
+  margin-bottom: 15px;
+}
+</style>

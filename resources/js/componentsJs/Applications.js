@@ -9,7 +9,8 @@ import CapaAbertura from "@PagesVuejs/components/Applications/CapaAbertura.vue";
 import LogoutUser from "@PagesVuejs/components/Applications/logout.vue";
 import LogoInicial from "@PagesVuejs/components/Applications/LogoInicial.vue";
 import LogoApp from "@PagesVuejs/components/Applications/LogoApp.vue";
+import OfflineStatus from "@PagesVuejs/components/Applications/OfflineStatus.vue";
 
-const Applications = { AppHead, Loading, LoadingContainer, particles, particlesCircles, LoadingContainerDiv, CapaAbertura, LogoutUser, LogoInicial, LogoApp };
+const Applications = { AppHead, Loading, LoadingContainer, particles, particlesCircles, LoadingContainerDiv, CapaAbertura, LogoutUser, LogoInicial, LogoApp, OfflineStatus };
 
 export default Applications;

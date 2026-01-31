@@ -14,9 +14,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/offline/songs', [\App\Http\Controllers\SongController::class, 'apiIndex'])->name('offline.songs.index');
-    Route::get('/offline/songs/{id}', [\App\Http\Controllers\SongController::class, 'apiShow'])->name('offline.songs.show');
 });
+
+Route::get('/offline/songs', [\App\Http\Controllers\SongController::class, 'apiIndex'])->name('offline.songs.index');
+Route::get('/offline/songs/{id}', [\App\Http\Controllers\SongController::class, 'apiShow'])->name('offline.songs.show');
 
 // EMAIL
 route::post('/', [sendEmailController::class, 'Send'])->name('sendEmail');
@@ -38,4 +39,3 @@ Route::get('/service-worker.js', function () {
 require __DIR__ . '/auth.php';
 require __DIR__ . '/appTocare.php';
 require __DIR__ . '/google.php';
-
