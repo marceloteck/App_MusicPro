@@ -10,11 +10,10 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->dateTime('date');
-            $table->string('location')->nullable();
             $table->foreignId('band_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->date('date');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
