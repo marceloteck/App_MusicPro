@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Viewer de Cifras (sem cortar palavras)</title>
+  <style>
+    :root { --fs: 18px; --chordScale: 0.85; }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 16px;
+      background: #0b0b0c;
+      color: #e9e9ee;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #2b2b33;
+      border-radius: 12px;
+      background: #121218;
+    }
+
+    .btn {
+      border: 1px solid #2b2b33;
+      background: #1a1a22;
+      color: #e9e9ee;
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    input[type="file"] {
+      border: 1px solid #2b2b33;
+      background: #1a1a22;
+      color: #e9e9ee;
+      padding: 6px;
+      border-radius: 10px;
+    }
+
+    .hint { opacity: 0.85; font-size: 14px; }
+
+    #viewer {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #2b2b33;
+      border-radius: 12px;
+      background: #0f0f14;
+      overflow-x: auto;
+    }
+
+    .music-line { margin: 0 0 10px 0; }
+
+    /* Mantém fonte mono e permite quebra */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: var(--fs);
+      line-height: 1.05;
+    }
+
+    /* Token = pedaço da linha que quebra junto (palavra ou bloco de espaços) */
+    .token {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: flex-start;
+    }
+    .token.word {
+      white-space: nowrap; /* <- AQUI: nunca corta a palavra */
+    }
+    .token.space {
+      /* espaço pode ser ponto de quebra */
+    }
+
+    /* Cada célula = 1 coluna */
+    .cell {
+      width: 1ch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 0 0 auto;
+    }
+
+    .chord {
+      height: 1.1em;
+      font-size: calc(var(--fs) * var(--chordScale));
+      line-height: 1.1em;
+      color: #7dd3fc;
+      font-weight: 650;
+      transform: translateY(0.05em);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .lyric {
+      height: 1.2em;
+      line-height: 1.2em;
+      color: #f3f4f6;
+      white-space: pre;
+      pointer-events: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: #22222a;
+      margin: 10px 0;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      border-radius: 12px;
+      border: 1px solid #2b2b33;
+      background: #0f0f14;
+      color: #e9e9ee;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 14px;
+      margin-top: 14px;
+    }
+
+    .small { font-size: 13px; opacity: .85; }
+  </style>
+</head>
+<body>
+  <h2 style="margin:0 0 10px 0;">Viewer de cifras (não corta palavras)</h2>
+
+  <div class="topbar">
+    <input id="file" type="file" accept=".txt,text/plain" />
+    <button class="btn" id="minus">A-</button>
+    <button class="btn" id="plus">A+</button>
+    <button class="btn" id="renderBtn">Renderizar texto abaixo</button>
+    <span class="hint">Fonte: <b id="fsLabel"></b></span>
+  </div>
+
+  <div class="small" style="margin-top:10px;">
+    Formatos aceitos:
+    <ul>
+      <li><b>2 linhas</b>: cifras na linha de cima alinhadas por espaços + letra embaixo</li>
+      <li><b>ChordPro</b>: cifras inline tipo <code>[Am]Hoje [G]eu...</code></li>
+    </ul>
+  </div>
+
+  <textarea id="raw" placeholder="Cole aqui sua cifra/letra ou faça upload de um .txt..."></textarea>
+  <div id="viewer" aria-label="Render de cifras"></div>
+
+  <script>
+    // ========= Config de fonte =========
+    const root = document.documentElement;
+    let fontSize = 18;
+
+    const fsLabel = document.getElementById("fsLabel");
+    function updateFontLabel() {
+      fsLabel.textContent = fontSize + "px";
+      root.style.setProperty("--fs", fontSize + "px");
+    }
+    updateFontLabel();
+
+    document.getElementById("plus").addEventListener("click", () => {
+      fontSize = Math.min(42, fontSize + 2);
+      updateFontLabel();
+    });
+    document.getElementById("minus").addEventListener("click", () => {
+      fontSize = Math.max(10, fontSize - 2);
+      updateFontLabel();
+    });
+
+    // ========= Upload =========
+    const fileInput = document.getElementById("file");
+    const raw = document.getElementById("raw");
+    fileInput.addEventListener("change", async (e) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      const text = await f.text();
+      raw.value = text.replace(/\r\n/g, "\n");
+      render(raw.value);
+    });
+
+    document.getElementById("renderBtn").addEventListener("click", () => {
+      render(raw.value);
+    });
+
+    // ========= Parser =========
+    function looksLikeChordToken(tok) {
+      return /^[A-G](#|b)?(m|maj|min|dim|aug|sus|add)?\d*(\([^)]+\))?(\/[A-G](#|b)?)?$/.test(tok);
+    }
+
+    function isChordLine(line) {
+      const trimmed = line.trim();
+      if (!trimmed) return false;
+      if (trimmed.includes("[") && trimmed.includes("]")) return false;
+
+      const tokens = trimmed.split(/\s+/).filter(Boolean);
+      if (tokens.length === 0) return false;
+
+      const chordish = tokens.filter(looksLikeChordToken).length;
+      return chordish >= Math.max(1, Math.ceil(tokens.length * 0.6));
+    }
+
+    function extractChordsWithPositions(chordLine) {
+      const chords = [];
+      const re = /\S+/g;
+      let m;
+      while ((m = re.exec(chordLine)) !== null) {
+        const chord = m[0];
+        const idx = m.index;
+        if (looksLikeChordToken(chord)) chords.push({ idx, chord });
+      }
+      return chords;
+    }
+
+    function parseChordProLine(line) {
+      let lyric = "";
+      const chords = [];
+      let i = 0;
+
+      while (i < line.length) {
+        if (line[i] === "[") {
+          const end = line.indexOf("]", i + 1);
+          if (end !== -1) {
+            const chord = line.slice(i + 1, end).trim();
+            if (chord) chords.push({ idx: lyric.length, chord });
+            i = end + 1;
+            continue;
+          }
+        }
+        lyric += line[i];
+        i++;
+      }
+      return { lyric, chords };
+    }
+
+    function makeLineModel(lyricLine, chords) {
+      const maxChordIdx = chords.length ? Math.max(...chords.map(c => c.idx)) : 0;
+      const len = Math.max(lyricLine.length, maxChordIdx + 1);
+
+      const chordAt = new Map();
+      for (const c of chords) chordAt.set(c.idx, c.chord);
+
+      const lyric = lyricLine.padEnd(len, " ");
+      return { lyric, chordAt, len };
+    }
+
+    // ========= Tokenização: quebra só em espaços =========
+    // Retorna tokens [{type:'word'|'space', start, end}]
+    function tokenizeBySpaces(str) {
+      const tokens = [];
+      let i = 0;
+      while (i < str.length) {
+        const isSpace = (str[i] === " ");
+        let j = i + 1;
+        while (j < str.length && (str[j] === " ") === isSpace) j++;
+        tokens.push({ type: isSpace ? "space" : "word", start: i, end: j });
+        i = j;
+      }
+      return tokens;
+    }
+
+    // ========= Render =========
+    const viewer = document.getElementById("viewer");
+
+    function render(text) {
+      viewer.innerHTML = "";
+      const lines = (text || "").replace(/\r\n/g, "\n").split("\n");
+
+      const blocks = [];
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        if (isChordLine(line) && i + 1 < lines.length) {
+          const next = lines[i + 1];
+          const chords = extractChordsWithPositions(line);
+          blocks.push(makeLineModel(next, chords));
+          i++;
+          continue;
+        }
+
+        if (line.includes("[") && line.includes("]")) {
+          const { lyric, chords } = parseChordProLine(line);
+          blocks.push(makeLineModel(lyric, chords));
+          continue;
+        }
+
+        blocks.push(makeLineModel(line, []));
+      }
+
+      for (const b of blocks) {
+        if (b.lyric.trim() === "" && b.chordAt.size === 0) {
+          const div = document.createElement("div");
+          div.className = "divider";
+          viewer.appendChild(div);
+          continue;
+        }
+
+        const wrap = document.createElement("div");
+        wrap.className = "music-line";
+
+        const grid = document.createElement("div");
+        grid.className = "grid";
+
+        const tokens = tokenizeBySpaces(b.lyric);
+
+        for (const t of tokens) {
+          const tokenEl = document.createElement("span");
+          tokenEl.className = "token " + t.type;
+
+          for (let col = t.start; col < t.end; col++) {
+            const cell = document.createElement("span");
+            cell.className = "cell";
+
+            const chordSpan = document.createElement("span");
+            chordSpan.className = "chord";
+            chordSpan.textContent = b.chordAt.get(col) || "";
+
+            const lyricSpan = document.createElement("span");
+            lyricSpan.className = "lyric";
+            lyricSpan.textContent = b.lyric[col] ?? " ";
+
+            cell.appendChild(chordSpan);
+            cell.appendChild(lyricSpan);
+            tokenEl.appendChild(cell);
+          }
+
+          grid.appendChild(tokenEl);
+        }
+
+        wrap.appendChild(grid);
+        viewer.appendChild(wrap);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Viewer de Cifras com Paginação</title>
+  <style>
+    :root{
+      --fs: 18px;
+      --chordScale: 0.85;
+      --chordColor: #3fb6ff;
+      --lyricColor: #f3f4f6;
+      --pageBg: #0f0f14;
+      --border: #2b2b33;
+      --uiBg: #121218;
+      --btnBg: #1a1a22;
+      --text: #e9e9ee;
+
+      --chordWeight: 650;
+      --lyricWeight: 450;
+
+      /* “Tamanho” da folha em tela (A4 aproximado em px). Ajuste se quiser. */
+      --pageW: 820px;
+      --pageH: 1120px;
+
+      --pagePad: 26px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    body{
+      margin: 16px;
+      font-family: var(--sans);
+      background: #0b0b0c;
+      color: var(--text);
+    }
+
+    h2{ margin: 0 0 10px 0; }
+
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background: var(--uiBg);
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+
+    .btn{
+      border:1px solid var(--border);
+      background: var(--btnBg);
+      color: var(--text);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .pill{
+      border:1px solid var(--border);
+      background: #0f0f14;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      opacity: .95;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      white-space: nowrap;
+    }
+
+    .label{
+      font-size: 13px;
+      opacity: .85;
+      margin-right: 6px;
+    }
+
+    select, input[type="number"], input[type="color"]{
+      border:1px solid var(--border);
+      background:#0f0f14;
+      color: var(--text);
+      padding:6px 8px;
+      border-radius:10px;
+      outline: none;
+    }
+
+    .pages-wrap{
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+    }
+
+    #pages{
+      width: min(100%, var(--pageW));
+      display:flex;
+      flex-direction:column;
+      gap: 16px;
+      align-items:center;
+    }
+
+    .page{
+      width: min(100%, var(--pageW));
+      height: var(--pageH);
+      background: var(--pageBg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      padding: var(--pagePad);
+      box-sizing: border-box;
+      overflow: hidden; /* importante pra paginação */
+      position: relative;
+    }
+
+    .header{
+      margin-bottom: 10px;
+    }
+
+    .title{
+      font-weight: 750;
+      font-size: 18px;
+      margin: 0 0 4px 0;
+    }
+
+    .subtitle{
+      font-size: 13px;
+      opacity: .9;
+      margin: 0;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+    }
+
+    .badge{
+      border: 1px solid var(--border);
+      background: #101018;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* Linhas musicais */
+    .music-line{ margin: 0 0 10px 0; }
+
+    .grid{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:flex-start;
+      font-family: var(--mono);
+      font-size: var(--fs);
+      line-height: 1.05;
+    }
+
+    /* token quebra junto (palavra) */
+    .token{
+      display:inline-flex;
+      flex: 0 0 auto;
+      align-items:flex-start;
+    }
+    .token.word{ white-space: nowrap; }
+    .token.space{ }
+
+    /* coluna de caractere */
+    .cell{
+      width: 1ch;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      flex: 0 0 auto;
+    }
+
+    .chord{
+      height: 1.1em;
+      font-size: calc(var(--fs) * var(--chordScale));
+      line-height: 1.1em;
+      color: var(--chordColor);
+      font-weight: var(--chordWeight);
+      transform: translateY(0.05em);
+      white-space: nowrap;
+      pointer-events:none;
+    }
+
+    .lyric{
+      height: 1.2em;
+      line-height: 1.2em;
+      color: var(--lyricColor);
+      font-weight: var(--lyricWeight);
+      white-space: pre;
+      pointer-events:none;
+    }
+
+    .divider{
+      height: 1px;
+      background: #22222a;
+      margin: 10px 0;
+    }
+
+    .footer{
+      position:absolute;
+      bottom: 10px;
+      right: 14px;
+      font-size: 12px;
+      opacity: .7;
+    }
+
+    /* Área de medição invisível */
+    #measure{
+      position: absolute;
+      left: -99999px;
+      top: 0;
+      width: min(100%, var(--pageW));
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Print */
+    @media print {
+  /* Zera margens do navegador e evita “cortes” estranhos */
+  @page { size: A4; margin: 0; }
+
+  /* Esconde TUDO por padrão */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Mostra APENAS a área de páginas (e o que está dentro dela) */
+  .pages-wrap,
+  .pages-wrap * {
+    visibility: visible !important;
+  }
+
+  /* Coloca as páginas no topo esquerdo e remove espaçamentos de tela */
+  .pages-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  #pages {
+    width: 100% !important;
+    gap: 0 !important;
+    align-items: stretch !important;
+  }
+
+  /* Cada .page vira uma página impressa */
+  .page {
+    width: 210mm !important;
+    height: 297mm !important;
+    padding: 15mm !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* Evita página extra no final em alguns browsers */
+  .page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* Se tiver algum sticky/topbar, garante que some */
+  .topbar { display: none !important; }
+}
+
+  </style>
+</head>
+<body>
+  <h2>Viewer de Cifras com Folhas (paginação automática)</h2>
+
+  <div class="topbar">
+    <button class="btn" id="fsMinus">A-</button>
+    <button class="btn" id="fsPlus">A+</button>
+
+    <div class="pill">
+      <span class="label">Fonte</span>
+      <b id="fsLabel"></b>
+    </div>
+
+    <div class="pill">
+      <span class="label">Tom</span>
+      <button class="btn" id="trDown">-</button>
+      <b id="trLabel">0</b>
+      <button class="btn" id="trUp">+</button>
+      <span style="opacity:.85;font-size:13px;">(semitons)</span>
+    </div>
+
+    <div class="pill">
+      <span class="label">Capotraste</span>
+      <select id="capoOn">
+        <option value="0">Não</option>
+        <option value="1">Sim</option>
+      </select>
+      <span class="label">Traste</span>
+      <input id="capoFret" type="number" min="0" max="12" value="0" style="width:72px;">
+    </div>
+
+    <div class="pill">
+      <span class="label">Cor da cifra</span>
+      <input id="chordColor" type="color" value="#3fb6ff">
+    </div>
+
+    <div class="pill">
+      <span class="label">Negrito</span>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;">
+        <input id="boldChord" type="checkbox" checked> Cifra
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;">
+        <input id="boldLyric" type="checkbox"> Letra
+      </label>
+    </div>
+
+    <button class="btn" onclick="window.print()">Imprimir</button>
+  </div>
+
+  <div class="pages-wrap">
+    <div id="pages"></div>
+  </div>
+
+  <div id="measure"></div>
+
+  <script>
+    // ============================================================
+    // 1) ÚNICA VARIÁVEL COM A CIFRA/TEXTO
+    //    (edite aqui e pronto)
+    // ============================================================
+    const CIFRA_TEXTO = `
+Am          G                                      A
+Hoje eu acordei cedo e fui caminhar na rua sem pressa
+F           E                               D
+E vi o céu mudando de cor enquanto o dia nascia
+
+[Am]Se você quiser testar [G]ChordPro também
+[F]funciona [E]assim com acordes no meio.
+
+Am                  G                                                   A                      D          G
+Uma linha maior de propósito pra forçar quebra de linha e gerar novas folhas automaticamente conforme o tamanho da fonte muda.
+`;
+
+    // ============================================================
+    // Estado (controles)
+    // ============================================================
+    const state = {
+      fontSize: 18,
+      transpose: 0,       // semitons
+      capoEnabled: false,
+      capoFret: 0,
+      chordColor: "#3fb6ff",
+      boldChord: true,
+      boldLyric: false,
+      title: "Minha Música",
+    };
+
+    // ============================================================
+    // Elementos UI
+    // ============================================================
+    const pagesEl = document.getElementById("pages");
+    const measureEl = document.getElementById("measure");
+
+    const fsLabel = document.getElementById("fsLabel");
+    const trLabel = document.getElementById("trLabel");
+
+    const fsPlus = document.getElementById("fsPlus");
+    const fsMinus = document.getElementById("fsMinus");
+    const trUp = document.getElementById("trUp");
+    const trDown = document.getElementById("trDown");
+
+    const capoOn = document.getElementById("capoOn");
+    const capoFret = document.getElementById("capoFret");
+
+    const chordColor = document.getElementById("chordColor");
+    const boldChord = document.getElementById("boldChord");
+    const boldLyric = document.getElementById("boldLyric");
+
+    // ============================================================
+    // Helpers: acordes / transposição
+    // ============================================================
+    const NOTES_SHARP = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+    const NOTES_FLAT  = ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
+
+    function mod(n,m){ return ((n%m)+m)%m; }
+
+    function preferFlatsFromChord(ch){
+      // Se a música usa b em algum lugar, preferimos flats
+      return /[A-G]b/.test(ch);
+    }
+
+    function noteToIndex(note){
+      // nota pode vir como "C", "C#", "Db"
+      const iSharp = NOTES_SHARP.indexOf(note);
+      if (iSharp !== -1) return iSharp;
+      const iFlat = NOTES_FLAT.indexOf(note);
+      if (iFlat !== -1) return iFlat;
+      return null;
+    }
+
+    function indexToNote(idx, preferFlats){
+      return preferFlats ? NOTES_FLAT[idx] : NOTES_SHARP[idx];
+    }
+
+    // Transpõe um acorde tipo: Am7(b5)/G -> +2 etc
+    function transposeChord(chord, semitones, preferFlats){
+      // pega raiz + resto + baixo opcional
+      // raiz: [A-G](#|b)?
+      const re = /^([A-G])([#b]?)(.*?)(?:\/([A-G])([#b]?)(.*))?$/;
+      const m = chord.match(re);
+      if (!m) return chord;
+
+      const root = m[1] + (m[2] || "");
+      const tail = m[3] || "";
+      const bassRoot = m[4] ? (m[4] + (m[5] || "")) : null;
+      const bassTail = m[6] || "";
+
+      const rIdx = noteToIndex(root);
+      if (rIdx === null) return chord;
+
+      const newR = indexToNote(mod(rIdx + semitones, 12), preferFlats);
+
+      if (bassRoot){
+        const bIdx = noteToIndex(bassRoot);
+        if (bIdx === null) return newR + tail + "/" + bassRoot + bassTail;
+        const newB = indexToNote(mod(bIdx + semitones, 12), preferFlats);
+        return newR + tail + "/" + newB + bassTail;
+      }
+
+      return newR + tail;
+    }
+
+    function looksLikeChordToken(tok){
+      // permissivo: A-G + acidente + sufixos comuns + números + parênteses + slash
+      return /^[A-G](#|b)?([a-zA-Z]{0,5})?\d*(\([^)]+\))?(\/[A-G](#|b)?)?$/.test(tok);
+    }
+
+    function isChordLine(line){
+      const trimmed = line.trim();
+      if (!trimmed) return false;
+      if (trimmed.includes("[") && trimmed.includes("]")) return false;
+
+      const tokens = trimmed.split(/\s+/).filter(Boolean);
+      if (tokens.length === 0) return false;
+
+      const chordish = tokens.filter(looksLikeChordToken).length;
+      return chordish >= Math.max(1, Math.ceil(tokens.length * 0.6));
+    }
+
+    function extractChordsWithPositions(chordLine){
+      const chords = [];
+      const re = /\S+/g;
+      let m;
+      while ((m = re.exec(chordLine)) !== null){
+        const chord = m[0];
+        const idx = m.index;
+        if (looksLikeChordToken(chord)) chords.push({ idx, chord });
+      }
+      return chords;
+    }
+
+    function parseChordProLine(line){
+      let lyric = "";
+      const chords = [];
+      let i = 0;
+
+      while (i < line.length){
+        if (line[i] === "["){
+          const end = line.indexOf("]", i+1);
+          if (end !== -1){
+            const chord = line.slice(i+1, end).trim();
+            if (chord) chords.push({ idx: lyric.length, chord });
+            i = end + 1;
+            continue;
+          }
+        }
+        lyric += line[i];
+        i++;
+      }
+      return { lyric, chords };
+    }
+
+    function makeLineModel(lyricLine, chords){
+      const maxChordIdx = chords.length ? Math.max(...chords.map(c => c.idx)) : 0;
+      const len = Math.max(lyricLine.length, maxChordIdx + 1);
+
+      const chordAt = new Map();
+      for (const c of chords) chordAt.set(c.idx, c.chord);
+
+      const lyric = lyricLine.padEnd(len, " ");
+      return { lyric, chordAt, len };
+    }
+
+    function tokenizeBySpaces(str){
+      const tokens = [];
+      let i = 0;
+      while (i < str.length){
+        const isSpace = (str[i] === " ");
+        let j = i + 1;
+        while (j < str.length && (str[j] === " ") === isSpace) j++;
+        tokens.push({ type: isSpace ? "space" : "word", start: i, end: j });
+        i = j;
+      }
+      return tokens;
+    }
+
+    // ============================================================
+    // Render de uma linha musical (com transposição e capo)
+    // ============================================================
+    function buildMusicLineElement(lineModel, preferFlats){
+      const wrap = document.createElement("div");
+      wrap.className = "music-line";
+
+      const grid = document.createElement("div");
+      grid.className = "grid";
+
+      const tokens = tokenizeBySpaces(lineModel.lyric);
+
+      // calcula semitons finais no que é mostrado:
+      // transposição aplicada sempre
+      const semisShow = state.transpose;
+
+      // Se capo ligado, a prática comum é mostrar “formas” (acordes) transpostas pra baixo do capo:
+      // Ex: música em +2 mas capo 2 => mostra formas "originais" (semitons - capo)
+      // Aqui vamos fazer: acordes mostrados = transpose - capoFret (quando capo ligado).
+      const semisChord = state.capoEnabled ? (semisShow - state.capoFret) : semisShow;
+
+      for (const t of tokens){
+        const tokenEl = document.createElement("span");
+        tokenEl.className = "token " + t.type;
+
+        for (let col = t.start; col < t.end; col++){
+          const cell = document.createElement("span");
+          cell.className = "cell";
+
+          const chordSpan = document.createElement("span");
+          chordSpan.className = "chord";
+          const rawChord = lineModel.chordAt.get(col) || "";
+          chordSpan.textContent = rawChord ? transposeChord(rawChord, semisChord, preferFlats) : "";
+
+          const lyricSpan = document.createElement("span");
+          lyricSpan.className = "lyric";
+          lyricSpan.textContent = lineModel.lyric[col] ?? " ";
+
+          cell.appendChild(chordSpan);
+          cell.appendChild(lyricSpan);
+          tokenEl.appendChild(cell);
+        }
+
+        grid.appendChild(tokenEl);
+      }
+
+      wrap.appendChild(grid);
+      return wrap;
+    }
+
+    // ============================================================
+    // Monta “conteúdo” inteiro (lista de elementos de linha)
+    // ============================================================
+    function buildAllLineElements(){
+      const text = (CIFRA_TEXTO || "").replace(/\r\n/g,"\n");
+      const lines = text.split("\n");
+
+      // preferência de flats pela música
+      const preferFlats = preferFlatsFromChord(text);
+
+      // transforma em blocos lineModel
+      const models = [];
+      for (let i=0; i<lines.length; i++){
+        const line = lines[i];
+
+        if (isChordLine(line) && i+1 < lines.length){
+          const next = lines[i+1];
+          const chords = extractChordsWithPositions(line);
+          models.push({ type:"music", model: makeLineModel(next, chords) });
+          i++;
+          continue;
+        }
+
+        if (line.includes("[") && line.includes("]")){
+          const { lyric, chords } = parseChordProLine(line);
+          models.push({ type:"music", model: makeLineModel(lyric, chords) });
+          continue;
+        }
+
+        if (line.trim()===""){
+          models.push({ type:"divider" });
+          continue;
+        }
+
+        models.push({ type:"music", model: makeLineModel(line, []) });
+      }
+
+      // cria DOM elements para cada “linha”
+      const els = [];
+      for (const it of models){
+        if (it.type === "divider"){
+          const div = document.createElement("div");
+          div.className = "divider";
+          els.push(div);
+        } else {
+          els.push(buildMusicLineElement(it.model, preferFlats));
+        }
+      }
+
+      return els;
+    }
+
+    // ============================================================
+    // Paginação automática por altura de página
+    // ============================================================
+    function createPageShell(pageNum, totalUnknown){
+      const page = document.createElement("div");
+      page.className = "page";
+
+      const header = document.createElement("div");
+      header.className = "header";
+
+      const title = document.createElement("p");
+      title.className = "title";
+      title.textContent = state.title;
+
+      const subtitle = document.createElement("p");
+      subtitle.className = "subtitle";
+
+      // Badges de status
+      const semis = state.transpose;
+      const capoTxt = state.capoEnabled ? `Sim (${state.capoFret})` : "Não";
+
+      // Informações extras úteis
+      const badge1 = document.createElement("span");
+      badge1.className = "badge";
+      badge1.textContent = `Transposição: ${semis > 0 ? "+"+semis : semis} semitons`;
+
+      const badge2 = document.createElement("span");
+      badge2.className = "badge";
+      badge2.textContent = `Capotraste: ${capoTxt}`;
+
+      const badge3 = document.createElement("span");
+      badge3.className = "badge";
+      badge3.textContent = state.capoEnabled
+        ? `Acordes mostrados: (transposição ${semis > 0 ? "+"+semis : semis}) − capo ${state.capoFret}`
+        : `Acordes mostrados: (transposição ${semis > 0 ? "+"+semis : semis})`;
+
+      subtitle.appendChild(badge1);
+      subtitle.appendChild(badge2);
+      subtitle.appendChild(badge3);
+
+      header.appendChild(title);
+      header.appendChild(subtitle);
+
+      const content = document.createElement("div");
+      content.className = "content";
+
+      const footer = document.createElement("div");
+      footer.className = "footer";
+      footer.textContent = `Página ${pageNum}`;
+
+      page.appendChild(header);
+      page.appendChild(content);
+      page.appendChild(footer);
+
+      return { page, content, footer };
+    }
+
+    function paginate(lineElements){
+      pagesEl.innerHTML = "";
+      measureEl.innerHTML = "";
+
+      // aplica CSS vars
+      document.documentElement.style.setProperty("--fs", state.fontSize + "px");
+      document.documentElement.style.setProperty("--chordColor", state.chordColor);
+      document.documentElement.style.setProperty("--chordWeight", state.boldChord ? "800" : "650");
+      document.documentElement.style.setProperty("--lyricWeight", state.boldLyric ? "750" : "450");
+
+      // cria uma “página” de medição (mesmo layout)
+      const { page: mPage, content: mContent } = createPageShell(1);
+      measureEl.appendChild(mPage);
+
+      // altura disponível dentro da página: page height - padding - header - footer
+      // vamos medir na prática: enche e quando estourar, nova página.
+      let pageNum = 1;
+      let { page, content, footer } = createPageShell(pageNum);
+      pagesEl.appendChild(page);
+
+      const availableHeight = () => {
+        // mede usando a página real (no pagesEl) pra respeitar largura real
+        // conteúdo não pode ultrapassar limite até o rodapé
+        // Vamos calcular: limite = altura da page - paddingBottom - footerHeight - (content top offset)
+        const pageRect = page.getBoundingClientRect();
+        const footerRect = footer.getBoundingClientRect();
+        const contentRect = content.getBoundingClientRect();
+
+        // limite vertical interno (em px na tela)
+        const limit = (pageRect.top + pageRect.height) - (pageRect.bottom - footerRect.top) - 12; // margem
+        // alternativa robusta: usar page.clientHeight e offsets:
+        // mas como o footer é absolute, vamos usar scrollHeight do content:
+        return page.clientHeight - (content.offsetTop) - 32; // 32 = folga p/ footer e margem
+      };
+
+      function startNewPage(){
+        pageNum++;
+        const shell = createPageShell(pageNum);
+        page = shell.page;
+        content = shell.content;
+        footer = shell.footer;
+        pagesEl.appendChild(page);
+      }
+
+      // tentamos adicionar item a item, se estourar volta e cria outra
+      for (const el of lineElements){
+        content.appendChild(el);
+
+        // se passou do limite de altura do conteúdo, volta e cria nova
+        if (content.scrollHeight > availableHeight()){
+          content.removeChild(el);
+          startNewPage();
+          content.appendChild(el);
+
+          // se MESMO assim não cabe (linha gigante), deixa e aceita overflow do item
+          // (não tem como quebrar palavra sem cortar; nesse caso o user rola horizontalmente)
+        }
+      }
+
+      // atualiza os rodapés com total (opcional)
+      const pages = [...pagesEl.querySelectorAll(".page")];
+      const total = pages.length;
+      pages.forEach((p, idx) => {
+        const f = p.querySelector(".footer");
+        if (f) f.textContent = `Página ${idx+1} / ${total}`;
+      });
+    }
+
+    // ============================================================
+    // Render completo (rebuild + paginate)
+    // ============================================================
+    function renderAll(){
+      fsLabel.textContent = state.fontSize + "px";
+      trLabel.textContent = (state.transpose > 0 ? "+"+state.transpose : state.transpose);
+
+      // regras do capo
+      const fret = Math.max(0, Math.min(12, Number(state.capoFret || 0)));
+      state.capoFret = fret;
+
+      const els = buildAllLineElements();
+      paginate(els);
+    }
+
+    // ============================================================
+    // Eventos UI
+    // ============================================================
+    fsPlus.addEventListener("click", () => {
+      state.fontSize = Math.min(46, state.fontSize + 2);
+      renderAll();
+    });
+
+    fsMinus.addEventListener("click", () => {
+      state.fontSize = Math.max(10, state.fontSize - 2);
+      renderAll();
+    });
+
+    trUp.addEventListener("click", () => {
+      state.transpose = Math.min(24, state.transpose + 1);
+      renderAll();
+    });
+
+    trDown.addEventListener("click", () => {
+      state.transpose = Math.max(-24, state.transpose - 1);
+      renderAll();
+    });
+
+    capoOn.addEventListener("change", () => {
+      state.capoEnabled = capoOn.value === "1";
+      renderAll();
+    });
+
+    capoFret.addEventListener("input", () => {
+      state.capoFret = Number(capoFret.value || 0);
+      renderAll();
+    });
+
+    chordColor.addEventListener("input", () => {
+      state.chordColor = chordColor.value;
+      renderAll();
+    });
+
+    boldChord.addEventListener("change", () => {
+      state.boldChord = boldChord.checked;
+      renderAll();
+    });
+
+    boldLyric.addEventListener("change", () => {
+      state.boldLyric = boldLyric.checked;
+      renderAll();
+    });
+
+    // Recalcula páginas automaticamente se a largura mudar (resize/zoom)
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(renderAll, 120);
+    });
+
+    // init
+    (function init(){
+      state.capoEnabled = capoOn.value === "1";
+      state.capoFret = Number(capoFret.value || 0);
+      state.chordColor = chordColor.value;
+      state.boldChord = boldChord.checked;
+      state.boldLyric = boldLyric.checked;
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
