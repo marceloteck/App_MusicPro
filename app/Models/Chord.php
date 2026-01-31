@@ -9,7 +9,7 @@ class Chord extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['song_id', 'line_number', 'lyrics', 'chords'];
+    protected $fillable = ['song_id', 'chord_progression', 'key', 'notes'];
 
     public function song()
     {

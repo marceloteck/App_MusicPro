@@ -9,6 +9,7 @@ use App\Models\BandMember;
 use App\Models\Event;
 use App\Models\Song;
 use App\Models\EventSong;
+use App\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,6 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // Criar um usuário de teste
         $user = User::factory()->create(['email' => 'teste@email.com']);
+        $adminRole = Role::where('name', 'admin')->first();
+        if ($adminRole) {
+            $user->assignRole($adminRole);
+        }
 
         // Criar uma banda
         $band = Band::create([

@@ -58,6 +58,27 @@ class SongImportService
         ];
     }
 
+    public function previewFromUrl(string $url): array
+    {
+        $response = Http::timeout(20)->get($url);
+
+        if (!$response->successful()) {
+            return [
+                'status' => 'failed',
+                'message' => "Falha ao acessar o link (HTTP {$response->status()}).",
+                'data' => null,
+            ];
+        }
+
+        $parsed = $this->parseHtml($response->body(), $url);
+
+        return [
+            'status' => 'success',
+            'message' => 'Pré-visualização carregada.',
+            'data' => $parsed,
+        ];
+    }
+
     private function parseHtml(string $html, string $url): array
     {
         libxml_use_internal_errors(true);

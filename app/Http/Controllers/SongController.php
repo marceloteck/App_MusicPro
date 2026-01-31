@@ -52,7 +52,7 @@ class SongController extends Controller
         }
 
         return response()->json([
-            'songs' => $songsQuery->select('id', 'title', 'artist', 'source_url', 'imported_at', 'lyrics', 'video_url')
+            'songs' => $songsQuery->select('id', 'title', 'artist', 'source_url', 'imported_at', 'lyrics', 'video_url', 'audio_url')
                 ->latest()
                 ->take(200)
                 ->get(),

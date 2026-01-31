@@ -9,7 +9,7 @@ class Playlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'user_id', 'band_id'];
+    protected $fillable = ['name', 'description', 'user_id', 'band_id', 'is_public'];
 
     public function user()
     {
