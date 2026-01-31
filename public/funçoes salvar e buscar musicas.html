@@ -1,0 +1,24 @@
+<!--No seu Vue.js, use o IndexedDB para armazenar músicas localmente. Exemplo:-->
+<script>
+
+    async function salvarMusicaOffline(musica) {
+        const db = await idb.openDB("musicasDB", 1, {
+            upgrade(db) {
+                db.createObjectStore("musicas", { keyPath: "id" });
+            },
+        });
+        const tx = db.transaction("musicas", "readwrite");
+        await tx.store.put(musica);
+        await tx.done;
+    }
+
+</script>
+
+<!--E para carregar músicas salvas:-->
+<script>
+    async function carregarMusicasOffline() {
+        const db = await idb.openDB("musicasDB", 1);
+        return await db.getAll("musicas");
+    }
+
+</script>

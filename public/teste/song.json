@@ -1,0 +1,67 @@
+{
+  "title": "Todos Reunidos na Casa de Deus",
+  "key": "E",
+  "sections": [
+    {
+      "type": "intro",
+      "chords": [
+        ["E", "A9", "E/G#", "D9", "A/C#"],
+        ["E", "A/C#", "E/G#", "D9", "A9"]
+      ]
+    },
+    {
+      "type": "verse",
+      "lines": [
+        {
+          "lyrics": ["TODOS", "REUNIDOS", "NA", "CASA", "DE", "DEUS"],
+          "chords": ["E", "A9", null, "E", null, null]
+        },
+        {
+          "lyrics": ["COM", "CANTOS", "DE", "ALEGRIA", "E", "GRANDE", "LOUVOR"],
+          "chords": [null, "A9", null, null, null, "B9", null]
+        },
+        {
+          "lyrics": ["VAMOS", "CELEBRAR", "OS", "FEITOS", "DO", "SENHOR"],
+          "chords": [null, "A9", null, null, null, "B9"]
+        },
+        {
+          "lyrics": ["E", "SUA", "BONDADE", "QUE", "NUNCA", "TEM", "FIM"],
+          "chords": [null, "A9", null, null, null, "E", null]
+        }
+      ]
+    },
+    {
+      "type": "chorus",
+      "lines": [
+        {
+          "lyrics": ["VAMOS", "CELEBRAR", "DEUS", "ESTÁ", "AQUI"],
+          "chords": ["E", null, "A9", null, null]
+        },
+        {
+          "lyrics": ["VAMOS", "CELEBRAR", "DEUS", "ESTÁ", "AQUI"],
+          "chords": ["E", null, "A9", null, null]
+        },
+        {
+          "lyrics": ["NO", "MEIO", "DE", "NÓS"],
+          "chords": ["B9", "A9", null, null]
+        },
+        {
+          "lyrics": ["VAMOS", "CELEBRAR", "DEUS", "ESTÁ", "AQUI"],
+          "chords": ["E", null, "A9", null, null]
+        },
+        {
+          "lyrics": ["VAMOS", "CELEBRAR", "DEUS", "ESTÁ", "AQUI"],
+          "chords": ["E", null, "A9", null, null]
+        },
+        {
+          "lyrics": ["NO", "MEIO", "DE", "NÓS"],
+          "chords": ["B9", null, null, null]
+        },
+        {
+          "lyrics": ["ELE", "ESTÁ", "PRESENTE", "AQUI"],
+          "chords": [null, null, "E", null]
+        }
+      ]
+    }
+  ]
+}

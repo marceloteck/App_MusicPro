@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocare Music - Perfil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #0288d1;
+            color: white;
+            padding: 15px;
+            font-size: 22px;
+        }
+
+        .perfil {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .perfil img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .perfil-info {
+            text-align: center;
+        }
+
+        .btn-editar {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            background: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-editar:hover {
+            background: #0277bd;
+        }
+
+        /* Versão Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .perfil {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>Meu Perfil</header>
+
+    <div class="container">
+        <div class="perfil">
+            <img src="https://via.placeholder.com/100" alt="Foto de Perfil">
+            <div class="perfil-info">
+                <h2>Nome do Usuário</h2>
+                <p>Email: usuario@email.com</p>
+                <p>Membro desde: 2025</p>
+            </div>
+            <button class="btn-editar">Editar Perfil</button>
+        </div>
+    </div>
+
+</body>
+</html>

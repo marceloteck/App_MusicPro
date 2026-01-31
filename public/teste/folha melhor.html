@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A4 Auto Pagination</title>
+
+  <!-- Normalize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+
+  <!-- Paper CSS for printing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+
+  <style>
+    @page { 
+      size: A4;
+      margin: 10mm;
+    }
+
+    body {
+      background: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .content {
+      width: 210mm;
+      max-width: 210mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      background: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      padding: 15mm;
+      margin-bottom: 10mm;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .page * {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: justify;
+      page-break-inside: avoid;
+    }
+
+    #hiddenContainer {
+      visibility: hidden;
+      position: absolute;
+      width: 180mm;
+      height: auto;
+      white-space: normal;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="content" id="content"></div>
+  <div id="hiddenContainer"></div>
+
+  <script>
+    function cleanHTML(html) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      return tempDiv.innerHTML;
+    }
+
+    function createPages(htmlContent) {
+      const content = document.getElementById('content');
+      const hiddenContainer = document.getElementById('hiddenContainer');
+
+      let currentPage = document.createElement('div');
+      currentPage.classList.add('page');
+      content.appendChild(currentPage);
+
+      let currentHTML = ""; 
+      let index = 0;
+      let charArray = htmlContent.split(''); 
+
+      while (index < charArray.length) {
+        currentHTML += charArray[index];  
+        hiddenContainer.innerHTML = currentHTML;  
+
+        if (hiddenContainer.offsetHeight > 280 * 3.8) {  
+          let lastValidHTML = cleanHTML(currentHTML.slice(0, -10));  
+          currentPage.innerHTML = lastValidHTML;  
+          
+          currentPage = document.createElement('div');  
+          currentPage.classList.add('page');  
+          content.appendChild(currentPage);  
+
+          currentHTML = currentHTML.slice(-10);  
+        }
+        index++;
+      }
+
+      currentPage.innerHTML = cleanHTML(currentHTML);  
+    }
+
+    const exampleHTML = `
+      <h1>Exemplo de Conteúdo com HTML</h1>
+      <p><strong>Texto em negrito</strong>, <em>itálico</em> e <u>sublinhado</u>.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada.</p>
+      
+      <ul>
+        <li>Item de lista 1</li>
+        <li>Item de lista 2</li>
+        <li>Item de lista 3</li>
+      </ul>
+
+      <p>Donec luctus auctor eros, nec venenatis nulla auctor sed.</p>
+
+      <h2>Outro Título</h2>
+      <p>Mais um parágrafo para testar a geração de páginas.</p>
+
+      <p>Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+
+      <p>Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.</p>
+
+      <p>Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.</p>
+
+      <h3>Mais conteúdo</h3>
+      <p>Esse texto deve continuar em outra página se necessário.</p>
+
+      <br><br>
+      <h1>Exemplo de Conteúdo com HTML</h1>
+      <p><strong>Texto em negrito</strong>, <em>itálico</em> e <u>sublinhado</u>.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada.</p>
+      
+      <ul>
+        <li>Item de lista 1</li>
+        <li>Item de lista 2</li>
+        <li>Item de lista 3</li>
+      </ul>
+
+      <p>Donec luctus auctor eros, nec venenatis nulla auctor sed.</p>
+
+      <h2>Outro Título</h2>
+      <p>Mais um parágrafo para testar a geração de páginas.</p>
+
+      <p>Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+
+      <p>Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.</p>
+
+      <p>Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.</p>
+
+      <h3>Mais conteúdo</h3>
+      <p>Esse texto deve continuar em outra página se necessário.</p>
+
+      <br><br>
+      <h1>Exemplo de Conteúdo com HTML</h1>
+      <p><strong>Texto em negrito</strong>, <em>itálico</em> e <u>sublinhado</u>.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada.</p>
+      
+      <ul>
+        <li>Item de lista 1</li>
+        <li>Item de lista 2</li>
+        <li>Item de lista 3</li>
+      </ul>
+
+      <p>Donec luctus auctor eros, nec venenatis nulla auctor sed.</p>
+
+      <h2>Outro Título</h2>
+      <p>Mais um parágrafo para testar a geração de páginas.</p>
+
+      <p>Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+
+      <p>Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.</p>
+
+      <p>Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.</p>
+
+      <h3>Mais conteúdo</h3>
+      <p>Esse texto deve continuar em outra página se necessário.</p>
+
+      <br><br>
+      <h1>Exemplo de Conteúdo com HTML</h1>
+      <p><strong>Texto em negrito</strong>, <em>itálico</em> e <u>sublinhado</u>.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada.</p>
+      
+      <ul>
+        <li>Item de lista 1</li>
+        <li>Item de lista 2</li>
+        <li>Item de lista 3</li>
+      </ul>
+
+      <p>Donec luctus auctor eros, nec venenatis nulla auctor sed.</p>
+
+      <h2>Outro Título</h2>
+      <p>Mais um parágrafo para testar a geração de páginas.</p>
+
+      <p>Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+
+      <p>Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.</p>
+
+      <p>Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.</p>
+
+      <h3>Mais conteúdo</h3>
+      <p>Esse texto deve continuar em outra página se necessário.</p>
+
+      <br><br>
+      <h1>Exemplo de Conteúdo com HTML</h1>
+      <p><strong>Texto em negrito</strong>, <em>itálico</em> e <u>sublinhado</u>.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada.</p>
+      
+      <ul>
+        <li>Item de lista 1</li>
+        <li>Item de lista 2</li>
+        <li>Item de lista 3</li>
+      </ul>
+
+      <p>Donec luctus auctor eros, nec venenatis nulla auctor sed.</p>
+
+      <h2>Outro Título</h2>
+      <p>Mais um parágrafo para testar a geração de páginas.</p>
+
+      <p>Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+
+      <p>Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.</p>
+
+      <p>Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.</p>
+
+      <h3>Mais conteúdo</h3>
+      <p>Esse texto deve continuar em outra página se necessário.</p>
+
+      <br><br>
+      <h1>Exemplo de Conteúdo com HTML</h1>
+      <p><strong>Texto em negrito</strong>, <em>itálico</em> e <u>sublinhado</u>.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada.</p>
+      
+      <ul>
+        <li>Item de lista 1</li>
+        <li>Item de lista 2</li>
+        <li>Item de lista 3</li>
+      </ul>
+
+      <p>Donec luctus auctor eros, nec venenatis nulla auctor sed.</p>
+
+      <h2>Outro Título</h2>
+      <p>Mais um parágrafo para testar a geração de páginas.</p>
+
+      <p>Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+
+      <p>Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.</p>
+
+      <p>Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.</p>
+
+      <h3>Mais conteúdo</h3>
+      <p>Esse texto deve continuar em outra página se necessário.</p>
+
+      <br><br>
+      https://github.com/cognitom/paper-css/blob/master/examples/multiple-sheets.html
+    `;
+
+    createPages(exampleHTML);
+  </script>
+
+</body>
+</html>

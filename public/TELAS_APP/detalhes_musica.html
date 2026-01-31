@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocare Music - Detalhes da Música</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background: #0288d1;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .music-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .chords {
+            font-weight: bold;
+            color: #0288d1;
+        }
+
+        .lyrics {
+            white-space: pre-line;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0288d1;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .bottom-bar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .bottom-bar {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>🎵 Detalhes da Música</header>
+
+    <div class="container">
+        <h2 class="music-title">Nome da Música</h2>
+        <p class="chords">Tom: C</p>
+        <p class="lyrics">
+            [C] Letra da música com as cifras [G] aqui...
+            [Am] Continua o verso com os acordes [F] inseridos...
+        </p>
+    </div>
+
+    <!-- Bottom Bar Mobile -->
+    <div class="bottom-bar">
+        <a href="home.html">🏠 Home</a>
+        <a href="musicas.html">🎵 Músicas</a>
+        <a href="#">📂 Playlists</a>
+        <a href="perfil.html">👤 Perfil</a>
+    </div>
+
+</body>
+</html>

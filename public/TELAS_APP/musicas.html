@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocare Music - Músicas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #0288d1;
+            color: white;
+            padding: 15px;
+            font-size: 22px;
+            text-align: center;
+        }
+
+        .music-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .music-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .music-item button {
+            background: #0288d1;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Bottom Bar (Mobile) */
+        .bottom-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0288d1;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .bottom-bar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .bottom-bar {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>🎶 Lista de Músicas</header>
+
+    <div class="container">
+        <ul class="music-list">
+            <li class="music-item">
+                🎵 Música 1
+                <button>▶️ Reproduzir</button>
+            </li>
+            <li class="music-item">
+                🎵 Música 2
+                <button>▶️ Reproduzir</button>
+            </li>
+            <li class="music-item">
+                🎵 Música 3
+                <button>▶️ Reproduzir</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Bottom Bar Mobile -->
+    <div class="bottom-bar">
+        <a href="home.html">🏠 Home</a>
+        <a href="musicas.html">🎵 Músicas</a>
+        <a href="#">📂 Playlists</a>
+        <a href="perfil.html">👤 Perfil</a>
+    </div>
+
+</body>
+</html>

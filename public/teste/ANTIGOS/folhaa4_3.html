@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Folha A4</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin-bottom: 10px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            page-break-after: always;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lyrics {
+            font-size: 16px;
+            line-height: 1.5;
+            width: 100%;
+            flex-grow: 1;
+            cursor: text;
+            border: none;
+            outline: none;
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                page-break-after: always;
+            }
+            .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <label for="marginSize">Tamanho da Margem (mm):</label>
+        <input type="number" id="marginSize" value="20" min="5" max="50">
+        <button onclick="generatePages()">Gerar Documento</button>
+        <button onclick="saveContent()">Salvar</button>
+        <button onclick="window.print()">Imprimir</button>
+    </div>
+
+    <div id="content">
+        <!-- As folhas serão geradas aqui -->
+    </div>
+
+    <script>
+        function generatePages() {
+            const contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = ""; // Limpa as páginas anteriores
+
+            let marginSize = parseInt(document.getElementById("marginSize").value);
+            let availableHeight = 297 - (marginSize * 2); // Altura disponível na folha A4
+
+            let text = localStorage.getItem("savedLyrics") || "<b>Clique aqui para editar o conteúdo...</b>";
+            let words = text.split(/\n/);
+            
+            let pages = [];
+            let currentPage = createPage(marginSize);
+            let currentText = document.createElement("div");
+            currentText.classList.add("lyrics");
+            currentText.setAttribute("contenteditable", "true");
+            currentText.innerHTML = text; // Agora renderiza o HTML corretamente
+            currentText.addEventListener("input", adjustPages);
+            currentPage.appendChild(currentText);
+            pages.push(currentPage);
+
+            document.querySelector("#content").appendChild(currentPage);
+        }
+
+        function createPage(marginSize) {
+            let page = document.createElement("div");
+            page.classList.add("page");
+            page.style.padding = `${marginSize}mm`;
+            return page;
+        }
+
+        function saveContent() {
+            let lyricsHtml = document.querySelector(".lyrics").innerHTML; // Salva o HTML formatado
+            localStorage.setItem("savedLyrics", lyricsHtml);
+            alert("Conteúdo salvo!");
+        }
+
+        function adjustPages() {
+            let lyricsContainer = document.querySelector(".lyrics");
+            let currentPage = document.querySelector(".page");
+
+            if (lyricsContainer.scrollHeight > currentPage.clientHeight) {
+                alert("Texto muito grande! Nova página será adicionada.");
+                let newPage = createPage(parseInt(document.getElementById("marginSize").value));
+                let newLyrics = document.createElement("div");
+                newLyrics.classList.add("lyrics");
+                newLyrics.setAttribute("contenteditable", "true");
+                newPage.appendChild(newLyrics);
+                document.querySelector("#content").appendChild(newPage);
+            }
+        }
+
+        window.onload = generatePages;
+    </script>
+
+</body>
+</html>

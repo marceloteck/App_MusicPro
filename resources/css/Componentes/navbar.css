@@ -1,0 +1,176 @@
+/* Estilos gerais para a barra de ícones */
+.icon-bar {
+    width: 100vw;
+    background-color: rgba(222, 222, 222,0.3);
+    backdrop-filter: blur(8px);
+    overflow: auto;
+    position: fixed !important;
+    bottom: -1px;
+    z-index: 99;
+    border-top: 1px solid #e5e3e3;
+    display: flex;
+    justify-content: space-around; /* Distribui os ícones igualmente */
+    padding-bottom: env(safe-area-inset-bottom); /* Ajusta para dispositivos com notch */
+}
+
+/* Links dentro da barra de ícones */
+.icon-bar a {
+    display: flex;
+    flex-direction: column; /* Ícone em cima, texto embaixo */
+    align-items: center;
+    justify-content: center;
+    flex: 1; /* Faz com que todos tenham o mesmo tamanho */
+    text-decoration: none;
+    color: #555;
+    font-size: 35px;
+    padding: 8px 0;
+    transition: all 0.3s ease;
+}
+
+.icon-bar a span {
+    font-size: 2rem; /* Tamanho do ícone */
+}
+
+.icon-bar a label {
+    font-size: 0.8rem;
+    margin-top: 0px; /* Espaço entre ícone e label */
+    color: #333;
+}
+
+.icon-bar a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para o link ativo */
+.icon-bar .active {
+    /*background-color: #16326b;*/
+    color: #ca3d12 !important;
+    font-weight: bold;
+    border-top: 3px solid #ca3d12;
+}
+
+.icon-bar .active label {
+    color: #ca3d12 !important;
+}
+
+/* Estilos específicos para LayoutSupPage */
+.LayoutSupPage .cardList i {
+    float: right;
+    position: absolute;
+    right: 15px;
+    margin-top: -12px;
+    padding: 15px;
+}
+
+
+
+/*
+.NavBarMobile .icon-bar {
+    width: 100vw;
+    background-color: #dedede;
+    overflow: auto;
+    position: fixed !important;
+    bottom: -1px;
+    z-index: 99;
+    border-top: 1px solid #e5e3e3;
+    display: flex;
+    justify-content: space-around; 
+  }
+  
+  .NavBarMobile .icon-bar a {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    flex: 1; 
+    text-decoration: none;
+    color: #555;
+    font-size: 35px;
+    padding: 8px 0;
+    transition: all 0.3s ease;
+  }
+  
+  .NavBarMobile .icon-bar a span {
+    font-size: 2rem; 
+  }
+  
+  .NavBarMobile .icon-bar a label {
+    font-size: 0.8rem;
+    margin-top: 3px; 
+    color: #333;
+  }
+  
+  .NavBarMobile .icon-bar a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .NavBarMobile .active {
+    background-color: #16326b;
+    color:#dedede !important;
+  }
+  .NavBarMobile .active label{
+    color:#dedede !important;
+  }
+
+
+
+.LayoutSupPage .icon-bar {
+    width: 100vw;
+    background-color: #dedede;
+    overflow: auto;
+    position: fixed !important;
+    bottom: -1px;
+    z-index: 99;
+    border-top: 1px solid #e5e3e3;
+    display: flex;
+    justify-content: space-around; 
+  }
+  
+  .LayoutSupPage .icon-bar a {
+    display: flex;
+    flex-direction: column; /* Ícone em cima, texto embaixo 
+    align-items: center;
+    justify-content: center;
+    flex: 1; /* Faz com que todos tenham o mesmo tamanho 
+    text-decoration: none;
+    color: #555;
+    font-size: 35px;
+    padding: 8px 0;
+    transition: all 0.3s ease;
+  }
+  
+  .LayoutSupPage .icon-bar a span {
+    font-size: 2rem; /* Tamanho do ícone 
+  }
+  
+  .LayoutSupPage .icon-bar a label {
+    font-size: 0.8rem;
+    margin-top: 3px; /* Espaço entre ícone e label 
+    color: #333;
+  }
+  
+  .LayoutSupPage .icon-bar a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .LayoutSupPage .active {
+    background-color: #16326b;
+    color:#dedede !important;
+  }
+  .LayoutSupPage .active label{
+    color:#dedede !important;
+  }
+  .LayoutSupPage .cardList i{
+      float: right;
+      position: absolute;
+      right: 15px;
+      margin-top: -12px;
+      padding: 15px;
+    }
+  .LayoutSupPage .cardList i{
+      float: right;
+      position: absolute;
+      right: 15px;
+      margin-top: -12px;
+      padding: 15px;
+    }*/

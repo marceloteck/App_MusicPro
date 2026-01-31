@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocare Music - Bandas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #0288d1;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .band-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .band-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0288d1;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .bottom-bar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .bottom-bar {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>🎼 Bandas</header>
+
+    <div class="container">
+        <ul class="band-list">
+            <li class="band-item">🎸 Banda 1</li>
+            <li class="band-item">🎤 Banda 2</li>
+            <li class="band-item">🎶 Banda 3</li>
+        </ul>
+    </div>
+
+    <div class="bottom-bar">
+        <a href="home.html">🏠 Home</a>
+        <a href="eventos.html">📅 Eventos</a>
+        <a href="bandas.html">🎼 Bandas</a>
+        <a href="perfil.html">👤 Perfil</a>
+    </div>
+
+</body>
+</html>

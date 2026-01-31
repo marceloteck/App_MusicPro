@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocare Music</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        body {
+            font-family: "Roboto Mono", "Courier New", "Courier", monospace;
+            background-color: #f4f4f4;
+
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h3,
+        h4 {
+            margin-bottom: 10px;
+            font-family: arial;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .line {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .chord-line {
+            text-align: center;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .chords,
+        .chord-line {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .lyrics-line {
+            gap: 10px;
+            font-size: 18px;
+            line-height: 40px;
+            white-space: pre-wrap;
+        }
+
+        .word {
+            position: relative;
+            display: inline-block;
+        }
+
+        .chord {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: blue;
+        }
+
+        .chordIntro {
+            font-size: 14px;
+            font-weight: bold;
+            color: blue;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .color-button {
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .black {
+            background-color: black;
+            color: white;
+        }
+
+        .blue {
+            background-color: blue;
+            color: white;
+        }
+
+        .purple {
+            background-color: purple;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+
+
+        <div class="controls">
+            <button class="btn btn-success" onclick="adjustFontSize(1)">A+</button>
+            <button class="btn btn-danger" onclick="adjustFontSize(-1)">A-</button>
+            <button class="btn btn-danger" onclick="resetFontSize()">Reset</button>
+
+
+            <button class="btn btn-info" onclick="transpose(-1)">- Tom</button>
+            <button class="btn btn-info" onclick="transpose(1)">+ Tom</button>
+            <button class="btn btn-info" onclick="resetTranspose()">Reset Tom</button>
+
+            <h3>Escolha a cor: Cifra</h3>
+            <button class="color-button black" onclick="changeChordColor('black')">Preto</button>
+            <button class="color-button blue" onclick="changeChordColor('blue')">Azul</button>
+            <button class="color-button purple" onclick="changeChordColor('purple')">Roxo</button>
+            <input type="color" id="customColor" onchange="changeCustomColor()">
+
+
+            <h3>Escolha a cor: letra</h3>
+            <button class="color-button black" onclick="changelyricsColor('black')">Preto</button>
+            <button class="color-button blue" onclick="changelyricsColor('blue')">Azul</button>
+            <button class="color-button purple" onclick="changelyricsColor('purple')">Roxo</button>
+            <input type="color" id="customColorlyrics" onchange="changeCustomColorlyrics()">
+
+            <button class="no-print" onclick="printFolha()">Imprimir Cifra</button>
+        </div>
+        <div id="folha">
+            <h1 id="song-title"></h1>
+            <h4> Tom: <span id="song-key" class="chords"></span></h4>
+            <pre id="div-cifra">              
+                <b>        C       F          C</b>
+                <strong>SOLO:</strong> HOSANA AO FILHO DE DAVI!
+                <b>              C       F          C</b>
+                <strong>ASSEMBLÉIA: HOSANA AO FILHO DE DAVI!</strong>
+                
+                <b>   C          Am     Dm        G  </b>
+                BENDITO O QUE VEM EM NOME DO SENHOR!
+                
+                <b>        C       F          C</b>
+                <strong>SOLO:</strong> HOSANA AO FILHO DE DAVI!
+                <b>              C       F          C</b>
+                <strong>ASSEMBLÉIA: HOSANA AO FILHO DE DAVI!</strong>
+                
+                <b>C          Am    Dm         G           </b>
+                REI DE ISRAEL, HOSANA NAS ALTURAS!
+                
+                <b>        C       F          C</b>
+                <strong>SOLO:</strong> HOSANA AO FILHO DE DAVI!
+                <b>              C       F          C</b>
+                <strong>ASSEMBLÉIA: HOSANA AO FILHO DE DAVI!</strong>
+                
+                
+                            </pre>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+
+        let fontSize = 18;
+        let lineHeight = 40;
+        let topCifras = 18;
+
+        let defaultFontSize = fontSize; // Defina o tamanho padrão
+        let defaultLineHeight = lineHeight; // Defina a altura padrão
+
+        function chordsTagCifras() {
+            let chordsTag = [
+                ...document.querySelectorAll(".chords"),
+                ...document.querySelectorAll("b"),
+                ...document.querySelectorAll(".js-modal-trigger"),
+                ...document.querySelectorAll(".chordIntro")
+            ];
+
+            return chordsTag.length ? chordsTag : null;
+        }
+
+        function lyricsTagCifras() {
+            let chordsTag = [
+                ...document.querySelectorAll(".lyrics-line"),
+                ...document.querySelectorAll("pre")
+            ];
+
+            return chordsTag.length ? chordsTag : null;
+        }
+
+
+        function adjustFontSize(change) {
+            fontSize += change;
+            lineHeight += change * 2;
+            topCifras += change * 1;
+            lyricsTagCifras().forEach(line => {
+                line.style.fontSize = fontSize + 'px';
+                line.style.lineHeight = lineHeight + 'px';
+            });
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = fontSize + 'px';
+            });
+
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = fontSize + 'px';
+                line.style.top = -(fontSize + 3) + 'px';
+            });
+        }
+        function resetFontSize() {
+            fontSize = defaultFontSize;
+            lineHeight = defaultLineHeight;
+
+            lyricsTagCifras().forEach(line => {
+                line.style.fontSize = defaultFontSize + 'px';
+                line.style.lineHeight = defaultLineHeight + 'px';
+            });
+
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = defaultFontSize + 'px';
+            });
+
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = defaultFontSize - 4 + 'px';
+                line.style.top = -(defaultFontSize) + 'px';
+            });
+        }
+
+
+        let keyPadrao = "";
+
+        // Função para carregar e exibir a música corretamente
+        async function loadSong() {
+            try {
+                let response = await fetch("song.json");
+                let song = await response.json();
+
+                document.getElementById("song-title").textContent = song.title;
+                document.getElementById("song-key").textContent = song.key;
+                keyPadrao = song.key;
+
+                let container = document.getElementById("song-container");
+                container.innerHTML = "";
+
+                let pre = document.createElement("pre");
+                pre.id = "div-cifra";
+
+                let finalOutput = "";
+
+                song.sections.forEach(section => {
+                    if (section.type === "intro") {
+                        finalOutput += `<strong>INTRO:</strong>\n`;
+                        section.chords.forEach(row => {
+                            finalOutput += `<b>${row.join("  ")}</b>\n`;
+                        });
+                        finalOutput += "\n";
+                    } else {
+                        section.lines.forEach(line => {
+                            let chordLine = "";
+                            let lyricLine = "";
+
+                            line.lyrics.forEach((word, index) => {
+                                let chord = line.chords[index] ? `<b>${line.chords[index]}</b>` : " ";
+                                let space = " ".repeat(word.length + 1);
+                                chordLine += chord + space;
+                                lyricLine += word + " ";
+                            });
+
+                            finalOutput += chordLine.trimEnd() + "\n" + lyricLine.trimEnd() + "\n\n";
+                        });
+                    }
+                });
+
+                pre.innerHTML = finalOutput.replace(/\n/g, "<br>"); // Garante quebras de linha
+                container.appendChild(pre);
+
+            } catch (error) {
+                console.error("Erro ao carregar a música:", error);
+            }
+        }
+
+        // Chama a função ao carregar a página
+        loadSong();
+
+
+
+
+        /*
+                let keyPadrao = "";
+                //
+                async function loadSong() {
+                    try {
+                        let response = await fetch("song.json");
+                        let song = await response.json();
+        
+                        document.getElementById("song-title").textContent = song.title;
+                        document.getElementById("song-key").textContent = song.key;
+                        keyPadrao = song.key;
+        
+                        let container = document.getElementById("song-container");
+                        container.innerHTML = "";
+        
+                        song.sections.forEach(section => {
+                            let sectionDiv = document.createElement("div");
+                            sectionDiv.classList.add("section");
+        
+                            if (section.type === "intro") {
+                                let introDiv = document.createElement("div");
+                                introDiv.classList.add("line");
+                                introDiv.innerHTML = `<strong>INTRO: </strong> <div class="chordIntro chords"> ${section.chords.map(row => row.join(" ")).join(" | ")}</div> <br/>`;
+                                sectionDiv.appendChild(introDiv);
+                            } else {
+                                section.lines.forEach(line => {
+                                    let lineDiv = document.createElement("div");
+                                    lineDiv.classList.add("line");
+        
+                                    let chordLineDiv = document.createElement("div");
+                                    chordLineDiv.classList.add("chord-line");
+        
+                                    let lyricsLineDiv = document.createElement("div");
+                                    lyricsLineDiv.classList.add("lyrics-line");
+        
+                                    line.lyrics.forEach((word, index) => {
+                                        let wordSpan = document.createElement("span");
+                                        wordSpan.classList.add("word");
+                                        wordSpan.textContent = word + " ";
+        
+                                        if (line.chords[index]) {
+                                            let chordSpan = document.createElement("span");
+                                            chordSpan.classList.add("chord");
+                                            chordSpan.classList.add("chords");
+                                            //chordSpan.id = "chords";
+                                            chordSpan.textContent = line.chords[index];
+                                            wordSpan.appendChild(chordSpan);
+                                        }
+        
+                                        lyricsLineDiv.appendChild(wordSpan);
+                                    });
+        
+                                    lineDiv.appendChild(lyricsLineDiv);
+                                    sectionDiv.appendChild(lineDiv);
+                                });
+                            }
+        
+                            container.appendChild(sectionDiv);
+                        });
+        
+                    } catch (error) {
+                        console.error("Erro ao carregar a música:", error);
+                    }
+                }
+        
+                loadSong();*/
+
+
+
+        // Lista de notas cromáticas
+        const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const NOTES_FLAT = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]; // Versão com bemóis
+        let currentTranspose = 0;
+
+        // Função para encontrar o índice de um acorde na escala cromática
+        function findNoteIndex(note) {
+            let index = NOTES.indexOf(note);
+            if (index === -1) index = NOTES_FLAT.indexOf(note); // Verifica também notas bemóis
+            return index;
+        }
+
+        // Função para transpor um único acorde
+        function transposeChord(chord, semitones) {
+            let match = chord.match(/([A-G][#b]?)(\/[A-G][#b]?)?(.*)/); // Modificado para capturar também o acorde de baixo (ex: "D/F#")
+            if (!match) return chord; // Retorna o acorde original se não for encontrado
+
+            let [_, baseNote, bassNote, suffix] = match; // Base (D), baixo (F#) e sufixo (m, 7, etc.)
+
+            // Transpõe a nota base
+            let baseIndex = findNoteIndex(baseNote);
+            if (baseIndex === -1) return chord; // Retorna o acorde original se não for válido
+
+            let newBaseIndex = (baseIndex + semitones + 12) % 12; // Calcula a nova posição da nota base
+            let newBaseNote = NOTES[newBaseIndex]; // Obtém a nova nota base transposta
+
+            // Transpõe a nota de baixo (caso exista)
+            let newBassNote = '';
+            if (bassNote) {
+                let bassIndex = findNoteIndex(bassNote.slice(1)); // Retira o '/' para analisar apenas a nota
+                if (bassIndex !== -1) {
+                    let newBassIndex = (bassIndex + semitones + 12) % 12; // Calcula a nova posição da nota de baixo
+                    newBassNote = '/' + NOTES[newBassIndex]; // Obtém a nova nota de baixo transposta
+                } else {
+                    newBassNote = bassNote; // Mantém a nota de baixo original se não for válida
+                }
+            }
+
+            return newBaseNote + newBassNote + suffix; // Retorna o acorde transposto mantendo o sufixo
+        }
+
+
+
+        function transpose(semitones) {
+            currentTranspose += semitones;
+
+            let chordsElements = chordsTagCifras(); // Seleciona todos os elementos com a classe "chords"
+
+            chordsElements.forEach(chordsElement => {
+                let chords = chordsElement.innerText.split(/\s+/); // Divide os acordes por espaço
+                let transposedChords = chords.map(chord => transposeChord(chord, semitones)); // Transpõe cada acorde
+                chordsElement.innerText = transposedChords.join(" "); // Atualiza a cifra na tela
+            });
+        }
+        function resetTranspose() {
+            transpose(-currentTranspose); // Reverte a transposição aplicada
+            currentTranspose = 0; // Reseta o contador de transposição
+        }
+
+
+        /** ALTERAR COR **/
+
+        function changeChordColor(color) {
+            chordsTagCifras().forEach(element => {
+                element.style.color = color; // Altera a cor do texto das cifras
+            });
+        }
+
+        function changeCustomColor() {
+            let customColor = document.getElementById("customColor").value; // Pega a cor escolhida pelo usuário
+            changeChordColor(customColor);
+        }
+
+        function changelyricsColor(color) {
+            lyricsTagCifras().forEach(element => {
+                element.style.color = color; // Altera a cor do texto das cifras
+            });
+        }
+
+        function changeCustomColorlyrics() {
+            let customColor = document.getElementById("customColorlyrics").value; // Pega a cor escolhida pelo usuário
+            changelyricsColor(customColor);
+        }
+
+        /** imprimir página **/
+        function printFolha() {
+            let content = document.getElementById("folha").innerHTML; // Pega o conteúdo dentro da div 'folha'
+            let originalContent = document.body.innerHTML; // Salva o conteúdo original da página
+
+            document.body.innerHTML = content; // Substitui o body pelo conteúdo da 'folha'
+            window.print(); // Aciona a impressão
+            document.body.innerHTML = originalContent; // Restaura o conteúdo original da página
+        }
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

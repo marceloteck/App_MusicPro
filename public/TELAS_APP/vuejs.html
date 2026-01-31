@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor HTML para Vue.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-family: monospace;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conversor HTML para Componente Vue.js</h1>
+
+    <h3>Insira o código HTML:</h3>
+    <textarea id="htmlInput" placeholder="Cole seu código HTML aqui..."></textarea>
+
+    <br/><br/>
+    <button onclick="convertToVue()">Converter para Vue.js</button>
+
+    <h3>Componente Vue.js gerado:</h3>
+    <textarea id="vueOutput" readonly placeholder="O código Vue.js aparecerá aqui..."></textarea>
+
+    <script>
+        function convertToVue() {
+            let htmlContent = document.getElementById('htmlInput').value;
+            
+            // Regex para pegar o conteúdo dentro das tags <body>, <style> e <script>
+            const bodyContent = htmlContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+            const styleContent = htmlContent.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
+            const scriptContent = htmlContent.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+    
+            // Inicializando as variáveis com valores padrão vazios
+            let vueTemplate = '';
+            let vueScript = '';
+            let vueStyle = '';
+    
+            // Adicionando o conteúdo dentro da tag <body> no <template>
+            if (bodyContent && bodyContent[1]) {
+                vueTemplate = "<template>\n" + bodyContent[1] + "\n</template>\n";
+            }
+    
+            // Adicionando o conteúdo da tag <script> no <script setup>
+            if (scriptContent && scriptContent[1]) {
+               
+            } 
+    
+            // Adicionando o conteúdo da tag <style> no <style scoped>
+            if (styleContent && styleContent[1].trim()) {
+                vueStyle = "<style scoped>\n" + styleContent[1] + "\n</style>\n";
+            }
+    
+            // Gerando o componente Vue.js completo
+            let vueComponent = vueTemplate + vueScript + vueStyle;
+    
+            // Exibindo o código Vue.js gerado
+            document.getElementById('vueOutput').value = vueComponent;
+        }
+    </script>
+    
+</body>
+</html>

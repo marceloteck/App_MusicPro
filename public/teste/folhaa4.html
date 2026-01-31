@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Folhas A4</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f1f1f1, #d9d9d9);
+            margin: 0;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 296mm;
+            page-break-after: always;
+            background: #fff;
+            margin: 0 auto 1.5cm;
+            padding: 13mm 10mm;
+            position: relative;
+            overflow: hidden;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+            box-sizing: border-box;
+        }
+
+        #content {
+            margin-top: 65px;
+            padding-top: -15px;
+
+        }
+
+        .lyrics {
+            font-size: 16px;
+            line-height: 1.5;
+            min-height: 979px;
+            width: 100%;
+            flex-grow: 1;
+            cursor: text;
+            border: none;
+            outline: none;
+            outline-color: #9A9A9A;
+        }
+
+        @media print {
+
+
+
+
+            #toolbar,
+            #toolbar * {
+                display: none;
+                visibility: hidden;
+            }
+
+            #content,
+            #content * {
+                position: relative;
+                border: none;
+                margin-top: -65px;
+            }
+
+            .page,
+            .page * {
+                box-sizing: none;
+                box-shadow: none;
+                border: none;
+            }
+
+
+
+
+        }
+
+        /* SEÇÃO DE CIFRAS */
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h3,
+        h4 {
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .line {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .chord-line,
+        .chords,
+        .chord {
+            font-size: 14px;
+            font-weight: bold;
+            color: blue;
+        }
+
+        .chord-line {
+            text-align: center;
+            white-space: pre-wrap;
+        }
+
+        .lyrics-line {
+            gap: 10px;
+            font-size: 18px;
+            line-height: 40px;
+            white-space: pre-wrap;
+        }
+
+        .word {
+            position: relative;
+            display: inline-block;
+        }
+
+        .chord {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .color-button {
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .black,
+        .blue,
+        .purple {
+            color: white;
+        }
+
+        .black {
+            background-color: black;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .purple {
+            background-color: purple;
+        }
+
+        /* Barra de ferramentas */
+        #toolbar {
+            align-items: center;
+            background: linear-gradient(135deg, #010D24, #03315E);
+            color: white;
+            display: flex;
+            height: 56px;
+            padding: 0 16px;
+            z-index: 1;
+            box-shadow: rgba(0, 0, 0, 0.09) 0px -2px 8px, rgba(0, 0, 0, 0.06) 0px 4px 8px, rgba(0, 0, 0, 0.3) 0px 1px 2px, rgba(0, 0, 0, 0.15) 0px 2px 6px;
+            position: fixed;
+            width: 98vw;
+        }
+
+        .addPageBtn {
+            width: 210mm;
+            display: block;
+            margin: 10px auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: transparent;
+            border: 1px solid #9A9A9A;
+            border-radius: 8%;
+            cursor: pointer;
+        }
+
+        .addPageBtn:hover {
+            background-color: #9A9A9A;
+            color: #f1f1f1;
+            transition: all 0.3s;
+        }
+
+
+        /** SEÇÃO DE CIFRAS **/
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h3,
+        h4 {
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .line {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .chord-line,
+        .chords,
+        .chord {
+            font-size: 14px;
+            font-weight: bold;
+            color: blue;
+        }
+
+        .chord-line {
+            text-align: center;
+            white-space: pre-wrap;
+        }
+
+        .lyrics-line {
+            gap: 10px;
+            font-size: 18px;
+            line-height: 40px;
+            white-space: pre-wrap;
+        }
+
+        .word {
+            position: relative;
+            display: inline-block;
+        }
+
+        .chord {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .color-button {
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .black,
+        .blue,
+        .purple {
+            color: white;
+        }
+
+        .black {
+            background-color: black;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .purple {
+            background-color: purple;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="toolbar">
+        <div class="controls">
+            <label for="marginSize">Configurações:</label>
+
+            <button onclick="printFolha()">Imprimir</button>
+            <button onclick="saveContent()">Salvar</button>
+            <button onclick="formatText('bold')">Negrito</button>
+            <button onclick="formatText('italic')">Itálico</button>
+            <button onclick="formatText('underline')">Sublinhado</button>
+            <span>|</span>
+            <button class="btn btn-success" onclick="adjustFontSize(1)">A+</button>
+            <button class="btn btn-danger" onclick="adjustFontSize(-1)">A-</button>
+            <button class="btn btn-danger" onclick="resetFontSize()">Reset</button>
+            <span>|</span>
+            <button class="btn btn-info" onclick="transpose(-1)">- Tom</button>
+            <button class="btn btn-info" onclick="transpose(1)">+ Tom</button>
+            <button class="btn btn-info" onclick="resetTranspose()">Reset Tom</button>
+
+            <span>|</span>
+            <button class="color-button black" onclick="changeChordColor('black')">Preto</button>
+            <button class="color-button blue" onclick="changeChordColor('blue')">Azul</button>
+            <button class="color-button purple" onclick="changeChordColor('purple')">Roxo</button>
+            <input type="color" id="customColor" onchange="changeCustomColor()">
+
+
+            <span>|</span>
+            <button class="color-button black" onclick="changelyricsColor('black')">Preto</button>
+            <button class="color-button blue" onclick="changelyricsColor('blue')">Azul</button>
+            <button class="color-button purple" onclick="changelyricsColor('purple')">Roxo</button>
+            <input type="color" id="customColorlyrics" onchange="changeCustomColorlyrics()">
+
+        </div>
+
+    </div>
+
+    <div id="content"></div>
+
+    <script>
+
+
+        let fontSize = 18;
+        let lineHeight = 40;
+        let topCifras = 18;
+
+        let defaultFontSize = fontSize; // Defina o tamanho padrão
+        let defaultLineHeight = lineHeight; // Defina a altura padrão
+
+        function chordsTagCifras() {
+            let chordsTag = [
+                ...document.querySelectorAll(".chords"),
+                ...document.querySelectorAll("b"),
+                ...document.querySelectorAll(".js-modal-trigger"),
+                ...document.querySelectorAll(".chordIntro")
+            ];
+
+            return chordsTag.length ? chordsTag : null;
+        }
+
+        function lyricsTagCifras() {
+            let chordsTag = [
+                ...document.querySelectorAll(".lyrics-line"),
+                ...document.querySelectorAll("pre")
+            ];
+
+            return chordsTag.length ? chordsTag : null;
+        }
+
+
+        function adjustFontSize(change) {
+            fontSize += change;
+            lineHeight += change * 2;
+            topCifras += change * 1;
+            lyricsTagCifras().forEach(line => {
+                line.style.fontSize = fontSize + 'px';
+                line.style.lineHeight = lineHeight + 'px';
+            });
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = fontSize + 'px';
+            });
+
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = fontSize + 'px';
+                line.style.top = -(fontSize + 3) + 'px';
+            });
+        }
+        function resetFontSize() {
+            fontSize = defaultFontSize;
+            lineHeight = defaultLineHeight;
+
+            lyricsTagCifras().forEach(line => {
+                line.style.fontSize = defaultFontSize + 'px';
+                line.style.lineHeight = defaultLineHeight + 'px';
+            });
+
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = defaultFontSize + 'px';
+            });
+
+            chordsTagCifras().forEach(line => {
+                line.style.fontSize = defaultFontSize - 4 + 'px';
+                line.style.top = -(defaultFontSize) + 'px';
+            });
+        }
+
+        // Lista de notas cromáticas
+        const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const NOTES_FLAT = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]; // Versão com bemóis
+        let currentTranspose = 0;
+
+        // Função para encontrar o índice de um acorde na escala cromática
+        function findNoteIndex(note) {
+            let index = NOTES.indexOf(note);
+            if (index === -1) index = NOTES_FLAT.indexOf(note); // Verifica também notas bemóis
+            return index;
+        }
+
+        // Função para transpor um único acorde
+        function transposeChord(chord, semitones) {
+            let match = chord.match(/([A-G][#b]?)(\/[A-G][#b]?)?(.*)/); // Modificado para capturar também o acorde de baixo (ex: "D/F#")
+            if (!match) return chord; // Retorna o acorde original se não for encontrado
+
+            let [_, baseNote, bassNote, suffix] = match; // Base (D), baixo (F#) e sufixo (m, 7, etc.)
+
+            // Transpõe a nota base
+            let baseIndex = findNoteIndex(baseNote);
+            if (baseIndex === -1) return chord; // Retorna o acorde original se não for válido
+
+            let newBaseIndex = (baseIndex + semitones + 12) % 12; // Calcula a nova posição da nota base
+            let newBaseNote = NOTES[newBaseIndex]; // Obtém a nova nota base transposta
+
+            // Transpõe a nota de baixo (caso exista)
+            let newBassNote = '';
+            if (bassNote) {
+                let bassIndex = findNoteIndex(bassNote.slice(1)); // Retira o '/' para analisar apenas a nota
+                if (bassIndex !== -1) {
+                    let newBassIndex = (bassIndex + semitones + 12) % 12; // Calcula a nova posição da nota de baixo
+                    newBassNote = '/' + NOTES[newBassIndex]; // Obtém a nova nota de baixo transposta
+                } else {
+                    newBassNote = bassNote; // Mantém a nota de baixo original se não for válida
+                }
+            }
+
+            return newBaseNote + newBassNote + suffix; // Retorna o acorde transposto mantendo o sufixo
+        }
+
+
+
+
+        function transpose(semitones) {
+            currentTranspose += semitones;
+
+
+            let chordsElements = chordsTagCifras(); // Seleciona todos os elementos com a classe "chords"
+            if (chordsElements) {
+                chordsElements.forEach(chordsElement => {
+                    let chords = chordsElement.innerText.split(/\s+/); // Divide os acordes por espaço
+                    let transposedChords = chords.map(chord => transposeChord(chord, semitones)); // Transpõe cada acorde
+                    chordsElement.innerText = transposedChords.join(" "); // Atualiza a cifra na tela
+                });
+            }
+
+        }
+        function resetTranspose() {
+            transpose(-currentTranspose); // Reverte a transposição aplicada
+            currentTranspose = 0; // Reseta o contador de transposição
+        }
+
+        /** ALTERAR COR **/
+
+        function changeChordColor(color) {
+            chordsTagCifras().forEach(element => {
+                element.style.color = color; // Altera a cor do texto das cifras
+            });
+        }
+
+        function changeCustomColor() {
+            let customColor = document.getElementById("customColor").value; // Pega a cor escolhida pelo usuário
+            changeChordColor(customColor);
+        }
+
+        function changelyricsColor(color) {
+            lyricsTagCifras().forEach(element => {
+                element.style.color = color; // Altera a cor do texto das cifras
+            });
+        }
+
+        function changeCustomColorlyrics() {
+            let customColor = document.getElementById("customColorlyrics").value; // Pega a cor escolhida pelo usuário
+            changelyricsColor(customColor);
+        }
+
+        let lyricsText = '<h1 id="song-title">Todos Reunidos na Casa de Deus</h1><h4> Tom: <span id="song-key" class="chords">E</span></h4><pre><div id="song-container"><div class="section"><div class="line"><strong>INTRO: </strong> <div class="chordIntro chords"> E A9 E/G# D9 A/C# | E A/C# E/G# D9 A9</div> <br></div></div><div class="section"><div class="line"><div class="lyrics-line"><span class="word">  <span class="chord chords">E</span></span><span class="word">TODOS </span><span class="word">REUNIDOS <span class="chord chords">A9</span></span><span class="word">NA </span><span class="word">CASA </span><span class="word">DE </span><span class="word">DEUS <span class="chord chords">E</span></span><span class="word">COM </span><span class="word">CANTOS </span><span class="word">DE </span><span class="word">ALEGRIA <span class="chord chords">A9</span></span><span class="word">E </span><span class="word">GRANDE </span><span class="word">LOUVOR <span class="chord chords">B9</span></span><span class="word">VAMOS </span><span class="word">CELEBRAR <span class="chord chords">A9</span></span><span class="word">OS </span><span class="word">FEITOS </span><span class="word">DO </span><span class="word">SENHOR <span class="chord chords">B9</span></span></div></div><div class="line"><div class="lyrics-line"><span class="word">  <span class="chord chords">E</span></span><span class="word">TODOS </span><span class="word">REUNIDOS <span class="chord chords">A9</span></span><span class="word">NA </span><span class="word">CASA </span><span class="word">DE </span><span class="word">DEUS <span class="chord chords">E</span></span><span class="word">COM </span><span class="word">CANTOS </span><span class="word">DE </span><span class="word">ALEGRIA <span class="chord chords">A9</span></span><span class="word">E </span><span class="word">GRANDE </span><span class="word">LOUVOR <span class="chord chords">B9</span></span><span class="word">VAMOS </span><span class="word">CELEBRAR <span class="chord chords">A9</span></span><span class="word">OS </span><span class="word">FEITOS </span><span class="word">DO </span><span class="word">SENHOR <span class="chord chords">B9</span></span></div></div></div></div></pre>'; /********************************************/
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const config = {
+                defaultMargin: 20, // Margem padrão das páginas
+                paddingAdjustment: 140, // Ajuste de altura para compensar margens
+                storageKey: "savedLyrics", // Chave de armazenamento no localStorage
+                maxPageHeight: 979, // Altura máxima permitida para o conteúdo
+                PAGE_HEIGHT: 1120,  // Altura de uma página A4 em pixels (aproximadamente)
+            };
+
+            let lyricsContainer = document.querySelector(".lyrics");
+
+            // 🔹 Se não existir o elemento .lyrics, cria automaticamente
+            if (!lyricsContainer) {
+                generatePages();
+                lyricsContainer = document.querySelector(".lyrics"); // Atualiza a variável
+            }
+
+            function generatePages() {
+                const contentDiv = document.getElementById("content");
+                if (!contentDiv) {
+                    console.error("❌ ERRO: Elemento #content não encontrado!");
+                    return;
+                }
+                contentDiv.innerHTML = "";
+
+                //const lyricsText = "Digite aqui...";
+
+                let marginSize = config.defaultMargin;
+                let text = localStorage.getItem(config.storageKey) || lyricsText;
+
+                let currentPage = createPage(marginSize);
+                let currentText = createLyricsElement(text);
+
+                currentPage.appendChild(currentText);
+                contentDiv.appendChild(currentPage);
+
+
+            }
+
+            function createPage(marginSize) {
+                let page = document.createElement("div");
+                page.classList.add("page");
+                page.style.padding = `${marginSize}mm`;
+                return page;
+            }
+
+            function createLyricsElement(text) {
+                let lyrics = document.createElement("div");
+                lyrics.classList.add("lyrics");
+                lyrics.setAttribute("contenteditable", "true");
+                lyrics.innerHTML = text;
+
+                addEventListenersToLyrics(lyrics);
+                return lyrics;
+            }
+
+            function addEventListenersToLyrics(lyrics) {
+                lyrics.addEventListener("input", function () {
+                    //console.log("✏️ Texto alterado:", lyrics.innerHTML);
+
+                });
+            }
+
+
+
+        });
+
+        function saveContent() {
+            let lyricsHtml = document.querySelector(".lyrics").innerHTML;
+            localStorage.setItem("savedLyrics", lyricsHtml);
+            alert("Conteúdo salvo!");
+        }
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+
+
+        function printFolha() {
+            let content = document.getElementById("content").innerHTML; // Pega o conteúdo dentro da div 'folha'
+            let originalContent = document.body.innerHTML; // Salva o conteúdo original da página
+
+            document.body.innerHTML = content; // Substitui o body pelo conteúdo da 'folha'
+            window.print(); // Aciona a impressão
+            document.body.innerHTML = originalContent; // Restaura o conteúdo original da página
+        }
+    </script>
+
+    <!--
+        <center style="color: rgb(51, 51, 51); font-family: sans-serif;"><center><h1 id="song-title" style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; font-weight: 500; line-height: 1.2; color: rgb(33, 37, 41); font-size: 2.5rem; font-family: arial; text-align: start;">Todos Reunidos na Casa de Deus</h1><h4 style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; font-weight: 500; line-height: 1.2; color: rgb(33, 37, 41); font-size: 1.5rem; font-family: arial; text-align: start;">Tom:&nbsp;<span id="song-key" class="chords" style="box-sizing: border-box; color: black; font-weight: bold;">E</span></h4><pre style="box-sizing: border-box; font-family: var(--bs-font-monospace); font-size: 0.875em; margin-top: 0px; margin-bottom: 1rem; overflow: auto; color: rgb(33, 37, 41); text-align: start;"><div id="song-container" style="box-sizing: border-box;"><div class="section" style="box-sizing: border-box; margin-bottom: 20px;"><div class="line" style="box-sizing: border-box; display: flex; flex-direction: column; margin-bottom: 10px;"><span style="box-sizing: border-box; font-weight: bolder;">INTRO: </span><div class="chordIntro chords" style="box-sizing: border-box; color: black; font-weight: bold;"> E A9 E/G# D9 A/C# | E A/C# E/G# D9 A9</div><br style="box-sizing: border-box;"></div></div><div class="section" style="box-sizing: border-box; margin-bottom: 20px;"><div class="line" style="box-sizing: border-box; display: flex; flex-direction: column; margin-bottom: 10px;"><div class="lyrics-line" style="box-sizing: border-box; gap: 10px; font-size: 18px; line-height: 40px; text-wrap-mode: wrap; color: blue;"><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">  <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 9.89062px; transform: translateX(-50%); font-size: 14px;">E</span></span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">TODOS </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">REUNIDOS <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 44.5312px; transform: translateX(-50%); font-size: 14px;">A9</span></span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">NA </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">CASA </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">DE </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">DEUS <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 24.7344px; transform: translateX(-50%); font-size: 14px;">E</span></span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">COM </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">CANTOS </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">DE </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">ALEGRIA <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 39.5781px; transform: translateX(-50%); font-size: 14px;">A9</span></span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">E </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">GRANDE </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">LOUVOR <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 34.6406px; transform: translateX(-50%); font-size: 14px;">B9</span></span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">VAMOS </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">CELEBRAR <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 44.5312px; transform: translateX(-50%); font-size: 14px;">A9</span></span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">OS </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">FEITOS </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">DO </span><span class="word" style="box-sizing: border-box; position: relative; display: inline-block;">SENHOR <span class="chord chords" style="box-sizing: border-box; color: black; font-weight: bold; position: absolute; top: -18px; left: 34.6406px; transform: translateX(-50%); font-size: 14px;">B9</span></span></div></div></div></div></pre></center></center>
+    -->
+</body>
+
+</html>

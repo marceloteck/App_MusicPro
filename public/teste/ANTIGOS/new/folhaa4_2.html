@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Folha A4</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin-bottom: 10px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            page-break-after: always;
+            position: relative;
+        }
+
+        .lyrics {
+            font-size: 16px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            outline: none;
+            min-height: 100%;
+            cursor: text;
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                page-break-after: always;
+            }
+            .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <label for="marginSize">Tamanho da Margem (mm):</label>
+        <input type="number" id="marginSize" value="20" min="5" max="50">
+        <button onclick="generatePages()">Gerar Documento</button>
+        <button onclick="saveContent()">Salvar</button>
+        <button onclick="window.print()">Imprimir</button>
+    </div>
+
+    <div id="content">
+        <!-- As folhas serão geradas aqui -->
+    </div>
+
+    <script>
+        function generatePages() {
+            const contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = ""; // Limpa as páginas anteriores
+
+            let marginSize = parseInt(document.getElementById("marginSize").value);
+            let availableHeight = 297 - (marginSize * 2); // Altura disponível na folha A4
+
+            let text = localStorage.getItem("savedLyrics") || "<b>Clique aqui para editar o conteúdo...</b>";
+            let words = text.split(/\n/);
+            
+            let page = createPage(marginSize);
+            let pageHeight = 0;
+
+            let lyricsContainer = document.createElement("div");
+            lyricsContainer.classList.add("lyrics");
+            lyricsContainer.setAttribute("contenteditable", "true");
+            lyricsContainer.innerText = text;
+            lyricsContainer.addEventListener("input", adjustPages);
+            page.appendChild(lyricsContainer);
+            contentDiv.appendChild(page);
+        }
+
+        function createPage(marginSize) {
+            let page = document.createElement("div");
+            page.classList.add("page");
+            page.style.padding = `${marginSize}mm`;
+            return page;
+        }
+
+        function saveContent() {
+            let lyricsText = document.querySelector(".lyrics").innerText;
+            localStorage.setItem("savedLyrics", lyricsText);
+            alert("Conteúdo salvo!");
+        }
+
+        function adjustPages() {
+            let lyricsContainer = document.querySelector(".lyrics");
+            let currentPage = document.querySelector(".page");
+
+            console.print(currentPage);
+
+            if (lyricsContainer.scrollHeight > currentPage.clientHeight) {
+                alert("Texto muito grande! Nova página será adicionada em breve.");
+                // Aqui podemos implementar a lógica de adicionar novas páginas conforme necessário
+            }
+        }
+
+        window.onload = generatePages;
+    </script>
+
+</body>
+</html>

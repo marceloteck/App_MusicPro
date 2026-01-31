@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulação de Cifras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .chords {
+            white-space: pre;
+            font-size: 1.5em;
+            /* Tamanho da fonte das cifras */
+            line-height: 1.5;
+            /* Espaçamento entre linhas */
+        }
+
+        .lyrics {
+            white-space: pre;
+            font-size: 1em;
+            /* Tamanho da fonte das letras */
+            line-height: 1.5;
+            /* Espaçamento entre linhas */
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="controls">
+        <label for="fontSize">Tamanho da Fonte:</label>
+        <input type="range" id="fontSize" min="1" max="3" step="0.1" value="1.5">
+    </div>
+
+    <pre id="musica"></pre>
+
+    <script>
+        const jsonData = {
+            "title": "Todos Reunidos na Casa de Deus",
+            "key": "E",
+            "sections": [
+                {
+                    "type": "intro",
+                    "chords": [
+                        ["E", "A9", "E/G#", "D9", "A/C#"],
+                        ["E", "A/C#", "E/G#", "D9", "A9"]
+                    ]
+                },
+                {
+                    "type": "verse",
+                    "lines": [
+                        {
+                            "lyrics": [" ", "TODOS", "REUNIDOS", "NA", "CASA", "DE", "DEUS"],
+                            "chords": ["E", null, "A9", null, null, null, "E"]
+                        },
+                        {
+                            "lyrics": [" ", "COM", "CANTOS", "DE", "ALEGRIA", "E", "GRANDE", "LOUVOR"],
+                            "chords": ["A9", null, null, null, "B9", null, "A9", null]
+                        },
+                        {
+                            "lyrics": [" ", "VAMOS", "CELEBRAR", "OS", "FEITOS", "DO", "SENHOR"],
+                            "chords": ["E", null, "A9", null, null, null, "E"]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function formatMusic(data) {
+            let output = '';
+            let chordsOutput = '';
+
+            data.sections.forEach(section => {
+                if (section.type === 'verse') {
+                    section.lines.forEach(line => {
+                        const { lyrics, chords } = line;
+                        let chordLine = '';
+                        let lyricLine = '';
+
+                        lyrics.forEach((lyric, index) => {
+                            if (chords[index]) {
+                                chordLine += chords[index].padEnd(10, ' '); // Alinha as cifras
+                            } else {
+                                chordLine += ' '.padEnd(10, ' '); // Espaço para cifras nulas
+                            }
+                            lyricLine += lyric + ' '; // Adiciona a letra
+                        });
+
+                        chordsOutput += chordLine + '\n';
+                        output += lyricLine + '\n\n'; // Quebra de linha entre as estrofes
+                    });
+                }
+            });
+
+            return `<div class="chords">${chordsOutput}</div><div class="lyrics">${output}</div>`;
+        }
+
+        function updateFontSize() {
+            const fontSize = document.getElementById('fontSize').value;
+            document.querySelector('.chords').style.fontSize = `${fontSize}em`;
+            document.querySelector('.lyrics').style.fontSize = `${fontSize}em`;
+        }
+
+        document.getElementById('musica').innerHTML = formatMusic(jsonData);
+        document.getElementById('fontSize').addEventListener('input', updateFontSize);
+    </script>
+
+</body>
+
+</html>
+
+
+
+<!--ATUAL PARA USO DE DIVISÃO DE PÁGINAS-->
+
+<!--<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Texto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .toolbar {
+            margin-bottom: 10px;
+        }
+
+        .toolbar button {
+            margin-right: 5px;
+        }
+
+        .editor-container {
+            position: relative;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            background: white;
+            overflow: hidden;
+            white-space: pre-wrap;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 12px;
+            color: gray;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .output {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <button onclick="formatText('bold')">Negrito</button>
+        <button onclick="formatText('italic')">Itálico</button>
+        <button onclick="formatText('underline')">Sublinhado</button>
+    </div>
+    <div class="container" id="pages"></div>
+    <div class="output">
+        <h3>Texto Armazenado (JSON)</h3>
+        <pre id="jsonOutput"></pre>
+    </div>
+    <script>
+        let storedLines = [""];
+        const pageHeight = 1122;  // Aproximadamente 29,7 cm em pixels para uma folha A4
+        const marginTopBottom = 50; // Margem superior e inferior de 2,5 cm (ajuste conforme necessário)
+
+        // Calculando a altura disponível para o conteúdo, descontando as margens
+        const availableHeight = pageHeight - marginTopBottom; // 1122px - 50px = 1072px
+
+        // Ajuste da altura da linha (ajuste conforme o tamanho da fonte)
+        const lineHeight = 20; // Altura de uma linha em pixels (ajuste conforme necessário)
+        const linesPerPage = Math.floor(availableHeight / lineHeight); // Quantidade de linhas que cabem na página
+
+
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function handleInput(event) {
+
+            const index = parseInt(event.target.getAttribute("data-page")) * linesPerPage;
+            const lines = event.target.innerText.split("\n");
+            storedLines.splice(index, lines.length, ...lines);
+            updateStoredText();
+            managePageBreaks();
+        }
+
+        // Função para gerenciar a quebra de página
+        function managePageBreaks() {
+            // Ajusta a lógica de quebra de página com base no limite de altura
+            let currentHeight = 0;
+            let currentPage = 0;
+            let formattedText = '';
+
+            for (let i = 0; i < storedLines.length; i++) {
+                const line = storedLines[i];
+                currentHeight += 20; // Incrementa a altura de cada linha
+
+                if (currentHeight > pageHeight) {
+                    currentPage++;
+                    currentHeight = 0;  // Reset para a nova página
+                }
+
+                // Adiciona a linha com o número da página correspondente
+                formattedText += `<div contentEditable="false" data-page="${currentPage}">${line}</div>\n`;
+            }
+
+            document.getElementById("content").innerHTML = formattedText;
+        }
+
+
+
+
+        function handleKeyDown(event) {
+            if (event.key === 'Backspace') {
+                managePageBreaks();
+            }
+        }
+
+        function updateStoredText() {
+            document.getElementById('jsonOutput').textContent = JSON.stringify(storedLines, null, 2);
+        }
+
+        function managePageBreaks() {
+            let allText = storedLines.join("\n");
+            storedLines = allText.split("\n");
+            renderPages();
+        }
+
+        function renderPages() {
+            let container = document.getElementById('pages');
+            container.innerHTML = "";
+            let numPages = Math.max(1, Math.ceil(storedLines.length / linesPerPage));
+
+            for (let i = 0; i < numPages; i++) {
+                let page = document.createElement('div');
+                page.classList.add('editor-container');
+                page.contentEditable = "true";
+                page.setAttribute("data-page", i);
+                page.oninput = handleInput;
+                page.onkeydown = handleKeyDown;
+
+                let pageNumber = document.createElement('div');
+                pageNumber.classList.add('page-number');
+                pageNumber.textContent = `Página ${i + 1}`;
+
+                let start = i * linesPerPage;
+                let end = start + linesPerPage;
+                page.innerText = storedLines.slice(start, end).join('\n');
+
+                page.appendChild(pageNumber);
+                container.appendChild(page);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderPages();
+        });
+    </script>
+</body>
+
+</html>
+
+-->
+
+
+
+
+<!-------------------------------------------ANTIGOS------------------------------------------------------------------>
+<!--<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Texto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .toolbar {
+            margin-bottom: 10px;
+        }
+
+        .toolbar button {
+            margin-right: 5px;
+        }
+
+        .editor {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            background: white;
+            overflow: hidden;
+            white-space: pre-wrap;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .output {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <button onclick="formatText('bold')">Negrito</button>
+        <button onclick="formatText('italic')">Itálico</button>
+        <button onclick="formatText('underline')">Sublinhado</button>
+    </div>
+    <div class="container" id="pages">
+        <div contenteditable="true" class="editor" oninput="handleInput(event)" onkeydown="handleKeyDown(event)"></div>
+    </div>
+    <div class="output">
+        <h3>Texto Armazenado (JSON)</h3>
+        <pre id="jsonOutput"></pre>
+    </div>
+    <script>
+        let storedLines = [];
+
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function handleInput(event) {
+            let pages = document.querySelectorAll('.editor');
+            let lastPage = pages[pages.length - 1];
+
+            updateStoredText();
+
+            if (lastPage.scrollHeight > lastPage.clientHeight) {
+                addPage();
+            }
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Backspace') {
+                let pages = document.querySelectorAll('.editor');
+                if (pages.length > 1 && pages[pages.length - 1].innerText.trim() === '') {
+                    pages[pages.length - 1].remove();
+                }
+                updateStoredText();
+            }
+        }
+
+        function addPage() {
+            let newPage = document.createElement('div');
+            newPage.contentEditable = "true";
+            newPage.classList.add('editor');
+            newPage.oninput = handleInput;
+            newPage.onkeydown = handleKeyDown;
+            document.getElementById('pages').appendChild(newPage);
+            newPage.focus();
+        }
+
+        function updateStoredText() {
+            storedLines = [];
+            let pages = document.querySelectorAll('.editor');
+            pages.forEach(page => {
+                let lines = page.innerText.split('\n');
+                storedLines.push(...lines);
+            });
+            document.getElementById('jsonOutput').textContent = JSON.stringify(storedLines, null, 2);
+        }
+    </script>
+</body>
+
+</html>
+
+
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Texto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .toolbar {
+            margin-bottom: 10px;
+        }
+
+        .toolbar button {
+            margin-right: 5px;
+        }
+
+        .editor {
+            width: 210mm;
+            height: 297mm;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <button onclick="formatText('bold')">Negrito</button>
+        <button onclick="formatText('italic')">Itálico</button>
+        <button onclick="formatText('underline')">Sublinhado</button>
+    </div>
+    <div class="container" id="pages">
+        <div contenteditable="true" class="editor" oninput="handleInput(event)" onkeydown="handleKeyDown(event)"></div>
+    </div>
+    <script>
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function handleInput(event) {
+            let pages = document.querySelectorAll('.editor');
+            let lastPage = pages[pages.length - 1];
+            if (lastPage.scrollHeight > lastPage.clientHeight) {
+                addPage();
+            }
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Backspace') {
+                let pages = document.querySelectorAll('.editor');
+                if (pages.length > 1 && pages[pages.length - 1].innerText.trim() === '') {
+                    pages[pages.length - 1].remove();
+                }
+            }
+        }
+
+        function addPage() {
+            let newPage = document.createElement('div');
+            newPage.contentEditable = "true";
+            newPage.classList.add('editor');
+            newPage.oninput = handleInput;
+            newPage.onkeydown = handleKeyDown;
+            document.getElementById('pages').appendChild(newPage);
+            newPage.focus();
+        }
+    </script>
+</body>
+
+</html>
+-->

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Folhas A4</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            /*background-color: rgb(103, 105, 107);*/
+            background: linear-gradient(135deg, #f1f1f1, #d9d9d9);
+            margin: 0px;
+        }
+
+
+
+        .page {
+            /*width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin-bottom: 10px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;*/
+
+            width: 210mm;
+            height: 296mm;
+            page-break-after: always;
+
+            background: #fff;
+            margin: 0 auto 1.5cm;
+            padding: 13mm 10mm;
+            position: relative;
+            overflow: hidden;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+            box-sizing: border-box;
+        }
+
+        #content {
+            margin-top: 65px;
+        }
+
+        .lyrics {
+            font-size: 16px;
+            line-height: 1.5;
+            max-height: 980px;
+            min-height: 979px;
+            width: 100%;
+            flex-grow: 1;
+            cursor: text;
+            border: none;
+            /*outline: none;*/
+            outline-color: #9A9A9A;
+        }
+
+        @media print {
+            body * {
+                display: none !important;
+                /* Oculta todo o conteúdo da página */
+            }
+
+            #content,
+            #content * {
+                display: block !important;
+                /* Exibe somente o conteúdo de #content */
+            }
+
+            .page {
+                position: relative;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                margin: 0;
+                border: none;
+                width: 210mm;
+                height: 296mm;
+                /*padding: 20mm;*/
+                margin-bottom: 10px;
+                background: white;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                page-break-after: always;
+                display: flex;
+                flex-direction: column;
+                page-break-after: always;
+
+                box-sizing: border-box;
+
+            }
+        }
+
+        #toolbar {
+            align-items: center;
+            background: linear-gradient(135deg, #010D24, #03315E);
+            color: rgb(255, 255, 255);
+            display: flex;
+            height: 56px;
+            padding: 0px 16px;
+            z-index: 1;
+            box-shadow: rgba(0, 0, 0, 0.09) 0px -2px 8px, rgba(0, 0, 0, 0.06) 0px 4px 8px, rgba(0, 0, 0, 0.3) 0px 1px 2px, rgba(0, 0, 0, 0.15) 0px 2px 6px;
+            position: absolute;
+            width: 100%;
+        }
+
+        .addPageBtn {
+            width: 210mm;
+            display: block;
+            margin: 10px auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: transparent;
+            border: 1px solid #9A9A9A;
+            border-radius: 8%;
+            margin-top: -25px;
+            cursor: pointer;
+        }
+
+        .addPageBtn:hover {
+            background-color: #9A9A9A;
+            color: #f1f1f1;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="toolbar">
+        <div class="controls">
+            <label for="marginSize">Tamanho da Margem (mm):</label>
+            <input type="number" id="marginSize" value="20" min="5" max="50">
+            <button onclick="generatePages()">Gerar Documento</button>
+            <button onclick="window.print()">Imprimir</button>
+            <button onclick="saveContent()">Salvar</button>
+        </div>
+
+    </div>
+
+    <div id="content">
+        <!-- As folhas serão geradas aqui -->
+    </div>
+    <button class="addPageBtn" onclick="addNewPage()">Adicionar Página</button>
+
+    <script>
+        const lyricsText = `Clique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãosd
+adClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãoClique aqui para editar o conteúdo... Aqui está um exemplo de letra de música Que pode ter várias estrofes e refrões Se for longa, será dividida em múltiplas páginas Cada folha respeitará o tamanho de uma folha A4 Este é um teste para ver como o sistema ajusta Se o conteúdo for muito longo, novas páginas serão criadas Tudo será distribuído corretamente Para garantir uma boa leitura e impressãosd
+sd
+ad`;
+
+
+
+        // Configurações gerais para facilitar ajustes
+        const config = {
+            defaultMargin: 20, // Margem padrão das páginas
+            paddingAdjustment: 140, // Ajuste de altura para compensar margens
+            storageKey: "savedLyrics", // Chave de armazenamento no localStorage
+            maxPageHeight: 979, // Altura máxima permitida para o conteúdo
+        };
+
+
+        /**
+         * Função principal chamada ao carregar a página.
+         * Gera as páginas e popula com o conteúdo salvo ou padrão.
+         */
+        function generatePages() {
+            const contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = "";
+
+            let marginSize = parseInt(document.getElementById("marginSize").value) || config.defaultMargin;
+            let text = localStorage.getItem(config.storageKey) || lyricsText;
+
+            let currentPage = createPage(marginSize);
+            let currentText = createLyricsElement(text);
+
+            currentPage.appendChild(currentText);
+            contentDiv.appendChild(currentPage);
+        }
+
+        /**
+         * Cria um elemento de página com a margem definida.
+         * @param {number} marginSize - Tamanho da margem em mm.
+         * @returns {HTMLElement} Elemento da página criada.
+         */
+        function createPage(marginSize) {
+            let page = document.createElement("div");
+            page.classList.add("page");
+            page.style.padding = `${marginSize}mm`;
+            return page;
+        }
+
+        /**
+         * Cria um elemento de texto editável e aplica eventos.
+         * @param {string} text - Conteúdo da música.
+         * @returns {HTMLElement} Elemento de texto criado.
+         */
+        function createLyricsElement(text) {
+            let lyrics = document.createElement("div");
+            lyrics.classList.add("lyrics");
+            lyrics.setAttribute("contenteditable", "true");
+            lyrics.innerHTML = text;
+            addEventListenersToLyrics(lyrics);
+            return lyrics;
+        }
+
+        /**
+         * Adiciona eventos aos elementos de letras.
+         * @param {HTMLElement} lyricsElement - Elemento de letras.
+         */
+        function addEventListenersToLyrics(lyricsElement) {
+            lyricsElement.addEventListener("input", adjustPages);
+            lyricsElement.addEventListener("keyup", handleBackspace);
+        }
+
+        /**
+         * Salva o conteúdo editado no localStorage.
+         */
+        function saveContent() {
+            let lyricsHtml = document.querySelector(".lyrics").innerHTML;
+            localStorage.setItem(config.storageKey, lyricsHtml);
+            alert("Conteúdo salvo!");
+        }
+
+        /**
+         * Ajusta as páginas conforme o conteúdo cresce.
+         
+                    console.log("maxHeight: " + maxHeight);
+                    console.log("lyricsContainer.clientHeight: " + lyricsContainer.clientHeight);
+         */
+        /*function adjustPages() {
+            let pages = document.querySelectorAll(".page");
+            let contentContainer = document.querySelector("#content");
+
+            pages.forEach((page, index) => {
+                let lyricsContainer = page.querySelector(".lyrics");
+                let maxHeight = config.maxPageHeight;
+
+                // 🔹 **Força a altura fixa** (entre 979px e 980px)
+                lyricsContainer.style.maxHeight = "980px";
+                lyricsContainer.style.minHeight = "979px";
+                lyricsContainer.style.overflow = "hidden"; // Evita crescimento além da borda
+
+                if (lyricsContainer.clientHeight > maxHeight) {
+                    let overflowText = splitOverflowText(lyricsContainer, maxHeight);
+                    if (!overflowText.trim()) return;
+
+                    let nextPage = pages[index + 1];
+                    if (!nextPage) {
+                        nextPage = createPage(config.defaultMargin);
+                        contentContainer.appendChild(nextPage);
+                        pages = document.querySelectorAll(".page");
+                    }
+
+                    let nextLyrics = nextPage.querySelector(".lyrics");
+                    if (!nextLyrics) {
+                        nextLyrics = createLyricsElement("");
+                        nextPage.appendChild(nextLyrics);
+                    }
+
+                    lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+                    nextLyrics.innerHTML = overflowText.trim();
+                    moveCursorToEnd(nextLyrics);
+                }
+            });
+        }*/
+
+
+        function adjustPages() {
+            let pages = document.querySelectorAll(".page");
+            let contentContainer = document.querySelector("#content");
+
+            console.log("🔍 Iniciando ajuste das páginas...");
+            console.log(`📄 Total de páginas detectadas: ${pages.length}`);
+
+            pages.forEach((page, index) => {
+                let lyricsContainer = page.querySelector(".lyrics");
+
+                console.log(`📌 Verificando página ${index + 1}`);
+
+                // 🔹 **Força a altura fixa** (entre 979px e 980px)
+                lyricsContainer.style.maxHeight = "980px";
+                lyricsContainer.style.minHeight = "979px";
+                lyricsContainer.style.overflow = "hidden"; // Evita crescimento além da borda
+
+                let maxLines = 45; // 🔹 Ajuste conforme o número de linhas máximas desejadas
+                let currentLines = getLineCount(lyricsContainer);
+
+                console.log(`📏 Linhas atuais: ${currentLines} | Limite: ${maxLines}`);
+
+                if (currentLines > maxLines) {
+                    console.log("⚠️ Excedeu o número de linhas! Criando nova página...");
+
+                    let overflowText = splitOverflowTextByLines(lyricsContainer, maxLines);
+                    console.log(`✂️ Texto excedente extraído: "${overflowText}"`);
+
+                    if (!overflowText.trim()) {
+                        console.log("🚨 Erro: Nenhum texto para transferir para a nova página.");
+                        return;
+                    }
+
+                    let nextPage = pages[index + 1];
+
+                    if (!nextPage) {
+                        console.log("🆕 Criando nova página...");
+                        nextPage = createPage(config.defaultMargin);
+                        contentContainer.appendChild(nextPage);
+                        pages = document.querySelectorAll(".page");
+                        console.log(`✅ Nova página adicionada! Total de páginas agora: ${pages.length}`);
+                    } else {
+                        console.log("➡️ Página seguinte já existe, reutilizando...");
+                    }
+
+                    let nextLyrics = nextPage.querySelector(".lyrics");
+
+                    if (!nextLyrics) {
+                        console.log("🎵 Criando nova área de letras na nova página...");
+                        nextLyrics = createLyricsElement("");
+                        nextPage.appendChild(nextLyrics);
+                    }
+
+                    console.log("✏️ Ajustando conteúdo das páginas...");
+                    lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+                    nextLyrics.innerHTML = overflowText.trim();
+
+                    moveCursorToEnd(nextLyrics);
+
+                    console.log("✅ Ajuste concluído para essa página!");
+                } else {
+                    console.log("✅ Página dentro do limite de linhas, sem necessidade de ajuste.");
+                }
+            });
+
+            console.log("🎯 Ajuste de páginas finalizado!");
+        }
+
+
+        function getLineCount(element) {
+            let computedStyle = window.getComputedStyle(element);
+            let lineHeight = computedStyle.lineHeight;
+
+            // Se `lineHeight` for "normal", precisamos estimar com base no font-size
+            if (lineHeight === "normal") {
+                let fontSize = parseFloat(computedStyle.fontSize);
+                lineHeight = fontSize * 1.2; // Estimativa padrão (~120% do font-size)
+            } else {
+                lineHeight = parseFloat(lineHeight);
+            }
+
+            let totalHeight = element.scrollHeight; // Usa scrollHeight para pegar o conteúdo real
+            return Math.round(totalHeight / lineHeight);
+        }
+
+
+        function splitOverflowTextByLines(container, maxLines) {
+            let words = container.innerHTML.split(" ");
+            let tempText = "";
+            let testElement = document.createElement("div");
+
+            testElement.style.visibility = "hidden";
+            testElement.style.position = "absolute";
+            testElement.classList.add("lyrics");
+            testElement.style.whiteSpace = "pre-wrap"; // Mantém as quebras de linha corretas
+            testElement.style.lineHeight = window.getComputedStyle(container).lineHeight;
+
+            document.body.appendChild(testElement);
+
+            for (let i = 0; i < words.length; i++) {
+                testElement.innerHTML = tempText + " " + words[i];
+                let currentLines = getLineCount(testElement);
+
+                if (currentLines > maxLines) {
+                    document.body.removeChild(testElement);
+                    return words.slice(i).join(" ");
+                }
+
+                tempText += " " + words[i];
+            }
+
+            document.body.removeChild(testElement);
+            return "";
+        }
+
+
+
+
+
+
+        /**
+         * Divide corretamente o texto que excede a página.
+         * @param {HTMLElement} container - Container de letras.
+         * @param {number} maxHeight - Altura máxima permitida.
+         * @returns {string} Texto excedente.
+         */
+        function splitOverflowText(container, maxHeight) {
+            let words = container.innerHTML.split(" ");
+            let tempText = "";
+            let testElement = document.createElement("div");
+
+            // 🔹 **Força a altura fixa no elemento de teste**
+            testElement.style.maxHeight = "980px";
+            testElement.style.minHeight = "979px";
+            testElement.style.visibility = "hidden";
+            testElement.style.position = "absolute";
+            testElement.classList.add("lyrics");
+
+            document.body.appendChild(testElement);
+
+            for (let i = 0; i < words.length; i++) {
+                testElement.innerHTML = tempText + " " + words[i];
+                if (testElement.scrollHeight > maxHeight) {
+                    document.body.removeChild(testElement);
+                    return words.slice(i).join(" ");
+                }
+                tempText += " " + words[i];
+            }
+
+            document.body.removeChild(testElement);
+            return "";
+        }
+
+
+        /**
+         * Move o cursor para o final do conteúdo editável.
+         * @param {HTMLElement} element - Elemento onde o cursor será movido.
+         */
+        function moveCursorToEnd(element) {
+            let range = document.createRange();
+            let selection = window.getSelection();
+            range.selectNodeContents(element);
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        /**
+         * Adiciona manualmente uma nova página em branco.
+         */
+        function addNewPage() {
+            let contentDiv = document.getElementById("content");
+            let newPage = createPage(config.defaultMargin);
+            let newLyrics = createLyricsElement("");
+            newLyrics.style.maxHeight = "980px";
+            newLyrics.style.minHeight = "979px";
+            newPage.appendChild(newLyrics);
+            contentDiv.appendChild(newPage);
+        }
+
+        /**
+         * Remove páginas vazias quando o usuário usa a tecla Backspace.
+         * @param {KeyboardEvent} event - Evento de teclado.
+         */
+        function handleBackspace(event) {
+            if (event.key === "Backspace") {
+                let pages = document.querySelectorAll(".page");
+                let allTextContainers = document.querySelectorAll(".lyrics");
+
+                allTextContainers.forEach((textContainer, index) => {
+                    if (textContainer.innerHTML.trim() === "" && pages[index] && pages.length > 1) {
+                        pages[index].remove();
+                        adjustPages();
+                    }
+                });
+            }
+        }
+
+        window.onload = generatePages;
+
+    </script>
+
+</body>
+
+</html>

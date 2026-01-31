@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cifras Interativas</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      background-color: #222;
+      color: white;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .topbar button {
+      background: #444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .topbar button:hover {
+      background: #666;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 16px;
+   
+    }
+    .cifrascs{
+      padding-left: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar com botões -->
+  <div class="topbar">
+    <button onclick="transpose(1)">▲ Tom</button>
+    <button onclick="transpose(-1)">▼ Tom</button>
+    <button onclick="resetTranspose()">Reset Tom</button>
+    <button onclick="adjustFontSize(2)">A+</button>
+    <button onclick="adjustFontSize(-2)">A-</button>
+    <button onclick="resetFontSize()">Reset Fonte</button>
+  </div>
+  <!-- Letras da música com cifras -->
+<div class="cifrascs">
+<h2>HOSANA AO FILHO DE DAVI</h2>
+
+<pre id="div-cifra">              
+<b>        C</b>       <b>F</b>          <b>C</b>
+<strong>SOLO: HOSANA AO FILHO DE DAVI!</strong>
+<b>              C</b>       <b>F</b>          <b>C</b>
+<strong>ASSEMBLÉIA: HOSANA AO FILHO DE DAVI!</strong>
+
+<b>   C</b>          <b>Am</b>     <b>Dm</b>        <b>G</b>
+BENDITO O QUE VEM EM NOME DO SENHOR!
+
+<b>        C</b>       <b>F</b>          <b>C</b>
+<strong>SOLO: HOSANA AO FILHO DE DAVI!</strong>
+<b>              C</b>       <b>F</b>          <b>C</b>
+<strong>ASSEMBLÉIA: HOSANA AO FILHO DE DAVI!</strong>
+
+<b>C</b>          <b>Am</b>    <b>Dm</b>         <b>G</b>           
+REI DE ISRAEL, HOSANA NAS ALTURAS!
+
+<b>        C</b>       <b>F</b>          <b>C</b>
+<strong>SOLO: HOSANA AO FILHO DE DAVI!</strong>
+<b>              C</b>       <b>F</b>          <b>C</b>
+<strong>ASSEMBLÉIA: HOSANA AO FILHO DE DAVI!</strong>
+
+</pre>
+
+
+
+<h2>Derrama ó senhor (crianças)</h2>
+<pre class="col1">[Primeira Parte]
+
+<b style="color: rgb(255, 102, 0);">C</b>                           <b style="color: rgb(255, 102, 0);">Am</b>
+Nossas crianças serão abençoadas
+
+<b style="color: rgb(255, 102, 0);" class="js-modal-trigger">Dm</b>             <b style="color: rgb(255, 102, 0);">G7</b>       
+Pois o Senhor vai derramar o seu
+<b style="color: rgb(255, 102, 0);">C</b>   (<b style="color: rgb(255, 102, 0);">C7</b>)
+amor (bis)
+
+[Refrão]
+
+<b style="color: rgb(255, 102, 0);">F</b>                 <b style="color: rgb(255, 102, 0);">C</b>
+Derrama ó senhor derrama ó 
+senhor 
+<b style="color: rgb(255, 102, 0);">G7</b>                      <b style="color: rgb(255, 102, 0);">C</b>
+Derrama sobre elas o seu amor 
+
+</pre>
+
+
+
+      <h2>HOSANA HEI HOSANA HA</h2>    
+<pre id="div-cifra">
+<strong>INTRO:</strong> <b>D</b> <b>G</b> <b>D</b>
+
+        <b>D</b>                   
+<strong>HOSANA HEI HOSANA HA</strong>
+        <b>G</b>
+<strong>HOSANA HEI HOSANA HEI</strong>
+        <b>D</b>     
+<strong>HOSANA HA (BIS)</strong>
+
+            <b>D</b>                        <b>G</b>
+<span>1. ELE É O SANTO ELE É O FILHO DE MARIA</span>
+                    <b>D</b>           <b>A</b>          <b>D</b>
+<span>ELE É O DEUS DE ISRAEL, ELE É O FILHO DE DAVI</span>
+              <b>D</b>                          <b>G</b>
+<span>SANTO É O SEU NOME É O SENHOR DEUS DO UNIVERSO</span>
+                      <b>D</b>        <b>A</b>          <b>D</b>
+<span>GLORIA A DEUS DE ISRAEL NOSSO REI E SALVADOR</span>
+
+        <b>D</b>                   
+<strong>HOSANA HEI HOSANA HA</strong>
+        <b>G</b>
+<strong>HOSANA HEI HOSANA HEI</strong>
+        <b>D</b>     
+<strong>HOSANA HA (BIS)</strong>
+
+            <b>D</b>                        <b>G</b>
+<span>2. VAMOS A ELE COM AS FLORES DOS TRIGAIS</span>
+                    <b>D</b>            <b>A</b>            <b>D</b>
+<span>COM OS RAMOS DE OLIVEIRA COM ALEGRIA E MUITA PAZ</span>
+              <b>D</b>                          <b>G</b>
+<span>SANTO É O SEU NOME É O SENHOR DEUS DO UNIVERSO</span>
+          <b>D</b>                    <b>A</b>          <b>D</b>
+<span>GLORIA A DEUS DE ISRAEL NOSSO REI E SALVADOR</span>
+
+
+            <b>D</b>                 <b>G</b> 
+<span>3. ELE É O CRISTO É O UNIFICADOR</span>
+                <b>D</b>         <b>A</b>        <b>D</b>
+<span>É HOSANA NAS ALTURAS É HOSANA NO AMOR</span>
+              <b>D</b>                          <b>G</b>
+<span>SANTO É O SEU NOME É O SENHOR DEUS DO UNIVERSO</span>
+                      <b>D</b>        <b>A</b>          <b>D</b>
+<span>GLORIA A DEUS DE ISRAEL NOSSO REI E SALVADOR</span>
+
+        <b>D</b>                   
+<strong>HOSANA HEI HOSANA HA</strong>
+        <b>G</b>
+<strong>HOSANA HEI HOSANA HEI</strong>
+        <b>D</b>     
+<strong>HOSANA HA (BIS)</strong>
+</pre>
+
+    
+
+<h2>HOSANA, HOSANA AO REI!</h2>
+
+
+<pre id="div-cifra">              
+<b>A</b> <b>D</b>     <b>E</b> <b>A</b>   
+<strong>HOSANA, HOSANA AO REI!
+<b>A</b> <b>D</b>     <b>E</b> <b>A</b>   
+HOSANA, HOSANA AO REI!</strong>
+
+<b>A</b>                   <b>D</b>
+MANTOS E PALMAS ESPALHANDO VAI,
+<b>E</b>                <b>A</b>	   
+O POVO ALEGRE DE JERUSALÉM
+      <b>D</b>     
+LÁ BEM AO LONGE SE COMEÇA A VER,
+<b>E</b>                    <b>A</b>  
+O FILHO DE DEUS QUE MONTADO VEM
+<b>F#m </b>                 <b>C#m</b>
+ENQUANTO MIL VOZES RESSOAM POR AÍ
+<b>D</b>                   <b>A</b>
+HOSANA AO QUE VEM EM NOME DO SENHOR
+<b>F#m</b>              <b>C#m</b>
+COM UM ALENTO DE GRANDE EXCLAMAÇÃO,
+<b>D</b>                    <b>E</b>
+PRORROMPEM COM VOZ TRIUNFAL
+
+<b>A</b> <b>D</b>     <b>E</b> <b>A</b>   
+<strong>HOSANA, HOSANA AO REI!
+<b>A</b> <b>D</b>     <b>E</b> <b>A</b>   
+HOSANA, HOSANA AO REI!</strong>
+
+<b>A</b>                   <b>D</b>
+COMO NA ESTRADA DE JERUSALÉM,
+<b>E</b>              <b>A</b>	   
+UM DIA TAMBÉM PODEREMOS CANTAR
+      <b>D</b>  
+A JESUS CRISTO QUE VIRÁ OUTRA VEZ,
+<b>E</b>                  <b>A</b>  
+PARA LEVAR-NOS AO ETERNO LAR
+
+<b>F#m </b>                 <b>C#m</b>
+ENQUANTO MIL VOZES RESSOAM POR AÍ
+<b>D</b>                   <b>A</b>
+HOSANA AO QUE VEM EM NOME DO SENHOR
+<b>F#m</b>              <b>C#m</b>
+COM UM ALENTO DE GRANDE EXCLAMAÇÃO,
+<b>D</b>                    <b>E</b>
+PRORROMPEM COM VOZ TRIUNFAL
+
+<b>A</b> <b>D</b>     <b>E</b> <b>A</b>   
+<strong>HOSANA, HOSANA AO REI!
+<b>A</b> <b>D</b>     <b>E</b> <b>A</b>   
+HOSANA, HOSANA AO REI!</strong>
+
+</pre>
+
+<h2>OS FILHOS DOS HEBREUS</h2>
+<pre id="div-cifra">              
+<b>Am</b>              <b>F</b>
+<strong>OS FILHOS DOS HEBREUS,
+  <b>Dm</b>          <b>Am</b>
+COM RAMOS DE PALMEIRA,
+  <b>A</b>
+ACORRERAM AO ENCONTRO
+    <b>A7</b>            <b>Dm</b>
+DE JESUS, NOSSO SENHOR</strong>
+
+            <b>Am</b>
+<strong>CANTANDO E GRITANDO:
+  <b>E</b>            <b>Am</b>
+"HOSANA, Ó SALVADOR!"</strong>
+
+  <b>Dm</b>         <b>Am</b>
+<strong>CANTANDO E GRITANDO:
+  <b>E</b>            <b>Am</b>
+"HOSANA, Ó SALVADOR!"</strong>
+
+<b>Am</b>      <b>Em</b>           <b>F</b>        <b>C</b>        
+O MUNDO E TUDO QUE TEM NELE É DE DEUS,
+<b>E</b>                 <b>E7</b>           <b>Am</b>
+A TERRA E OS QUE AÍ VIVEM, TODOS SEUS!
+  <b>Am</b>         <b>Em</b>           <b>F</b>              <b>C</b>   
+FOI DEUS QUE A TERRA CONSTRUIU POR SOBRE OS MARES,
+  <b>E</b>           <b>E7</b>          <b>Am</b>
+NO FUNDO DO OCEANO, SEUS PILARES!
+
+<strong>(REFRÃO)</strong>
+
+    <b>Am</b>    <b>Em</b>            <b>F</b>        <b>C</b>       
+QUEM VAI MORAR NO TEMPLO DE SUA CIDADE?
+    <b>E</b>            <b>E7</b>           <b>Am</b>
+QUEM PENSA E VIVE LONGE DAS VAIDADES!
+    <b>Am</b>     <b>Em</b>           <b>F</b>     <b>C</b>  
+POIS DEUS,O SALVADOR O ABENÇOARÁ,
+  <b>E</b>         <b>E7</b>      <b>Am</b>
+NO JULGAMENTO O DEFENDERÁ!
+
+<strong>(REFRÃO)</strong>
+
+<b>Am</b>       <b>Em</b>            <b>F</b>             <b>C</b>       
+ASSIM, SÃO TODOS OS QUE PRESTAM CULTO A DEUS
+    <b>E</b>                    <b>E7</b>    <b>Am</b>
+QUE ADORAM O SENHOR, DEUS DOS HEBREUS!
+  <b>Am</b>     <b>Em</b>             <b>F</b>             <b>C</b>   
+PORTÕES ANTIGOS, SE ESCANCAREM, VAI CHEGAR,
+<b>E</b>              <b>E7</b>           <b>Am</b>
+ALERTA! O REI DA GLÓRIA VAI ENTRAR!
+
+<strong>(REFRÃO)</strong>
+
+    <b>Am</b>     <b>Em</b>              <b>F</b>           <b>C</b>       
+QUEM É, QUEM É, ENTÃO, QUEM É O REI DA GLÓRIA?
+<b>E</b>             <b>E7</b>               <b>Am</b>
+O DEUS, FORTE SENHOR DA NOSSA HISTÓRIA!
+  <b>Am</b>     <b>Em</b>             <b>F</b>             <b>C</b>   
+PORTÕES ANTIGOS, SE ESCANCAREM, VAI CHEGAR,
+<b>E</b>              <b>E7</b>           <b>Am</b>
+ALERTA! O REI DA GLÓRIA VAI ENTRAR!
+
+<strong>(REFRÃO)</strong>
+
+    <b>Am</b>     <b>Em</b>             <b>F</b>          <b>C</b>       
+QUEM É,QUEM É, ENTÃO, QUEM É O REI DA GLÓRIA?
+<b>E</b>             <b>E7</b>               <b>Am</b>
+O DEUS QUE TUDO PODE, É O REI DA GLÓRIA!
+    <b>Am</b>      <b>Em</b>              <b>F</b>          <b>C</b>  
+AOS TRÊS, AO PAI, AO FILHO E AO CONFORTADOR
+    <b>E</b>          <b>E7</b>         <b>Am</b>
+DA IGREJA QUE CAMINHA O LOUVOR!
+
+<strong>(REFRÃO)</strong>
+
+
+          </pre>
+
+
+<h2>o povo de Deus</h2>          
+<pre id="div-cifra">              
+ 
+  <b>D</b>                 <b>A</b>
+O POVO DE DEUS NO DESERTO ANDAVA
+  <b>Em</b>    <b>A7</b>          <b>D</b>   
+MAS A SUA FRENTE ALGUÉM CAMINHAVA
+  <b>D</b>                <b>A</b>
+O POVO DE DEUS ERA RICO DE NADA
+     <b>Em</b>   <b>A7</b>           <b>D</b>    <b>D7</b>  
+SÓ TINHA ESPERANÇA E O PÓ DA ESTRADA
+
+       <b>G</b>           <b>A7</b>
+<strong>TAMBÉM SOU TEU POVO SENHOR
+        <b>D</b>    <b>Bm</b>
+E ESTOU NESSA ESTRADA
+      <b>Em</b>   <b>A7</b>
+SOMENTE A TUA GRAÇA
+        <b>D</b>    <b>D7</b>
+ME BASTA E MAIS NADA
+       <b>G</b>           <b>A7</b>
+TAMBÉM SOU TEU POVO SENHOR
+        <b>D</b>    <b>Bm</b>
+E ESTOU NESSA ESTRADA
+      <b>Em</b>    <b>A7</b>
+SOMENTE A TUA GRAÇA
+        <b>D</b>    <b>A</b>
+ME BASTA E MAIS NADA</strong>
+
+  <b>D</b>                <b>A</b>
+O POVO DE DEUS, TAMBÉM VACILAVA,
+    <b>Em</b>  <b>A7</b>          <b>D</b>  
+ÀS VEZES CUSTAVA A CRER NO AMOR.
+  <b>D</b>                <b>A</b>
+O POVO DE DEUS, CHORANDO REZAVA,
+ <b>Em</b>  <b>A7</b>        <b>D</b>  <b>D7</b>
+PEDIA PERDÃO, E RECOMEÇAVA.
+
+<strong>(REFRÃO)</strong>
+
+  <b>D</b>                <b>A</b>  
+O POVO DE DEUS TAMBÉM TEVE FOME
+    <b>Em</b>  <b>A7</b>            <b>D</b>       
+E TU LHE MANDASTE O PÃO LÁ DO CÉU.
+  <b>D</b>                  <b>A</b>
+O POVO DE DEUS, CANTANDO DEU GRAÇAS,
+    <b>Em</b> <b>A7</b>                 <b>D</b>    <b>D7</b>
+PROVOU TEU AMOR, TEU AMOR QUE NÃO PASSA.
+
+<strong>(REFRÃO)</strong>
+
+  <b>D</b>                 <b>A</b>
+O POVO DE DEUS AO LONGE AVISTOU,
+   <b>Em</b>  <b>A7</b>               <b>D</b> 
+A TERRA QUERIDA QUE O AMOR PREPAROU.
+  <b>D</b>                 <b>A</b>
+O POVO DE DEUS, CORRIA E CANTAVA
+      <b>Em</b>  <b>A7</b>                 <b>D</b>   <b>D7</b>
+E NOS SEUS LOUVORES, SEU PODER PROCLAMAVA.
+
+<strong>(REFRÃO)</strong>
+
+
+    </pre>
+
+
+<h2>rei rei jeus</h2>
+<pre> <b style="color: rgb(0, 0, 0);">Em</b>         <b style="color: rgb(0, 0, 0);">D</b>
+Rei, Rei, Rei
+      <b class="js-modal-trigger" style="color: rgb(0, 0, 0);">Em</b>        <b class="js-modal-trigger" style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+        <b style="color: rgb(0, 0, 0);">B7</b>
+Jesus é o Senhor
+
+<b style="color: rgb(0, 0, 0);">Em</b>
+Vem com poder
+Para nos libertar
+<b style="color: rgb(0, 0, 0);">D</b>
+Sua palavra
+Ensina a amar
+  <b style="color: rgb(0, 0, 0);">Am</b>
+Eu grito pro mundo
+  <b style="color: rgb(0, 0, 0);">B7</b>
+Que Cristo Jesus é o
+
+<b style="color: rgb(0, 0, 0);">Em</b>         <b style="color: rgb(0, 0, 0);">D</b>
+Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+        <b style="color: rgb(0, 0, 0);">B7</b>
+Jesus é o Senhor
+
+<b style="color: rgb(0, 0, 0);">Em</b>
+E vem de novo
+Pra nos socorrer
+<b style="color: rgb(0, 0, 0);">D</b>
+Somos seu povo
+Que espera e que crê
+  <b style="color: rgb(0, 0, 0);">Am</b>
+Eu grito pro mundo
+
+<b style="color: rgb(0, 0, 0);">B7</b>
+Que Cristo Jesus é o
+
+<b style="color: rgb(0, 0, 0);">Em</b>         <b style="color: rgb(0, 0, 0);">D</b>
+Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+        <b style="color: rgb(0, 0, 0);">B7</b>
+Jesus é o Senhor
+
+<b style="color: rgb(0, 0, 0);">Em</b>
+Vem todo dia
+De novo pra dar
+<b style="color: rgb(0, 0, 0);">D</b>
+Um coração
+Para quem quer amar
+  <b style="color: rgb(0, 0, 0);">Am</b>
+Eu grito pro mundo
+  <b style="color: rgb(0, 0, 0);">B7</b>
+Que Cristo Jesus é o
+
+<b style="color: rgb(0, 0, 0);">Em</b>         <b style="color: rgb(0, 0, 0);">D</b>
+Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+      <b style="color: rgb(0, 0, 0);">Em</b>        <b style="color: rgb(0, 0, 0);">D</b>
+Jesus é o Rei, Rei, Rei
+        <b style="color: rgb(0, 0, 0);">B7</b>
+Jesus é o Senhor
+</pre>
+
+<h2>o senhor é rei</h2>
+<pre>[Intro] <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">A#</b> <b style="color: rgb(0, 0, 0);">G</b>  <b style="color: rgb(0, 0, 0);">A#</b>
+<b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">A#</b> <b style="color: rgb(0, 0, 0);">G</b>  <b style="color: rgb(0, 0, 0);">A#</b>
+<b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b> 
+<b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>   
+<b style="color: rgb(0, 0, 0);">A#7M</b> <b style="color: rgb(0, 0, 0);">A#6</b> <b style="color: rgb(0, 0, 0);">A#7M</b> <b style="color: rgb(0, 0, 0);">A#6</b> 
+<b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7(4/9)</b> <b style="color: rgb(0, 0, 0);">A7(4)</b>
+
+[Primeira Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>                <b style="color: rgb(0, 0, 0);">C/E</b>           
+O Senhor é Rei 
+<b style="color: rgb(0, 0, 0);">F</b>                          <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">C#°</b>
+O Senhor é meu pastor e Rei
+<b style="color: rgb(0, 0, 0);" class="js-modal-trigger">Dm</b>               <b style="color: rgb(0, 0, 0);">C/E</b>                
+O Senhor é Rei
+<b style="color: rgb(0, 0, 0);">F</b>                          <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">A7(4/9)</b> <b style="color: rgb(0, 0, 0);">A7(4)</b>
+O Senhor é meu pastor e Rei
+
+<b style="color: rgb(0, 0, 0);">Dm</b>                      <b style="color: rgb(0, 0, 0);">C/E</b>           
+O Senhor está no céu
+<b style="color: rgb(0, 0, 0);">F</b>                      <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>     
+O Senhor está no mar
+  <b style="color: rgb(0, 0, 0);">A#</b>    <b style="color: rgb(0, 0, 0);">A7</b>   <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">A#</b> <b style="color: rgb(0, 0, 0);">G</b>  <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">C4</b>  <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">C</b>
+Na extensão do infinito 
+<b style="color: rgb(0, 0, 0);">Dm</b>                      <b style="color: rgb(0, 0, 0);">C/E</b>           
+O Senhor está no céu
+<b style="color: rgb(0, 0, 0);">F</b>                      <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>     
+O Senhor está no mar
+  <b style="color: rgb(0, 0, 0);">A#</b>    <b style="color: rgb(0, 0, 0);">A7</b>   <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">A#</b> <b style="color: rgb(0, 0, 0);">G</b>  <b style="color: rgb(0, 0, 0);">C</b>
+Na extensão do infinito 
+
+[Refrão]
+
+<b style="color: rgb(0, 0, 0);">F</b>             <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>          <b style="color: rgb(0, 0, 0);">Am7</b>
+Está no céu,      está no mar
+
+<b style="color: rgb(0, 0, 0);">Dm</b>          <b style="color: rgb(0, 0, 0);">A#</b>         <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">A#</b>
+  Na extensão do infinito
+<b style="color: rgb(0, 0, 0);">F</b>             <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>          <b style="color: rgb(0, 0, 0);">Am7</b>
+Está no céu,      está no mar
+<b style="color: rgb(0, 0, 0);">Dm</b>          <b style="color: rgb(0, 0, 0);">A#</b>         <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">A#</b>
+  Na extensão do infinito
+
+( <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b> )
+( <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b> )
+( <b style="color: rgb(0, 0, 0);">A#7M</b> <b style="color: rgb(0, 0, 0);">A#6</b> <b style="color: rgb(0, 0, 0);">A#7M</b> <b style="color: rgb(0, 0, 0);">A#6</b> )
+( <b style="color: rgb(0, 0, 0);">Gm7</b>  <b style="color: rgb(0, 0, 0);">A7(4/9)</b> <b style="color: rgb(0, 0, 0);">A7(4)</b> )
+
+[Primeira Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>                <b style="color: rgb(0, 0, 0);">C/E</b>           
+  O Senhor é Rei 
+<b style="color: rgb(0, 0, 0);">F</b>                          <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">C#°</b>
+O Senhor é meu pastor e Rei
+<b style="color: rgb(0, 0, 0);">Dm</b>               <b style="color: rgb(0, 0, 0);" class="hover js-modal-trigger">C/E</b>                
+  O Senhor é Rei
+<b style="color: rgb(0, 0, 0);">F</b>                          <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">C</b>  <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">A7(4/9)</b> <b style="color: rgb(0, 0, 0);">A7(4)</b>
+O Senhor é meu pastor e Rei
+
+<b style="color: rgb(0, 0, 0);">Dm</b>                      <b style="color: rgb(0, 0, 0);">C/E</b>           
+  O Senhor está no céu
+<b style="color: rgb(0, 0, 0);">F</b>                      <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>     
+O Senhor está no mar
+        <b style="color: rgb(0, 0, 0);">A#</b>    <b style="color: rgb(0, 0, 0);">A7</b>   <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">A#</b> <b style="color: rgb(0, 0, 0);">G</b>  <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>
+Na extensão do infinito 
+<b style="color: rgb(0, 0, 0);">Dm</b>                      <b style="color: rgb(0, 0, 0);">C/E</b>           
+  O Senhor está no céu
+<b style="color: rgb(0, 0, 0);">F</b>                      <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>     
+O Senhor está no mar
+        <b style="color: rgb(0, 0, 0);">A#</b>    <b style="color: rgb(0, 0, 0);">A7</b>   <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">A#</b> <b style="color: rgb(0, 0, 0);">G</b>  <b style="color: rgb(0, 0, 0);">C</b>
+Na extensão do infinito 
+
+[Refrão]
+
+[Refrão]
+
+<b style="color: rgb(0, 0, 0);">F</b>             <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">C</b>          <b style="color: rgb(0, 0, 0);">Am7</b>
+Está no céu,      está no mar
+<b style="color: rgb(0, 0, 0);">Dm</b>          <b style="color: rgb(0, 0, 0);">A#</b>         <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">C4</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">A#</b>
+  Na extensão do infinito
+</pre>
+
+
+
+
+
+
+<h1>MISSA</h1>
+
+<h2>aclamação</h2>
+<pre id="div-cifra">              
+          <b>Am</b>     <b>E</b>    <b>Am</b> 
+  <strong>SALVE, Ó CRISTO OBEDIENTE!
+          <b>E7</b>       <b>Am</b>
+  SALVE, AMOR ONIPOTENTE,
+         <b>Am</b> <b>E</b>        <b>Am</b>
+  QUE TE EN-TREGOU À CRUZ
+  <b>     E7</b>         <b>Am</b>
+  E TE RECEBEU NA LUZ!</strong>
+
+       <b>C</b>                <b>G</b>    <b>C</b>
+  <strong>O CRISTO OBEDECEU ATÉ A MORTE,
+      <b>E7</b>                         <b>Am</b>
+  HUMILHOU-SE E OBEDECEU O BOM JESUS,
+      <b>E7</b>                           <b>Am</b>
+  HUMILHOU-SE E OBEDECEU, SERENO E FORTE,
+      <b>E7</b>                       <b>Am</b>
+  HUMILHOU-SE E OBEDECEU ATÉ A CRUZ.</strong>
+
+           <b>Am</b>     <b>E</b>    <b>Am</b> 
+  <strong>SALVE, Ó CRISTO OBEDIENTE!
+          <b>E7</b>       <b>Am</b>
+  SALVE, AMOR ONIPOTENTE,
+         <b>Am</b> <b>E</b>        <b>Am</b>
+  QUE TE EN-TREGOU À CRUZ
+  <b>     E7</b>         <b>Am</b>
+  E TE RECEBEU NA LUZ!</strong>
+
+       <b>C</b>                 <b>G</b>     <b>C</b>
+  <strong>POR ISSO O PAI DO CÉU O EXALTOU,
+      <b>E7</b>                        <b>Am</b>
+  EXALTOU-O E LHE DEU UM GRANDE NOME,
+      <b>E7</b>                      <b>Am</b>
+  EXALTOU-O E LHE DEU PODER E GLÓRIA,
+         <b>E7</b>                       <b>Am</b>
+  DIANTE DELES CÉUS E TERRA SE AJOELHEM!</strong>
+
+           <b>Am</b>     <b>E</b>    <b>Am</b> 
+  <strong>SALVE, Ó CRISTO OBEDIENTE!
+          <b>E7</b>       <b>Am</b>
+  SALVE, AMOR ONIPOTENTE,
+         <b>Am</b> <b>E</b>        <b>Am</b>
+  QUE TE EN-TREGOU À CRUZ
+  <b>     E7</b>         <b>Am</b>
+  E TE RECEBEU NA LUZ!</strong>
+
+
+              </pre>
+
+<h2>oferta</h2>              
+<pre>         <b style="color: rgb(255, 102, 0);">D</b>
+A ti meu Deus
+             <b style="color: rgb(255, 102, 0);">Em</b>
+Elevo meu coração
+                 <b style="color: rgb(255, 102, 0);">A</b>
+Elevo as minhas mãos
+      <b style="color: rgb(255, 102, 0);">G</b>         <b style="color: rgb(255, 102, 0);">D</b>
+Meu olhar, minha voz
+
+         <b style="color: rgb(255, 102, 0);">D</b>
+A ti meu Deus
+    <b style="color: rgb(255, 102, 0);">D7</b>       <b style="color: rgb(255, 102, 0);">G</b>
+Eu quero oferecer
+                     <b style="color: rgb(255, 102, 0);">D</b>
+Meus passos e meu viver
+       <b style="color: rgb(255, 102, 0);">A</b>              <b style="color: rgb(255, 102, 0);">D</b>  <b style="color: rgb(255, 102, 0);">G</b>  <b style="color: rgb(255, 102, 0);">D</b>  <b style="color: rgb(255, 102, 0);" class="js-modal-trigger">G</b>
+Meu caminhos, meu sofrer
+
+   <b style="color: rgb(255, 102, 0);">D</b>                  <b style="color: rgb(255, 102, 0);">G</b>         <b style="color: rgb(255, 102, 0);">D</b>
+A tua ternura Senhor vem me abraçar
+                    <b style="color: rgb(255, 102, 0);">D7</b>         <b style="color: rgb(255, 102, 0);">Em</b>
+E a tua bondade infinita me perdoar
+    <b style="color: rgb(255, 102, 0);">G</b>                       <b style="color: rgb(255, 102, 0);">D</b>            <b style="color: rgb(255, 102, 0);">B7</b>
+Vou ser o teu seguidor e te dar o meu coração
+    <b style="color: rgb(255, 102, 0);">Em</b>               <b style="color: rgb(255, 102, 0);">A</b>           <b style="color: rgb(255, 102, 0);">D</b>  <b style="color: rgb(255, 102, 0);">A4</b>  <b style="color: rgb(255, 102, 0);">A</b>
+Eu quero sentir o calor de tuas mãos
+         <b style="color: rgb(255, 102, 0);">D</b>
+A ti meu Deus
+                      <b style="color: rgb(255, 102, 0);">Em</b>
+Que és bom e que tens amor
+                  <b style="color: rgb(255, 102, 0);">A</b>
+Ao pobre, ao sofredor
+       <b style="color: rgb(255, 102, 0);">G</b>       <b style="color: rgb(255, 102, 0);">A4</b>  <b style="color: rgb(255, 102, 0);">A</b>
+Vos servir, esperar
+         <b style="color: rgb(255, 102, 0);">D</b>
+Em ti Senhor
+   <b style="color: rgb(255, 102, 0);">D7</b>            <b style="color: rgb(255, 102, 0);">G</b>
+Humildes se alegrarão
+                    <b style="color: rgb(255, 102, 0);">D</b>
+Cantando a nossa canção
+       <b style="color: rgb(255, 102, 0);">A</b>            <b style="color: rgb(255, 102, 0);">D</b>  <b style="color: rgb(255, 102, 0);">G</b>
+De esperança e de paz
+</pre>
+
+<h2>santo</h2>
+<pre class="col1">[Intro] <b style="color: rgb(255, 102, 0);">D</b>  <b style="color: rgb(255, 102, 0);">G</b>  <b style="color: rgb(255, 102, 0);">D</b>  <b style="color: rgb(255, 102, 0);">G</b>
+
+  [Refrão]
+  
+  <b style="color: rgb(255, 102, 0);">D</b>      <b style="color: rgb(255, 102, 0);">F#m</b>    <b style="color: rgb(255, 102, 0);">G</b>       
+  Santo, Santo, Santo é o 
+       <b style="color: rgb(255, 102, 0);">A9</b>
+  Senhor
+  <b style="color: rgb(255, 102, 0);">Bm</b>     <b style="color: rgb(255, 102, 0);">F#m</b>    <b style="color: rgb(255, 102, 0);">G</b>           
+  Santo, Santo, Senhor Deus 
+          <b style="color: rgb(255, 102, 0);">A9</b>
+  do universo
+  
+  [Primeira Parte]
+  
+  <b style="color: rgb(255, 102, 0);">G</b>             <b style="color: rgb(255, 102, 0);">D/F#</b>    
+  Céu é terra proclamam a 
+             <b style="color: rgb(255, 102, 0);">A9</b>  <b style="color: rgb(255, 102, 0);">D/F#</b>
+  vossa glória
+  <b style="color: rgb(255, 102, 0);">G</b>            <b style="color: rgb(255, 102, 0);" class="js-modal-trigger">D/F#</b>         
+  Bendito o que vem em nome 
+  <b style="color: rgb(255, 102, 0);">C</b>     <b style="color: rgb(255, 102, 0);">A9</b>
+  do Senhor
+  
+  [Refrão]
+  
+  <b style="color: rgb(255, 102, 0);">D</b>      <b style="color: rgb(255, 102, 0);">F#m</b>    <b style="color: rgb(255, 102, 0);">G</b>       
+    Santo, Santo, Santo é o 
+         <b style="color: rgb(255, 102, 0);">A9</b>
+    Senhor
+    <b style="color: rgb(255, 102, 0);">Bm</b>     <b style="color: rgb(255, 102, 0);">F#m</b>   <b style="color: rgb(255, 102, 0);">G</b>            
+    Santo, Santo Senhor Deus 
+           <b style="color: rgb(255, 102, 0);">A9</b>
+    do universo
+    
+    [Ponte]
+    
+    <b style="color: rgb(255, 102, 0);">C</b>   <b style="color: rgb(255, 102, 0);">G/B</b>      <b style="color: rgb(255, 102, 0);">A9</b>
+    Hosana nas alturas
+    <b style="color: rgb(255, 102, 0);" class="js-modal-trigger">C</b>   <b style="color: rgb(255, 102, 0);">G/B</b>       <b style="color: rgb(255, 102, 0);">A9</b>  <b style="color: rgb(255, 102, 0);">B9</b>
+    Hosana nas alturas
+    
+    [Refrão]
+    
+    <b style="color: rgb(255, 102, 0);">E</b>      <b style="color: rgb(255, 102, 0);">G#m</b>    <b style="color: rgb(255, 102, 0);">A</b>       
+    Santo, Santo, Santo é o 
+         <b style="color: rgb(255, 102, 0);">B9</b>
+    Senhor
+    <b style="color: rgb(255, 102, 0);">C#m</b>    <b style="color: rgb(255, 102, 0);">G#m</b>   <b style="color: rgb(255, 102, 0);">A</b>            
+    Santo, Santo Senhor Deus 
+         <b style="color: rgb(255, 102, 0);">B9</b>  <b style="color: rgb(255, 102, 0);">A9</b>  <b style="color: rgb(255, 102, 0);">B9</b>  <b style="color: rgb(255, 102, 0);">E</b>
+    do universo
+    
+    </pre>
+
+<h2>cordeiro</h2>
+<pre class="col1">[Intro] <b style="color: rgb(255, 102, 0);">F#m</b>  <b style="color: rgb(255, 102, 0);">E</b>  <b style="color: rgb(255, 102, 0);">Bm</b>  <b style="color: rgb(255, 102, 0);">E7</b> - <b style="color: rgb(255, 102, 0);">F#m</b>  <b style="color: rgb(255, 102, 0);">E</b>  
+
+  <b style="color: rgb(255, 102, 0);">D</b>
+  
+    <b style="color: rgb(255, 102, 0);">F#m</b>                   <b style="color: rgb(255, 102, 0);" class="js-modal-trigger">E</b>     
+  Cordeiro de Deus que tirais o 
+    <b style="color: rgb(255, 102, 0);">D</b>       <b style="color: rgb(255, 102, 0);">E</b>
+  pecado do mundo
+  <b style="color: rgb(255, 102, 0);">F#m</b>      <b style="color: rgb(255, 102, 0);">E</b>       <b style="color: rgb(255, 102, 0);">D</b>   <b style="color: rgb(255, 102, 0);">C#</b>
+  Tende Piedade de nó__s!
+  
+    <b style="color: rgb(255, 102, 0);">F#m</b>                   <b style="color: rgb(255, 102, 0);">E</b>     
+  Cordeiro de Deus que tirais o 
+    <b style="color: rgb(255, 102, 0);">D</b>       <b style="color: rgb(255, 102, 0);">E</b>
+  pecado do mundo
+  <b style="color: rgb(255, 102, 0);">F#m</b>      <b style="color: rgb(255, 102, 0);">E</b>       <b style="color: rgb(255, 102, 0);">Bm</b>  <b style="color: rgb(255, 102, 0);">Bm/A</b>  
+  Tende Piedade de 
+  <b style="color: rgb(255, 102, 0);">E/G#</b>  <b style="color: rgb(255, 102, 0);">F°</b>
+  nó_________s!
+  
+    <b style="color: rgb(255, 102, 0);">F#m</b>                   <b style="color: rgb(255, 102, 0);">E</b>     
+  Cordeiro de Deus que tirais o 
+    <b style="color: rgb(255, 102, 0);">D</b>       <b style="color: rgb(255, 102, 0);">E</b>
+  pecado do mundo
+  <b style="color: rgb(255, 102, 0);">F#m</b>       <b style="color: rgb(255, 102, 0);">E</b>
+  Dai-nos a Paz!
+  
+  <b style="color: rgb(255, 102, 0);">D</b>     <b style="color: rgb(255, 102, 0);">Dm6/F</b>  <b style="color: rgb(255, 102, 0);">A</b>   <b style="color: rgb(255, 102, 0);">F</b> <b style="color: rgb(255, 102, 0);">A</b>
+  Dai-nos   a Pa...az!
+  
+  </pre>
+<h2>comunhão 1</h2>
+<pre class="col1">    <b style="color: rgb(255, 102, 0);">Em</b>                        <b style="color: rgb(255, 102, 0);">Am</b>       
+Eu vim para que todos tenham vida; que 
+  <b style="color: rgb(255, 102, 0);">B7</b>             
+todos tenham vida
+      <b style="color: rgb(255, 102, 0);">Em</b>
+Plenamente
+    <b style="color: rgb(255, 102, 0);">Em</b>             <b style="color: rgb(255, 102, 0);">C</b>      <b style="color: rgb(255, 102, 0);">Am</b>           
+Reconstrói a tua vida em comunhão com 
+      <b style="color: rgb(255, 102, 0);">F#°</b>
+teu Senhor
+    <b style="color: rgb(255, 102, 0);">B7</b>                        <b style="color: rgb(255, 102, 0);">Em</b>
+Reconstrói a tua vida em comunhão com 
+teu irmão
+    <b style="color: rgb(255, 102, 0);">Em7</b>             <b style="color: rgb(255, 102, 0);">Am</b>      <b style="color: rgb(255, 102, 0);">D7</b>           
+Onde está o teu irmão, eu estou presente
+  <b style="color: rgb(255, 102, 0);">G</b>
+  nele
+
+    <b style="color: rgb(255, 102, 0);">Em</b>                <b style="color: rgb(255, 102, 0);">C</b>       <b style="color: rgb(255, 102, 0);">Am</b>         
+Eu passei fazendo o bem, eu curei todos 
+    <b style="color: rgb(255, 102, 0);">F#°</b>
+os males
+      <b style="color: rgb(255, 102, 0);">B7</b>                        <b style="color: rgb(255, 102, 0);">Em</b>
+Hoje és minha presença junto a todo 
+sofredor
+  <b style="color: rgb(255, 102, 0);">Em7</b>         <b style="color: rgb(255, 102, 0);">Am</b>              <b style="color: rgb(255, 102, 0);">D7</b> 
+Onde sofre o teu irmão, eu estou 
+          <b style="color: rgb(255, 102, 0);">G</b>
+sofrendo nele
+
+      <b style="color: rgb(255, 102, 0);">Em</b>           <b style="color: rgb(255, 102, 0);">C</b>         <b style="color: rgb(255, 102, 0);">Am</b>         
+Entreguei a minha vida pela salvação de 
+  <b style="color: rgb(255, 102, 0);">F#°</b>
+todos
+    <b style="color: rgb(255, 102, 0);">B7</b>                             <b style="color: rgb(255, 102, 0);">Em</b>
+Reconstrói, protege a vida de indefesos 
+e inocentes
+        <b style="color: rgb(255, 102, 0);">Em7</b>        <b style="color: rgb(255, 102, 0);">Am</b>          <b style="color: rgb(255, 102, 0);">D7</b> 
+Onde morre o teu irmão, eu estou 
+          <b style="color: rgb(255, 102, 0);">G</b>
+morrendo nele
+
+        <b style="color: rgb(255, 102, 0);">Em</b>          <b style="color: rgb(255, 102, 0);">C</b>            <b style="color: rgb(255, 102, 0);">Am</b>      
+Vim buscar e vim salvar o que estava já 
+<b style="color: rgb(255, 102, 0);">F#°</b>
+perdido
+    <b style="color: rgb(255, 102, 0);" class="js-modal-trigger">B7</b>                        <b style="color: rgb(255, 102, 0);">Em</b>
+Busca, salva e reconduze a quem perdeu 
+toda a esperança
+    <b style="color: rgb(255, 102, 0);">Em7</b>        <b style="color: rgb(255, 102, 0);">Am</b>            <b style="color: rgb(255, 102, 0);">D7</b> 
+Onde salvas teu irmão, tu me estás 
+      <b style="color: rgb(255, 102, 0);">G</b>
+salvando nele
+
+  <b style="color: rgb(255, 102, 0);">Em</b>                 <b style="color: rgb(255, 102, 0);">C</b>        
+Este pão, meu corpo e vida para a 
+<b style="color: rgb(255, 102, 0);">Am</b>           <b style="color: rgb(255, 102, 0);">F#°</b>
+salvação do mundo
+  <b style="color: rgb(255, 102, 0);">B7</b>                    <b style="color: rgb(255, 102, 0);">Em</b>
+É presença e alimento nesta santa 
+comunhão
+    <b style="color: rgb(255, 102, 0);">Em7</b>       <b style="color: rgb(255, 102, 0);">Am</b>          <b style="color: rgb(255, 102, 0);">D7</b>        
+Onde está o teu irmão, eu estou, também,
+<b style="color: rgb(255, 102, 0);">G</b>
+com ele
+
+    <b style="color: rgb(255, 102, 0);">Em</b>        <b style="color: rgb(255, 102, 0);">C</b>         <b style="color: rgb(255, 102, 0);">Am</b>          
+Salvará a sua vida quem a perde, quem a
+<b style="color: rgb(255, 102, 0);">F#°</b>
+doa
+    <b style="color: rgb(255, 102, 0);">B7</b>                     <b style="color: rgb(255, 102, 0);">Em</b>
+Eu não deixo perecer nenhum daqueles que
+são meus
+    <b style="color: rgb(255, 102, 0);">Em7</b>        <b style="color: rgb(255, 102, 0);">Am</b>           <b style="color: rgb(255, 102, 0);">D7</b> 
+Onde salvas teu irmão, tu me estás 
+      <b style="color: rgb(255, 102, 0);">G</b>
+salvando nele
+
+  <b style="color: rgb(255, 102, 0);">Em</b>          <b style="color: rgb(255, 102, 0);">C</b>         <b style="color: rgb(255, 102, 0);">Am</b>       
+Da ovelha desgarrada eu me fiz o bom 
+<b style="color: rgb(255, 102, 0);">F#°</b>
+pastor
+    <b style="color: rgb(255, 102, 0);">B7</b>                          <b style="color: rgb(255, 102, 0);">Em</b>
+Reconduze, acolhe e guia a que de mim se
+extraviou
+    <b style="color: rgb(255, 102, 0);">Em7</b>       <b style="color: rgb(255, 102, 0);">Am</b>             <b style="color: rgb(255, 102, 0);">D7</b>     
+Onde acolhes teu irmão, tu me acolhes, 
+    <b style="color: rgb(255, 102, 0);">G</b>
+também, nele
+
+</pre>
+
+<h2>comunhão 2</h2>
+
+<pre class="">[Intro] <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">C</b>  <b style="color: rgb(0, 0, 0);">F</b> 
+  <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">Eb</b>  <b style="color: rgb(0, 0, 0);">A7</b>  <b style="color: rgb(0, 0, 0);">Dm</b>
+
+[Primeira Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>               <b style="color: rgb(0, 0, 0);">Gm</b> 
+Somos todos convidados
+  <b style="color: rgb(0, 0, 0);">C</b>          <b style="color: rgb(0, 0, 0);">F</b> 
+Para a ceia do cordeiro
+<b style="color: rgb(0, 0, 0);">Gm</b>             <b style="color: rgb(0, 0, 0);">Dm</b>  
+Neste mundo imolado
+ <b style="color: rgb(0, 0, 0);">E7</b>            <b style="color: rgb(0, 0, 0);">A</b> 
+Dos viventes é o primeiro!
+<b style="color: rgb(0, 0, 0);">Gm</b>              <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">Dm</b> 
+Não sejamos separados
+<b style="color: rgb(0, 0, 0);">A7</b>               <b style="color: rgb(0, 0, 0);">Dm</b> 
+Do amor que ao mundo veio!
+
+<b style="color: rgb(0, 0, 0);">D</b>          <b style="color: rgb(0, 0, 0);">Gm</b>  
+Ó senhor, a tua páscoa
+ <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b>     <b style="color: rgb(0, 0, 0);">D7</b> 
+Confirmada no madeiro
+<b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>     <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">Bb</b>     
+É penhor da aliança
+<b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>       <b style="color: rgb(0, 0, 0);">Dm</b>
+E o fim   do cativeiro!
+
+[Segunda Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>             <b style="color: rgb(0, 0, 0);">Gm</b>  
+Exaltado no calvário
+<b style="color: rgb(0, 0, 0);">C</b>            <b style="color: rgb(0, 0, 0);">F</b> 
+O senhor abriu caminho
+<b style="color: rgb(0, 0, 0);">Gm</b>              <b style="color: rgb(0, 0, 0);">Dm</b>  
+Elegendo a santuário
+
+<b style="color: rgb(0, 0, 0);">E7</b>       <b style="color: rgb(0, 0, 0);">A</b> 
+O humano peregrino!
+<b style="color: rgb(0, 0, 0);">Gm</b>               <b style="color: rgb(0, 0, 0);">Dm</b>   
+O seu reino é contrário
+       <b style="color: rgb(0, 0, 0);">A7</b>          <b style="color: rgb(0, 0, 0);">Dm</b> 
+A quem nega o pequenino!
+
+     <b style="color: rgb(0, 0, 0);">D</b>          <b style="color: rgb(0, 0, 0);">Gm</b>  
+Ó senhor, a tua páscoa
+      <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b>     <b style="color: rgb(0, 0, 0);">D7</b> 
+Confirmada no madeiro
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>     <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">Bb</b>     
+É penhor da aliança
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>       <b style="color: rgb(0, 0, 0);">Dm</b>
+E o fim   do cativeiro!
+
+[Terceira Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>              <b style="color: rgb(0, 0, 0);">Gm</b>  
+O senhor a cada dia
+     <b style="color: rgb(0, 0, 0);">C</b>             <b style="color: rgb(0, 0, 0);">F</b>
+Vem abrir-nos os ouvidos
+<b style="color: rgb(0, 0, 0);">Gm</b>                   <b style="color: rgb(0, 0, 0);">Dm</b> 
+Com a palavra que nos guia
+     <b style="color: rgb(0, 0, 0);">E7</b>          <b style="color: rgb(0, 0, 0);">A</b> 
+E dá força ao abatido
+<b style="color: rgb(0, 0, 0);">Gm</b>               <b style="color: rgb(0, 0, 0);">Dm</b> 
+É convite de ousadia
+         <b style="color: rgb(0, 0, 0);">A7</b>           <b style="color: rgb(0, 0, 0);">Dm</b> 
+Frente à morte e ao perigo
+
+     <b style="color: rgb(0, 0, 0);">D</b>          <b style="color: rgb(0, 0, 0);">Gm</b>  
+Ó senhor, a tua páscoa
+      <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b>     <b style="color: rgb(0, 0, 0);">D7</b> 
+Confirmada no madeiro
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>     <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">Bb</b>     
+É penhor da aliança
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>       <b style="color: rgb(0, 0, 0);">Dm</b>
+E o fim   do cativeiro!
+
+[Quarta Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>                   <b style="color: rgb(0, 0, 0);">Gm</b>  
+O senhor é a nossa estrada
+
+<b style="color: rgb(0, 0, 0);">C</b>              <b style="color: rgb(0, 0, 0);">F</b> 
+Salvação ao mundo inteiro
+<b style="color: rgb(0, 0, 0);">Gm</b>                <b style="color: rgb(0, 0, 0);">Dm</b>   
+Comunhão que nos abraça
+      <b style="color: rgb(0, 0, 0);">E7</b>        <b style="color: rgb(0, 0, 0);">A</b> 
+Nosso fim e paradeiro!
+<b style="color: rgb(0, 0, 0);">Gm</b>                 <b style="color: rgb(0, 0, 0);">Dm</b>             
+É o amor que nunca passa
+        <b style="color: rgb(0, 0, 0);">A7</b>            <b style="color: rgb(0, 0, 0);">Dm</b>
+Luz que brilha ao caminheiro!
+
+     <b style="color: rgb(0, 0, 0);">D</b>          <b style="color: rgb(0, 0, 0);">Gm</b>  
+Ó senhor, a tua páscoa
+      <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b>     <b style="color: rgb(0, 0, 0);">D7</b> 
+Confirmada no madeiro
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>     <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">Dm</b>  <b style="color: rgb(0, 0, 0);">Bb</b>     
+É penhor da aliança
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>       <b style="color: rgb(0, 0, 0);">Dm</b>
+E o fim   do cativeiro!
+
+[Quinta Parte]
+
+<b style="color: rgb(0, 0, 0);">Dm</b>                <b style="color: rgb(0, 0, 0);">Gm</b>    
+Do deus vivo e verdadeiro
+    <b style="color: rgb(0, 0, 0);">C</b>           <b style="color: rgb(0, 0, 0);">F</b> 
+Recebemos plena vida
+<b style="color: rgb(0, 0, 0);">Gm</b>               <b style="color: rgb(0, 0, 0);">Dm</b>   
+Pra vivermos, pioneiros
+     <b style="color: rgb(0, 0, 0);">E7</b>              <b style="color: rgb(0, 0, 0);">A</b>
+Liberdade, a mais querida
+<b style="color: rgb(0, 0, 0);">Gm</b>                   <b style="color: rgb(0, 0, 0);">Dm</b>  
+Eis o sonho que é primeiro
+        <b style="color: rgb(0, 0, 0);">A7</b>              <b style="color: rgb(0, 0, 0);">Dm</b> 
+Desde a história mais antiga
+
+     <b style="color: rgb(0, 0, 0);">D</b>          <b style="color: rgb(0, 0, 0);">Gm</b>  
+Ó senhor, a tua páscoa
+      <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b>     <b style="color: rgb(0, 0, 0);">D7</b> 
+Confirmada no madeiro
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>     <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);">Bb</b>     
+É penhor da aliança
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>       <b style="color: rgb(0, 0, 0);">Dm</b>
+E o fim   do cativeiro!
+
+[Sexta Parte]
+
+ <b style="color: rgb(0, 0, 0);">Dm</b>                 <b style="color: rgb(0, 0, 0);">Gm</b>  
+Do triunfo sobre a morte
+      <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b> 
+Nós fazemos a memória
+<b style="color: rgb(0, 0, 0);">Gm</b>                          <b style="color: rgb(0, 0, 0);">Dm</b>  
+Mais que a cruz, o cristo é forte
+     <b style="color: rgb(0, 0, 0);">E7</b>         <b style="color: rgb(0, 0, 0);">A</b> 
+E conquista a vitória!
+<b style="color: rgb(0, 0, 0);">Gm</b>              <b style="color: rgb(0, 0, 0);">Dm</b>         
+Do seu povo é o norte
+    <b style="color: rgb(0, 0, 0);">A7</b>                <b style="color: rgb(0, 0, 0);">Dm</b>
+O senhor de toda a história!
+
+     <b style="color: rgb(0, 0, 0);">D</b>          <b style="color: rgb(0, 0, 0);">Gm</b>  
+Ó senhor, a tua páscoa
+      <b style="color: rgb(0, 0, 0);">C</b>         <b style="color: rgb(0, 0, 0);">F</b>     <b style="color: rgb(0, 0, 0);">D7</b> 
+Confirmada no madeiro
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>     <b style="color: rgb(0, 0, 0);">Dm</b>  <b style="color: rgb(0, 0, 0);" class="js-modal-trigger">Bb</b>     
+É penhor da aliança
+    <b style="color: rgb(0, 0, 0);">Gm</b>  <b style="color: rgb(0, 0, 0);">A7</b>       <b style="color: rgb(0, 0, 0);">Dm</b>
+E o fim   do cativeiro!
+</pre>
+
+
+
+
+
+
+</div>
+<script>
+
+  let fontSize = 18;
+  let lineHeight = 40;
+  let topCifras = 18;
+
+  let defaultFontSize = fontSize; // Defina o tamanho padrão
+  let defaultLineHeight = lineHeight; // Defina a altura padrão
+
+  function chordsTagCifras() {
+      let chordsTag = [
+          ...document.querySelectorAll(".chords"),
+          ...document.querySelectorAll("b"),
+          ...document.querySelectorAll(".js-modal-trigger"),
+          ...document.querySelectorAll(".chordIntro")
+      ];
+
+      return chordsTag.length ? chordsTag : null;
+  }
+
+  function lyricsTagCifras() {
+      let chordsTag = [
+          ...document.querySelectorAll(".lyrics-line"),
+          ...document.querySelectorAll("pre")
+      ];
+
+      return chordsTag.length ? chordsTag : null;
+  }
+
+
+  function adjustFontSize(change) {
+      fontSize += change;
+      lineHeight += change * 2;
+      topCifras += change * 1;
+      lyricsTagCifras().forEach(line => {
+          line.style.fontSize = fontSize + 'px';
+      });
+      chordsTagCifras().forEach(line => {
+          line.style.fontSize = fontSize + 'px';
+      });
+
+      chordsTagCifras().forEach(line => {
+          line.style.fontSize = fontSize + 'px';
+          line.style.top = -(fontSize + 3) + 'px';
+      });
+  }
+  function resetFontSize() {
+      fontSize = defaultFontSize;
+      lineHeight = defaultLineHeight;
+
+      lyricsTagCifras().forEach(line => {
+          line.style.fontSize = defaultFontSize + 'px';
+      });
+
+      chordsTagCifras().forEach(line => {
+          line.style.fontSize = defaultFontSize + 'px';
+      });
+
+      chordsTagCifras().forEach(line => {
+          line.style.fontSize = defaultFontSize - 4 + 'px';
+      });
+  }
+
+
+
+
+
+  // Lista de notas cromáticas
+  const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const NOTES_FLAT = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]; // Versão com bemóis
+  let currentTranspose = 0;
+
+  // Função para encontrar o índice de um acorde na escala cromática
+  function findNoteIndex(note) {
+      let index = NOTES.indexOf(note);
+      if (index === -1) index = NOTES_FLAT.indexOf(note); // Verifica também notas bemóis
+      return index;
+  }
+
+  // Função para transpor um único acorde
+  function transposeChord(chord, semitones) {
+      let match = chord.match(/([A-G][#b]?)(\/[A-G][#b]?)?(.*)/); // Modificado para capturar também o acorde de baixo (ex: "D/F#")
+      if (!match) return chord; // Retorna o acorde original se não for encontrado
+
+      let [_, baseNote, bassNote, suffix] = match; // Base (D), baixo (F#) e sufixo (m, 7, etc.)
+
+      // Transpõe a nota base
+      let baseIndex = findNoteIndex(baseNote);
+      if (baseIndex === -1) return chord; // Retorna o acorde original se não for válido
+
+      let newBaseIndex = (baseIndex + semitones + 12) % 12; // Calcula a nova posição da nota base
+      let newBaseNote = NOTES[newBaseIndex]; // Obtém a nova nota base transposta
+
+      // Transpõe a nota de baixo (caso exista)
+      let newBassNote = '';
+      if (bassNote) {
+          let bassIndex = findNoteIndex(bassNote.slice(1)); // Retira o '/' para analisar apenas a nota
+          if (bassIndex !== -1) {
+              let newBassIndex = (bassIndex + semitones + 12) % 12; // Calcula a nova posição da nota de baixo
+              newBassNote = '/' + NOTES[newBassIndex]; // Obtém a nova nota de baixo transposta
+          } else {
+              newBassNote = bassNote; // Mantém a nota de baixo original se não for válida
+          }
+      }
+
+      return newBaseNote + newBassNote + suffix; // Retorna o acorde transposto mantendo o sufixo
+  }
+
+
+
+  function transpose(semitones) {
+      currentTranspose += semitones;
+
+      let chordsElements = chordsTagCifras(); // Seleciona todos os elementos com a classe "chords"
+
+      chordsElements.forEach(chordsElement => {
+          let chords = chordsElement.innerText.split(/\s+/); // Divide os acordes por espaço
+          let transposedChords = chords.map(chord => transposeChord(chord, semitones)); // Transpõe cada acorde
+          chordsElement.innerText = transposedChords.join(" "); // Atualiza a cifra na tela
+      });
+  }
+  function resetTranspose() {
+      transpose(-currentTranspose); // Reverte a transposição aplicada
+      currentTranspose = 0; // Reseta o contador de transposição
+  }
+
+
+  /** ALTERAR COR **/
+
+  function changeChordColor(color) {
+      chordsTagCifras().forEach(element => {
+          element.style.color = color; // Altera a cor do texto das cifras
+      });
+  }
+
+  function changeCustomColor() {
+      let customColor = document.getElementById("customColor").value; // Pega a cor escolhida pelo usuário
+      changeChordColor(customColor);
+  }
+
+  function changelyricsColor(color) {
+      lyricsTagCifras().forEach(element => {
+          element.style.color = color; // Altera a cor do texto das cifras
+      });
+  }
+
+  function changeCustomColorlyrics() {
+      let customColor = document.getElementById("customColorlyrics").value; // Pega a cor escolhida pelo usuário
+      changelyricsColor(customColor);
+  }
+
+  /** imprimir página **/
+  function printFolha() {
+      let content = document.getElementById("folha").innerHTML; // Pega o conteúdo dentro da div 'folha'
+      let originalContent = document.body.innerHTML; // Salva o conteúdo original da página
+
+      document.body.innerHTML = content; // Substitui o body pelo conteúdo da 'folha'
+      window.print(); // Aciona a impressão
+      document.body.innerHTML = originalContent; // Restaura o conteúdo original da página
+  }
+
+
+</script>
+
+
+</body>
+</html>

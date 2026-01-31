@@ -1,0 +1,34 @@
+{
+    "titulo": "Oração Pela Família",
+    "artista": "Padre Zezinho",
+    "tom_original": "C",
+    "letra": [
+      {
+        "linha": 1,
+        "texto": "Que nenhuma família comece em qualquer de repente",
+        "cifras": [
+          { "acorde": "C", "posicao": 0 },
+          { "acorde": "G", "posicao": 15 },
+          { "acorde": "Am", "posicao": 27 },
+          { "acorde": "F", "posicao": 37 },
+          { "acorde": "C", "posicao": 48 },
+          { "acorde": "G", "posicao": 55 },
+          { "acorde": "C", "posicao": 63 }
+        ]
+      },
+      {
+        "linha": 2,
+        "texto": "Que nenhuma família termine por falta de amor",
+        "cifras": [
+          { "acorde": "C", "posicao": 0 },
+          { "acorde": "G", "posicao": 15 },
+          { "acorde": "Am", "posicao": 27 },
+          { "acorde": "F", "posicao": 37 },
+          { "acorde": "C", "posicao": 48 },
+          { "acorde": "G", "posicao": 55 },
+          { "acorde": "C", "posicao": 63 }
+        ]
+      }
+    ]
+  }
+  

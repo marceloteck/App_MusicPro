@@ -1,0 +1,152 @@
+{
+  "title": "Música Exemplo",
+  "key": "F#m7",
+  "sections": [
+    {
+      "type": "intro",
+      "chords": [
+        [
+          "F#m7",
+          "D",
+          "A9",
+          "E"
+        ],
+        [
+          "F#m7",
+          "D",
+          "A9",
+          "E",
+          "F#m7"
+        ]
+      ]
+    },
+    {
+      "type": "verse",
+      "lines": [
+        {
+          "lyrics": [
+            "MÃOS",
+            "NA",
+            "TERRA",
+            "E",
+            "O",
+            "CORAÇÃO"
+          ],
+          "chords": [
+            "F#m7",
+            "",
+            "",
+            "",
+            "",
+            "D7+"
+          ]
+        },
+        {
+          "lyrics": [
+            "ALÉM",
+            "DESTE",
+            "CÉU,"
+          ],
+          "chords": [
+            "A9",
+            "",
+            "C#7(4)"
+          ]
+        },
+        {
+          "lyrics": [
+            "E",
+            "A",
+            "SEMENTE",
+            "QUE",
+            "BROTA"
+          ],
+          "chords": [
+            "F#m7",
+            "",
+            "D7+",
+            "",
+            "A9"
+          ]
+        },
+        {
+          "lyrics": [
+            "É",
+            "UM",
+            "GERME",
+            "DE",
+            "ETERNIDADE"
+          ],
+          "chords": [
+            "E",
+            "",
+            "",
+            "",
+            ""
+          ]
+        },
+        {
+          "lyrics": [
+            "VAI",
+            "BROTANDO,",
+            "CRESCENDO,",
+            "ESPERANDO"
+          ],
+          "chords": [
+            "F#m7",
+            "D/F#",
+            "A9",
+            "E"
+          ]
+        },
+        {
+          "lyrics": [
+            "É",
+            "A",
+            "VIDA",
+            "QUE",
+            "VEM",
+            "DESPONTAR"
+          ],
+          "chords": [
+            "F#m7",
+            "D/F#",
+            "A9",
+            "",
+            "",
+            "E"
+          ]
+        },
+        {
+          "lyrics": [
+            "E",
+            "ESTE",
+            "TRIGO",
+            "MADURO,"
+          ],
+          "chords": [
+            "D",
+            "A/C#",
+            "",
+            ""
+          ]
+        },
+        {
+          "lyrics": [
+            "A",
+            "COLHEITA",
+            "O",
+            "RECOLHERÁ"
+          ],
+          "chords": [
+            "Bm",
+            "Bm/A",
+            "E",
+            "D/F#",
+            "E/G#"
+          ]
+        }
+      ]
+    }
+  ]
+}

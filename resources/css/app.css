@@ -1,0 +1,22 @@
+@import 'Scrollbar.css';
+@import 'fontes.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'Componentes/navbar.css';
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+.title_supPage{
+position: relative;
+display: flex;
+align-items: center;
+font-size: 1.1rem;
+}
+
+.navbar .material-symbols-outlined{
+    margin-right: 10px;
+  
+}

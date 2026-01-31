@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A4 Auto Pagination</title>
+
+  <!-- Normalize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+
+  <!-- Paper CSS for printing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+
+  <style>
+    @page { 
+      size: A4;
+      margin: 10mm;
+    }
+
+    /* Estiliza o corpo para centralizar as páginas */
+    body {
+      background: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Container principal */
+    .content {
+      width: 210mm; /* Largura da página A4 */
+      max-width: 210mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Cada página */
+    .page {
+      width: 210mm;
+      height: 297mm; /* Altura fixa de uma página A4 */
+      background: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      padding: 15mm;
+      margin-bottom: 10mm;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* Parágrafos */
+    .page p {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: justify;
+      white-space: normal;
+      page-break-inside: avoid;
+    }
+
+    /* Área oculta usada para medir texto */
+    #hiddenContainer {
+      visibility: hidden;
+      position: absolute;
+      width: 180mm; /* Menor que a página */
+      height: auto;
+      white-space: normal;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="content" id="content"></div>
+
+  <!-- Elemento invisível para medir o tamanho do texto -->
+  <div id="hiddenContainer"></div>
+
+  <script>
+    function createPages(text) {
+      const content = document.getElementById('content');
+      const hiddenContainer = document.getElementById('hiddenContainer');
+
+      // Divide o texto em parágrafos
+      const paragraphs = text.split("\n").filter(p => p.trim() !== "");
+
+      // Criar a primeira página
+      let currentPage = document.createElement('div');
+      currentPage.classList.add('page');
+      content.appendChild(currentPage);
+
+      // Adiciona o texto dinamicamente
+      paragraphs.forEach(paragraph => {
+        let pElement = document.createElement('p');
+        pElement.textContent = paragraph;
+        hiddenContainer.appendChild(pElement);
+
+        // Se o conteúdo ultrapassar o tamanho da página, cria uma nova
+        if (hiddenContainer.offsetHeight > 260 * 3.8) {
+          currentPage = document.createElement('div');
+          currentPage.classList.add('page');
+          content.appendChild(currentPage);
+          hiddenContainer.innerHTML = ''; // Limpa o container temporário
+        }
+
+        currentPage.appendChild(pElement.cloneNode(true));
+      });
+
+      hiddenContainer.innerHTML = ''; // Limpa o container temporário
+    }
+
+    // Texto de exemplo
+    const exampleText = `
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada, vel ultrices nunc efficitur.
+      Donec eget mi ut eros gravida tincidunt. Aliquam erat volutpat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+      Donec luctus auctor eros, nec venenatis nulla auctor sed. Integer ullamcorper mi vel eros facilisis malesuada.
+      Fusce auctor turpis vel facilisis cursus. Proin sit amet massa sed leo dignissim fringilla. Nam vulputate turpis a sem luctus, id cursus quam accumsan.
+      Etiam vel lacus ut nulla accumsan egestas. Pellentesque fringilla turpis sed lectus mollis, non dictum nisi tincidunt.
+
+      Nullam eget purus in libero maximus sodales. Vivamus euismod risus id erat faucibus, in tristique erat tincidunt.
+      Morbi malesuada ex at feugiat suscipit. Sed a metus ac neque viverra facilisis.
+      Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+      Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.
+      Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.
+
+      Praesent eget nulla sed lorem dapibus posuere. Suspendisse potenti. Vivamus efficitur vestibulum risus, et feugiat sem tristique eu.
+      Vestibulum laoreet tincidunt orci, eu feugiat elit molestie at. Maecenas vehicula dolor in ex faucibus gravida.
+      Curabitur vel dui nec justo dictum gravida at ut dolor. Integer at turpis est. Etiam et ante est. Cras vel tortor in justo euismod molestie.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada, vel ultrices nunc efficitur.
+      Donec eget mi ut eros gravida tincidunt. Aliquam erat volutpat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+      Donec luctus auctor eros, nec venenatis nulla auctor sed. Integer ullamcorper mi vel eros facilisis malesuada.
+      Fusce auctor turpis vel facilisis cursus. Proin sit amet massa sed leo dignissim fringilla. Nam vulputate turpis a sem luctus, id cursus quam accumsan.
+      Etiam vel lacus ut nulla accumsan egestas. Pellentesque fringilla turpis sed lectus mollis, non dictum nisi tincidunt.
+
+      Nullam eget purus in libero maximus sodales. Vivamus euismod risus id erat faucibus, in tristique erat tincidunt.
+      Morbi malesuada ex at feugiat suscipit. Sed a metus ac neque viverra facilisis.
+      Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+      Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.
+      Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.
+
+      Praesent eget nulla sed lorem dapibus posuere. Suspendisse potenti. Vivamus efficitur vestibulum risus, et feugiat sem tristique eu.
+      Vestibulum laoreet tincidunt orci, eu feugiat elit molestie at. Maecenas vehicula dolor in ex faucibus gravida.
+      Curabitur vel dui nec justo dictum gravida at ut dolor. Integer at turpis est. Etiam et ante est. Cras vel tortor in justo euismod molestie.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in ultricies ex. Curabitur egestas dui a lacus malesuada, vel ultrices nunc efficitur.
+      Donec eget mi ut eros gravida tincidunt. Aliquam erat volutpat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+      Donec luctus auctor eros, nec venenatis nulla auctor sed. Integer ullamcorper mi vel eros facilisis malesuada.
+      Fusce auctor turpis vel facilisis cursus. Proin sit amet massa sed leo dignissim fringilla. Nam vulputate turpis a sem luctus, id cursus quam accumsan.
+      Etiam vel lacus ut nulla accumsan egestas. Pellentesque fringilla turpis sed lectus mollis, non dictum nisi tincidunt.
+
+      Nullam eget purus in libero maximus sodales. Vivamus euismod risus id erat faucibus, in tristique erat tincidunt.
+      Morbi malesuada ex at feugiat suscipit. Sed a metus ac neque viverra facilisis.
+      Aliquam erat volutpat. Suspendisse at justo eget lacus vehicula vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+      Curabitur euismod nulla a turpis venenatis, at consectetur tortor ultricies. Donec vulputate turpis nec dignissim scelerisque.
+      Fusce volutpat lectus in ex vestibulum elementum. Pellentesque id libero id justo aliquet tincidunt eget id ligula.
+
+      Praesent eget nulla sed lorem dapibus posuere. Suspendisse potenti. Vivamus efficitur vestibulum risus, et feugiat sem tristique eu.
+      Vestibulum laoreet tincidunt orci, eu feugiat elit molestie at. Maecenas vehicula dolor in ex faucibus gravida.
+      Curabitur vel dui nec justo dictum gravida at ut dolor. Integer at turpis est. Etiam et ante est. Cras vel tortor in justo euismod molestie.
+    `;
+
+    createPages(exampleText);
+  </script>
+
+</body>
+</html>

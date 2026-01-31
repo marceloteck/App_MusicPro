@@ -1,0 +1,505 @@
+
+        function generatePages() {
+            const contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = ""; // Limpa as páginas anteriores
+
+            let marginSize = parseInt(document.getElementById("marginSize").value);
+            let text = localStorage.getItem("savedLyrics") || lyricsText;
+
+            let pages = [];
+            let currentPage = createPage(marginSize);
+            let currentText = document.createElement("div");
+            currentText.classList.add("lyrics");
+            currentText.setAttribute("contenteditable", "true");
+            currentText.innerHTML = text; // Agora renderiza o HTML corretamente
+            currentText.addEventListener("input", adjustPages);
+
+            currentPage.appendChild(currentText);
+            pages.push(currentPage);
+            contentDiv.appendChild(currentPage);
+
+            // Adiciona evento para focar na página específica ao clicar nela
+            currentPage.addEventListener("click", function (event) {
+                event.stopPropagation(); // Impede que o clique afete outras páginas
+                currentText.focus();
+                moveCursorToEnd(currentText);
+            });
+
+            adjustPages(currentText); // Chama a função para garantir que as páginas sejam ajustadas inicialmente
+        }
+
+        function createPage(marginSize) {
+            let page = document.createElement("div");
+            page.classList.add("page");
+            page.style.padding = `${marginSize}mm`;
+            return page;
+        }
+
+        function saveContent() {
+            let lyricsHtml = document.querySelector(".lyrics").innerHTML; // Salva o HTML formatado
+            localStorage.setItem("savedLyrics", lyricsHtml);
+            alert("Conteúdo salvo!");
+        }
+
+        function adjustPages(currentText) {
+            // Checa se há mais de uma página
+            let lyricsContainers = document.querySelectorAll(".lyrics");
+            let pages = document.querySelectorAll(".page");
+
+            if (lyricsContainers.length > 0) {
+                let lyricsContainer = lyricsContainers[lyricsContainers.length - 1];
+                let maxHeight = pages[pages.length - 1].clientHeight - 140; // Ajuste para margens
+
+                // Verifica se o conteúdo excede a altura da página
+                if (lyricsContainer.scrollHeight > maxHeight) {
+                    let marginSize = parseInt(document.getElementById("marginSize").value);
+                    let newPage = createPage(marginSize);
+                    let newLyrics = document.createElement("div");
+                    newLyrics.classList.add("lyrics");
+                    newLyrics.setAttribute("contenteditable", "true");
+
+                    // Transfere o texto excedente para a nova página sem cortar palavras
+                    let overflowText = splitOverflowText(lyricsContainer, maxHeight);
+                    if (overflowText) {
+                        newLyrics.innerHTML = overflowText;
+                        lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+                    }
+
+                    newPage.appendChild(newLyrics);
+                    document.querySelector("#content").appendChild(newPage);
+
+                    // Evento para focar na nova página ao clicar
+                    newPage.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        newLyrics.focus();
+                        moveCursorToEnd(newLyrics);
+                    });
+
+                    // Chama adjustPages novamente para garantir que o texto foi ajustado corretamente
+                    setTimeout(() => adjustPages(newLyrics), 100); // Delays para garantir a execução sem travar
+                }
+            }
+        }
+
+        // Função para dividir corretamente o texto sem cortar palavras
+        function splitOverflowText(container, maxHeight) {
+            let words = container.innerHTML.split(" ");
+            let tempText = "";
+            let testElement = document.createElement("div");
+            testElement.style.visibility = "hidden";
+            testElement.style.position = "absolute";
+            testElement.classList.add("lyrics");
+            document.body.appendChild(testElement);
+
+            for (let i = 0; i < words.length; i++) {
+                testElement.innerHTML = tempText + " " + words[i];
+                if (testElement.scrollHeight > maxHeight) {
+                    document.body.removeChild(testElement);
+                    return words.slice(i).join(" ");
+                }
+                tempText += " " + words[i];
+            }
+
+            document.body.removeChild(testElement);
+            return "";
+        }
+
+        // Função para mover o cursor para o final do texto
+        function moveCursorToEnd(element) {
+            let range = document.createRange();
+            let selection = window.getSelection();
+            range.selectNodeContents(element);
+            range.collapse(false); // Posiciona o cursor no final do conteúdo
+            selection.addRange(range); // Adiciona o novo range (seleção) para mover o cursor
+        }
+
+        // Função para criar uma nova página manualmente
+        function addNewPage() {
+            let contentDiv = document.getElementById("content");
+            let marginSize = 20; // Padrão de margem
+            let newPage = createPage(marginSize);
+
+            let newLyrics = document.createElement("div");
+            newLyrics.classList.add("lyrics");
+            newLyrics.setAttribute("contenteditable", "true");
+            newPage.appendChild(newLyrics);
+            contentDiv.appendChild(newPage);
+
+            // Evento para focar na página ao clicar
+            newPage.addEventListener("click", function () {
+                newLyrics.focus();
+                moveCursorToEnd(newLyrics);
+            });
+
+            // Move o foco automaticamente para a nova página criada
+            newLyrics.focus();
+        }
+
+        // Evento para o botão de adicionar página
+        window.onload = generatePages;
+
+        /*///////////////////////////
+        RECENTE ABAIXO
+        */
+
+        function adjustPages() {
+            let lyricsContainers = document.querySelectorAll(".lyrics");
+            let pages = document.querySelectorAll(".page");
+
+            lyricsContainers.forEach((lyricsContainer, index) => {
+                let maxHeight = pages[index].clientHeight - 140; // Ajuste para compensar margens
+                if (lyricsContainer.scrollHeight > maxHeight) {
+                    console.log("Altura excedida na página:", index + 1);
+
+                    let marginSize = parseInt(document.getElementById("marginSize").value);
+                    let newPage = createPage(marginSize);
+                    let newLyrics = document.createElement("div");
+                    newLyrics.classList.add("lyrics");
+                    newLyrics.setAttribute("contenteditable", "true");
+
+                    // Transfere o texto excedente para a nova página sem cortar palavras
+                    let overflowText = splitOverflowText(lyricsContainer, maxHeight);
+                    if (overflowText) {
+                        newLyrics.innerHTML = overflowText;
+                        lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+                    }
+
+                    newPage.appendChild(newLyrics);
+                    document.querySelector("#content").appendChild(newPage);
+
+                    // Evento para focar na página correta ao clicar
+                    newPage.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        newLyrics.focus();
+                        moveCursorToEnd(newLyrics);
+                    });
+
+                    // Mantém o foco na página onde o usuário está digitando
+                    if (document.activeElement === lyricsContainer) {
+                        newLyrics.focus();
+                        moveCursorToEnd(newLyrics);
+                    }
+                }
+            });
+        }
+
+        /***
+         * CÓDIGO MAIS RECENTE ABAIXO
+         * EM FUNCIONAMENTO ATUAL 11:59 08/03
+         */
+
+          function generatePages() {
+            const contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = ""; // Limpa as páginas anteriores
+
+            let marginSize = parseInt(document.getElementById("marginSize").value);
+            let text = localStorage.getItem("savedLyrics") || lyricsText;
+
+            let pages = [];
+            let currentPage = createPage(marginSize);
+            let currentText = document.createElement("div");
+            currentText.classList.add("lyrics");
+            currentText.setAttribute("contenteditable", "true");
+            currentText.innerHTML = text; // Agora renderiza o HTML corretamente
+            addEventListenersToLyrics(currentText); // Aplica eventos ao texto
+
+
+
+            currentPage.appendChild(currentText);
+            pages.push(currentPage);
+            contentDiv.appendChild(currentPage);
+
+            // Adiciona evento para focar na página específica ao clicar nela
+            currentPage.addEventListener("click", function (event) {
+                event.stopPropagation(); // Impede que o clique afete outras páginas
+                currentText.focus();
+                moveCursorToEnd(currentText);
+            });
+
+
+        }
+        function addEventListenersToLyrics(lyricsElement) {
+            lyricsElement.addEventListener("input", adjustPages);
+            lyricsElement.addEventListener("keyup", handleBackspace);
+        }
+
+
+
+        function createPage(marginSize) {
+            let page = document.createElement("div");
+            page.classList.add("page");
+            page.style.padding = `${marginSize}mm`;
+            return page;
+        }
+
+        function saveContent() {
+            let lyricsHtml = document.querySelector(".lyrics").innerHTML; // Salva o HTML formatado
+            localStorage.setItem("savedLyrics", lyricsHtml);
+            alert("Conteúdo salvo!");
+        }
+
+        function adjustPages() {
+            // Seleciona todas as páginas disponíveis no documento.
+            let pages = document.querySelectorAll(".page");
+
+            // Seleciona todos os elementos que contêm as letras da música.
+            let lyricsContainers = document.querySelectorAll(".lyrics");
+
+            // Seleciona o container principal onde as páginas estão sendo adicionadas.
+            let contentContainer = document.querySelector("#content");
+
+            // Itera sobre cada container de letras (cada bloco de texto dentro das páginas).
+            lyricsContainers.forEach((lyricsContainer, index) => {
+                // Define a altura máxima permitida para o texto dentro de uma página.
+                let maxHeight = pages[index].clientHeight - 140; // Ajusta para compensar margens.
+
+                // Enquanto o conteúdo for maior do que o espaço disponível na página, divide o texto.
+                while (lyricsContainer.scrollHeight > maxHeight) {
+                    console.log("Texto excedendo a página:", index + 1);
+                    console.log("lyricsContainer.scrollHeight: ", lyricsContainer.scrollHeight);
+                    console.log("maxHeight: ", maxHeight);
+
+                    // Obtém o tamanho da margem configurado pelo usuário.
+                    let marginSize = parseInt(document.getElementById("marginSize").value);
+
+                    // Cria uma nova página para continuar o texto que não couber na atual.
+                    let newPage = createPage(marginSize);
+
+                    // Cria um novo container para o texto excedente.
+                    let newLyrics = document.createElement("div");
+                    newLyrics.classList.add("lyrics");
+                    newLyrics.setAttribute("contenteditable", "true"); // Permite edição do texto.
+
+                    // Separa o texto excedente que precisa ser movido para a nova página.
+                    let overflowText = splitOverflowText(lyricsContainer, maxHeight);
+
+                    // Se não houver texto para mover, evita um loop infinito e sai da função.
+                    if (!overflowText.trim()) return;
+
+                    // Define o novo container com o texto excedente.
+                    newLyrics.innerHTML = overflowText;
+
+                    // Remove o texto excedente da página original para manter o fluxo correto.
+                    lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+
+                    // Adiciona o novo container de texto dentro da nova página criada.
+                    newPage.appendChild(newLyrics);
+
+                    // Adiciona a nova página ao container principal de conteúdo.
+                    contentContainer.appendChild(newPage);
+
+                    // Adiciona os eventos necessários ao novo container de texto.
+                    addEventListenersToLyrics(newLyrics);
+
+                    // Evento para focar automaticamente na nova página ao clicar nela.
+                    newPage.addEventListener("click", function (event) {
+                        event.stopPropagation(); // Evita que o clique afete outros elementos.
+                        newLyrics.focus(); // Define o foco no novo campo de texto.
+                        moveCursorToEnd(newLyrics); // Move o cursor para o final do texto.
+                    });
+
+                    // Se o usuário estava digitando no container original, move o foco para o novo.
+                    if (document.activeElement === lyricsContainer) {
+                        newLyrics.focus();
+                        moveCursorToEnd(newLyrics);
+                    }
+
+                    // Atualiza a lista de páginas para incluir a nova página criada.
+                    pages = document.querySelectorAll(".page");
+                }
+            });
+        }
+
+
+
+        /* ## function adjustPages() {
+            let lyricsContainers = document.querySelectorAll(".lyrics");
+            let pages = document.querySelectorAll(".page");
+
+
+
+            lyricsContainers.forEach((lyricsContainer, index) => {
+                let maxHeight = pages[index].clientHeight - 140; // Ajuste para compensar margens
+                if (lyricsContainer.scrollHeight > maxHeight) {
+                    console.log("Altura excedida na página:", index + 1);
+
+                    let marginSize = parseInt(document.getElementById("marginSize").value);
+                    let newPage = createPage(marginSize);
+                    let newLyrics = document.createElement("div");
+                    newLyrics.classList.add("lyrics");
+                    newLyrics.setAttribute("contenteditable", "true");
+
+                    let overflowText = splitOverflowText(lyricsContainer, maxHeight);
+                    if (!overflowText.trim()) return; // Se não houver texto para mover, evita loop infinito
+
+                    newLyrics.innerHTML = overflowText;
+                    lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+
+                    newPage.appendChild(newLyrics);
+                    document.querySelector("#content").appendChild(newPage);
+
+                    // Evento para focar na página correta ao clicar
+                    newPage.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        newLyrics.focus();
+                        moveCursorToEnd(newLyrics);
+                    });
+
+                    // Mantém o foco na página onde o usuário está digitando
+                    if (document.activeElement === lyricsContainer) {
+                        newLyrics.focus();
+                        moveCursorToEnd(newLyrics);
+                    }
+                }
+            });
+        } #*/
+
+        /****  RECENTE
+         function adjustPages(currentText) {
+              let pages = document.querySelectorAll(".page");
+              let maxHeight = pages[pages.length - 1].clientHeight - 140;
+              let lyricsContainer = pages[pages.length - 1].querySelector(".lyrics");
+              //console.log(maxHeight);
+  
+              if (!lyricsContainer) return; // Garante que há conteúdo antes de continuar
+  
+              // Se o conteúdo ainda estiver cabendo, não faz nada
+              if (lyricsContainer.scrollHeight <= maxHeight) return;
+  
+              // Criar uma nova página apenas se houver texto excedente
+              let marginSize = parseInt(document.getElementById("marginSize").value);
+              let newPage = createPage(marginSize);
+              let newLyrics = document.createElement("div");
+              newLyrics.classList.add("lyrics");
+              newLyrics.setAttribute("contenteditable", "true");
+  
+              console.log("scrollHeight: " + lyricsContainer.scrollHeight);
+              console.log("maxHeight: " + maxHeight);
+  
+              let overflowText = splitOverflowText(lyricsContainer, maxHeight);
+              if (!overflowText.trim()) return; // Se não houver texto para mover, evita loop infinito
+  
+              newLyrics.innerHTML = overflowText;
+              lyricsContainer.innerHTML = lyricsContainer.innerHTML.replace(overflowText, "").trim();
+  
+              newPage.appendChild(newLyrics);
+              document.querySelector("#content").appendChild(newPage);
+  
+              addEventListenersToLyrics(newLyrics); // Adiciona eventos corretamente
+  
+              newPage.addEventListener("click", function (event) {
+                  event.stopPropagation();
+                  newLyrics.focus();
+                  moveCursorToEnd(newLyrics);
+              });
+  
+  
+              // 🔥 Apenas chama `adjustPages` novamente se ainda houver texto excedente
+              if (newLyrics.scrollHeight >= maxHeight) {
+                  setTimeout(() => adjustPages(newLyrics), 100);
+  
+              }
+          }*******/
+
+
+
+        // Função para dividir corretamente o texto sem cortar palavras
+        function splitOverflowText(container, maxHeight) {
+            // Divide o texto do container em um array de palavras, separando pelo espaço.
+            let words = container.innerHTML.split(" ");
+
+            // Variável temporária para armazenar o texto enquanto testamos o tamanho.
+            let tempText = "";
+
+            // Cria um elemento temporário para medir a altura do texto.
+            let testElement = document.createElement("div");
+
+            // Esconde o elemento temporário para que ele não seja visível na página.
+            testElement.style.visibility = "hidden";
+
+            // Posiciona o elemento de forma absoluta para que ele não afete o layout.
+            testElement.style.position = "absolute";
+
+            // Adiciona a classe "lyrics" ao elemento temporário para manter a mesma formatação.
+            testElement.classList.add("lyrics");
+
+            // Adiciona o elemento temporário ao corpo do documento.
+            document.body.appendChild(testElement);
+
+            // Itera sobre cada palavra do texto para verificar até onde cabe na página.
+            for (let i = 0; i < words.length; i++) {
+                // Define o conteúdo do elemento temporário com o texto acumulado + a próxima palavra.
+                testElement.innerHTML = tempText + " " + words[i];
+
+                // Verifica se a altura do elemento ultrapassa o limite máximo da página.
+                if (testElement.scrollHeight > maxHeight) {
+                    // Remove o elemento temporário do documento para evitar lixo no DOM.
+                    document.body.removeChild(testElement);
+
+                    // Retorna o texto excedente, ou seja, o que não coube na página.
+                    return i > 0 ? words.slice(i).join(" ") : "";
+                }
+
+                // Se o texto ainda cabe na página, adiciona a palavra atual ao texto temporário.
+                tempText += " " + words[i];
+            }
+
+            // Remove o elemento temporário após a verificação, caso todo o texto tenha cabido.
+            document.body.removeChild(testElement);
+
+            // Retorna uma string vazia se todo o texto couber na página sem precisar ser cortado.
+            return "";
+        }
+
+        // Função para mover o cursor para o final do texto
+        function moveCursorToEnd(element) {
+            let range = document.createRange();
+            let selection = window.getSelection();
+            range.selectNodeContents(element);
+            range.collapse(false); // Posiciona o cursor no final do conteúdo
+            selection.addRange(range); // Adiciona o novo range (seleção) para mover o cursor
+        }
+
+
+
+        // Função para criar uma nova página manualmente
+        function addNewPage() {
+            let contentDiv = document.getElementById("content");
+            let marginSize = 20; // Padrão de margem
+            let newPage = createPage(marginSize);
+
+            let newLyrics = document.createElement("div");
+            newLyrics.classList.add("lyrics");
+            newLyrics.setAttribute("contenteditable", "true");
+            newPage.appendChild(newLyrics);
+            contentDiv.appendChild(newPage);
+
+            // Evento para focar na página ao clicar
+            newPage.addEventListener("click", function () {
+                newLyrics.focus();
+                moveCursorToEnd(newLyrics);
+            });
+
+            // Move o foco automaticamente para a nova página criada
+            newLyrics.focus();
+        }
+        // Evento para o botão de adicionar página
+
+        function handleBackspace(event) {
+
+            if (event.key === "Backspace") {
+                let pages = document.querySelectorAll(".page");
+                let firstPage = pages[0];
+                let allTextContainers = document.querySelectorAll(".lyrics");
+
+                allTextContainers.forEach((textContainer, index) => {
+                    if (textContainer.innerHTML == "" && pages[index] && pages.length > 1) {
+                        pages[index].remove();
+                        adjustPages();
+                    }
+                });
+            }
+        }
+
+
+        window.onload = generatePages;

@@ -1,0 +1,1 @@
+.player-layout{display:grid;grid-template-columns:280px 1fr;gap:24px}.player-sidebar{background:#f8f9fa;border-radius:12px;padding:16px}.player-main{background:#fff;border-radius:12px;padding:24px;box-shadow:0 4px 12px #0000000d}.player-now{border-bottom:1px solid #eaeaea;padding-bottom:16px}.player-controls{display:flex;gap:12px;margin-top:12px}

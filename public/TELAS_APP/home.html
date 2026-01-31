@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocare Music - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding-bottom: 60px; /* Ajuste para o bottom bar */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #0288d1;
+            color: white;
+            padding: 15px;
+            font-size: 22px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #0288d1;
+            font-size: 18px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Bottom Bar (Aparece apenas no Mobile) */
+        .bottom-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0288d1;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .bottom-bar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        /* Versão Mobile */
+        @media (max-width: 768px) {
+            .menu {
+                display: none; /* Esconde o menu superior no mobile */
+            }
+
+            .bottom-bar {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>Tocare Music</header>
+
+    <div class="container">
+        <nav class="menu">
+            <a href="#">Músicas</a>
+            <a href="#">Playlists</a>
+            <a href="perfil.html">Perfil</a>
+        </nav>
+
+        <div class="content">
+            <div class="card">🎵 Música em destaque</div>
+            <div class="card">🔥 Novidades</div>
+            <div class="card">📅 Próximos eventos</div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar (aparece no Mobile) -->
+    <div class="bottom-bar">
+        <a href="#">🏠 Home</a>
+        <a href="#">🎵 Músicas</a>
+        <a href="#">📂 Playlists</a>
+        <a href="perfil.html">👤 Perfil</a>
+    </div>
+
+</body>
+</html>

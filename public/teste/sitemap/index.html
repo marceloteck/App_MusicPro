@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de URLs do Sitemap</title>
+</head>
+
+<body>
+    <input type="file" id="fileInput" accept=".xml">
+    <button onclick="countUrls()">Contar URLs</button>
+    <p>Total de URLs: <span id="urlCount">0</span></p>
+
+    <script>
+        function countUrls() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Selecione um arquivo XML primeiro.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(event.target.result, "text/xml");
+                const urls = xmlDoc.getElementsByTagName("url");
+                document.getElementById("urlCount").textContent = urls.length;
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+
+</html>
