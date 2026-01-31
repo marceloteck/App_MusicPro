@@ -1,0 +1,1 @@
+import{_ as s,c as a,d as e,o}from"./app-0b8657a5.js";const c={},t={class:"gif"};function _(d,n){return o(),a("div",t,n[0]||(n[0]=[e("div",{class:"containe"},[e("span"),e("span"),e("span"),e("span")],-1)]))}const r=s(c,[["render",_],["__scopeId","data-v-cfd4f5cf"]]);export{r as default};

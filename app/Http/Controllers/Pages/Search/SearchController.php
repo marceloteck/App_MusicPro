@@ -44,15 +44,4 @@ class SearchController extends Controller
             'song' => $result['song'],
         ]);
     }
-
-    public function previewExternal(Request $request, SongImportService $importService)
-    {
-        $data = $request->validate([
-            'url' => 'required|url',
-        ]);
-
-        $result = $importService->previewFromUrl($data['url']);
-
-        return response()->json($result);
-    }
 }
