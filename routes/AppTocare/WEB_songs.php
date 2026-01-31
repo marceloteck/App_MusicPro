@@ -11,4 +11,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/songs/{id}/edit', [SongController::class, 'edit'])->name('songs.edit'); // ❗ Formulário de edição (FALTA IMPLEMENTAR)
     Route::put('/songs/{id}', [SongController::class, 'update'])->name('songs.update'); // ❗ Atualizar música (FALTA IMPLEMENTAR)
 Route::delete('/songs/{id}', [SongController::class, 'destroy'])->name('songs.destroy'); // ❗ Excluir música (FALTA IMPLEMENTAR)
+    Route::post('/songs/{song}/corrections', [SongController::class, 'storeCorrection'])->name('songs.corrections.store');
 });

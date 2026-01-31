@@ -1,12 +1,28 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
   musica: {
     type: Object,
     required: true,
   },
+  versions: {
+    type: Array,
+    default: () => [],
+  },
 });
+
+const page = usePage();
+const tabs = [
+  { key: 'letras', label: 'Letras' },
+  { key: 'cifras', label: 'Cifras' },
+  { key: 'videos', label: 'Vídeos' },
+  { key: 'historico', label: 'Histórico' },
+];
+
+const activeTab = ref('cifras');
+const stageMode = ref(false);
 
 const state = ref({
   fontSize: 18,
@@ -28,11 +44,14 @@ const rawText = computed(() => {
   if (Array.isArray(props.musica?.letra)) {
     return props.musica.letra.join('\n');
   }
-  return props.musica?.texto ?? '';
+  return props.musica?.texto ?? props.musica?.chords ?? '';
 });
 
 const songTitle = computed(() => props.musica?.title ?? props.musica?.titulo ?? 'Cifra');
 const songArtist = computed(() => props.musica?.artist ?? props.musica?.artista ?? '');
+const songComposer = computed(() => props.musica?.composer ?? '');
+const songSinger = computed(() => props.musica?.singer ?? '');
+const songDescription = computed(() => props.musica?.description ?? '');
 
 const NOTES_SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const NOTES_FLAT = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
@@ -153,29 +172,6 @@ const lineModels = computed(() => {
   return models;
 });
 
-const linesPerPage = computed(() => {
-  const headerHeight = 120;
-  const footerHeight = 36;
-  const pageHeight = 1123;
-  const lineHeight = state.value.fontSize * 1.8;
-  return Math.max(1, Math.floor((pageHeight - headerHeight - footerHeight - 80) / lineHeight));
-});
-
-const paginatedLines = computed(() => {
-  const chunkSize = linesPerPage.value;
-  const pages = [];
-  let current = [];
-  lineModels.value.forEach((line) => {
-    current.push(line);
-    if (current.length >= chunkSize) {
-      pages.push(current);
-      current = [];
-    }
-  });
-  if (current.length) pages.push(current);
-  return pages;
-});
-
 const semitonesForChords = computed(() =>
   state.value.capoEnabled ? state.value.transpose - state.value.capoFret : state.value.transpose
 );
@@ -199,7 +195,7 @@ const increaseFont = () => {
 };
 
 const decreaseFont = () => {
-  state.value.fontSize = Math.max(10, state.value.fontSize - 2);
+  state.value.fontSize = Math.max(12, state.value.fontSize - 2);
 };
 
 const transposeUp = () => {
@@ -209,237 +205,409 @@ const transposeUp = () => {
 const transposeDown = () => {
   state.value.transpose = Math.max(-24, state.value.transpose - 1);
 };
+
+const videoUrl = computed(() => props.musica?.video_url || props.musica?.video || '');
+
+const videoEmbedUrl = computed(() => {
+  if (!videoUrl.value) return '';
+  if (videoUrl.value.includes('youtube.com') || videoUrl.value.includes('youtu.be')) {
+    const base = typeof window === 'undefined' ? 'http://localhost' : window.location.origin;
+    const url = new URL(videoUrl.value, base);
+    const id = url.searchParams.get('v') || url.pathname.split('/').pop();
+    return `https://www.youtube.com/embed/${id}`;
+  }
+  return '';
+});
+
+const canSuggest = computed(() => !!page.props.auth?.user);
+const correctionForm = useForm({
+  content: '',
+});
+
+watch(
+  rawText,
+  (value) => {
+    if (!correctionForm.content) {
+      correctionForm.content = value;
+    }
+  },
+  { immediate: true }
+);
+
+const submitCorrection = () => {
+  if (!props.musica?.id) return;
+  correctionForm.post(route('songs.corrections.store', props.musica.id), {
+    preserveScroll: true,
+  });
+};
 </script>
 
 <template>
   <div
-    class="cifra-viewer"
+    class="music-viewer"
+    :class="{ 'stage-mode': stageMode }"
     :style="{
       '--chordColor': state.chordColor,
       '--chordWeight': state.boldChord ? 800 : 600,
       '--lyricWeight': state.boldLyric ? 700 : 400,
+      '--fontSize': `${state.fontSize}px`,
     }"
   >
-    <div class="topbar">
-      <button class="btn" @click="decreaseFont">A-</button>
-      <button class="btn" @click="increaseFont">A+</button>
-
-      <div class="pill">
-        <span class="label">Fonte</span>
-        <b>{{ state.fontSize }}px</b>
+    <header class="music-header">
+      <div class="music-title">
+        <h1>{{ songTitle }}</h1>
+        <p v-if="songArtist" class="text-muted">{{ songArtist }}</p>
+        <div class="meta" v-if="songSinger || songComposer || songDescription">
+          <span v-if="songSinger">Cantor: {{ songSinger }}</span>
+          <span v-if="songComposer">Compositor: {{ songComposer }}</span>
+          <span v-if="songDescription">{{ songDescription }}</span>
+        </div>
       </div>
-
-      <div class="pill">
-        <span class="label">Tom</span>
-        <button class="btn" @click="transposeDown">-</button>
-        <b>{{ state.transpose }}</b>
-        <button class="btn" @click="transposeUp">+</button>
-        <span class="helper">(semitons)</span>
+      <div class="music-actions">
+        <button class="btn btn-outline-secondary" @click="stageMode = !stageMode">
+          {{ stageMode ? 'Modo normal' : 'Modo palco' }}
+        </button>
+        <button class="btn btn-outline-secondary" @click="decreaseFont">A-</button>
+        <button class="btn btn-outline-secondary" @click="increaseFont">A+</button>
       </div>
+    </header>
 
-      <div class="pill">
-        <span class="label">Capotraste</span>
-        <select v-model="state.capoEnabled">
-          <option :value="false">Não</option>
-          <option :value="true">Sim</option>
-        </select>
-        <span class="label">Traste</span>
-        <input v-model.number="state.capoFret" type="number" min="0" max="12" />
-      </div>
-
-      <div class="pill">
-        <span class="label">Cor da cifra</span>
-        <input v-model="state.chordColor" type="color" />
-      </div>
-
-      <div class="pill">
-        <span class="label">Negrito</span>
-        <label>
-          <input v-model="state.boldChord" type="checkbox" /> Cifra
-        </label>
-        <label>
-          <input v-model="state.boldLyric" type="checkbox" /> Letra
-        </label>
-      </div>
-
-      <button class="btn" @click="() => window.print()">Imprimir</button>
+    <div class="tabs">
+      <button
+        v-for="tab in tabs"
+        :key="tab.key"
+        :class="['tab', { active: activeTab === tab.key }]"
+        @click="activeTab = tab.key"
+      >
+        {{ tab.label }}
+      </button>
     </div>
 
-    <div class="pages-wrap" :style="{ '--fs': `${state.fontSize}px` }">
-      <div v-for="(page, pageIndex) in paginatedLines" :key="pageIndex" class="page">
-        <div class="header">
-          <p class="title">{{ songTitle }}</p>
-          <p class="subtitle">
-            <span class="badge">{{ songArtist }}</span>
-            <span class="badge">Transposição: {{ state.transpose }}</span>
-            <span class="badge">Capotraste: {{ state.capoEnabled ? state.capoFret : 'Não' }}</span>
-          </p>
-        </div>
+    <section v-if="activeTab === 'letras'" class="panel">
+      <pre class="lyrics-block">{{ rawText }}</pre>
+    </section>
 
-        <div class="content">
-          <div v-for="(line, index) in page" :key="index" class="line-wrapper">
-            <div v-if="line.type === 'divider'" class="divider"></div>
-            <div v-else class="music-line">
-              <span
-                v-for="(cell, cellIndex) in lineCells(line.model)"
-                :key="cellIndex"
-                class="cell"
-              >
-                <span class="chord">{{ cell.chord }}</span>
-                <span class="lyric">{{ cell.char }}</span>
-              </span>
-            </div>
+    <section v-else-if="activeTab === 'cifras'" class="panel">
+      <div class="toolbar">
+        <div class="pill">
+          <span class="label">Tom</span>
+          <button class="btn btn-sm" @click="transposeDown">-</button>
+          <b>{{ state.transpose }}</b>
+          <button class="btn btn-sm" @click="transposeUp">+</button>
+        </div>
+        <div class="pill">
+          <span class="label">Capotraste</span>
+          <select v-model="state.capoEnabled" class="form-select form-select-sm">
+            <option :value="false">Não</option>
+            <option :value="true">Sim</option>
+          </select>
+          <input v-model.number="state.capoFret" type="number" min="0" max="12" class="form-control form-control-sm" />
+        </div>
+        <div class="pill">
+          <span class="label">Cor cifra</span>
+          <input v-model="state.chordColor" type="color" class="form-control form-control-color" />
+        </div>
+        <div class="pill">
+          <label class="form-check-label">
+            <input v-model="state.boldChord" type="checkbox" class="form-check-input" /> Cifra
+          </label>
+          <label class="form-check-label">
+            <input v-model="state.boldLyric" type="checkbox" class="form-check-input" /> Letra
+          </label>
+        </div>
+      </div>
+
+      <div class="music-sheet" :style="{ '--fs': `${state.fontSize}px` }">
+        <div v-for="(line, index) in lineModels" :key="index" class="line-wrapper">
+          <div v-if="line.type === 'divider'" class="divider"></div>
+          <div v-else class="music-line">
+            <span v-for="(cell, cellIndex) in lineCells(line.model)" :key="cellIndex" class="cell">
+              <span class="chord">{{ cell.chord }}</span>
+              <span class="lyric">{{ cell.char }}</span>
+            </span>
           </div>
         </div>
-
-        <div class="footer">Página {{ pageIndex + 1 }} / {{ paginatedLines.length }}</div>
       </div>
-    </div>
+
+      <div v-if="canSuggest" class="correction-box">
+        <h5>Sugerir correção</h5>
+        <textarea
+          v-model="correctionForm.content"
+          class="form-control"
+          rows="6"
+          placeholder="Atualize a cifra/letre como deveria ficar"
+        ></textarea>
+        <button
+          class="btn btn-primary mt-3"
+          type="button"
+          :disabled="correctionForm.processing"
+          @click="submitCorrection"
+        >
+          Enviar correção
+        </button>
+      </div>
+    </section>
+
+    <section v-else-if="activeTab === 'videos'" class="panel">
+      <div v-if="videoEmbedUrl" class="video-frame">
+        <iframe
+          :src="videoEmbedUrl"
+          title="Vídeo"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div v-else>
+        <p class="text-muted">Nenhum vídeo encontrado para esta música.</p>
+        <a v-if="videoUrl" :href="videoUrl" target="_blank" rel="noreferrer">Abrir link</a>
+      </div>
+    </section>
+
+    <section v-else-if="activeTab === 'historico'" class="panel">
+      <div v-if="versions.length" class="history-list">
+        <div v-for="item in versions" :key="item.id" class="history-item">
+          <div class="history-meta">
+            <strong>{{ item.source }}</strong>
+            <span class="text-muted">· {{ new Date(item.created_at).toLocaleString('pt-BR') }}</span>
+          </div>
+          <pre class="history-content">{{ item.content }}</pre>
+        </div>
+      </div>
+      <p v-else class="text-muted">Nenhuma versão registrada ainda.</p>
+    </section>
+
+    <section v-else class="panel">
+      <p class="text-muted">Selecione uma aba para visualizar o conteúdo.</p>
+    </section>
   </div>
 </template>
 
 <style scoped>
-.cifra-viewer {
-  font-family: "Inter", sans-serif;
+.music-viewer {
+  background: #f7f8fa;
+  border-radius: 16px;
+  padding: 24px;
+  color: #1d1f23;
 }
 
-.topbar {
+.music-viewer.stage-mode {
+  background: #0d0f14;
+  color: #f1f3f7;
+}
+
+.music-viewer.stage-mode .text-muted {
+  color: #a6b0bf !important;
+}
+
+.music-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.music-title h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.meta {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  align-items: center;
-  padding: 12px;
-  border-bottom: 1px solid #e0e0e0;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 5;
+  font-size: 13px;
+  color: #6c757d;
 }
 
-.btn {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f7f7f7;
-  cursor: pointer;
+.tabs {
+  display: flex;
+  gap: 8px;
+  background: #e9ecef;
+  padding: 6px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.music-viewer.stage-mode .tabs {
+  background: #1c212b;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.tab.active {
+  background: #ffffff;
+  color: #111827;
+}
+
+.music-viewer.stage-mode .tab.active {
+  background: #2b3240;
+  color: #ffffff;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.music-viewer.stage-mode .panel {
+  background: #151a22;
+}
+
+.lyrics-block {
+  white-space: pre-wrap;
+  font-size: 16px;
+  line-height: 1.7;
+  font-family: 'Inter', sans-serif;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .pill {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  background: #f0f4f8;
+  gap: 8px;
+  background: #f1f3f7;
+  padding: 8px 12px;
   border-radius: 999px;
   font-size: 13px;
 }
 
-.pill label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.music-viewer.stage-mode .pill {
+  background: #1e2531;
 }
 
-.helper {
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-.pages-wrap {
-  padding: 24px;
-  background: #f5f6f8;
-}
-
-.page {
-  background: #fff;
-  padding: 24px;
-  margin-bottom: 24px;
+.music-sheet {
+  background: #f8f9fb;
   border-radius: 12px;
-  min-height: 1123px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: var(--fs);
 }
 
-.header {
-  margin-bottom: 16px;
-}
-
-.title {
-  font-size: 24px;
-  margin: 0;
-}
-
-.subtitle {
-  margin: 6px 0 0;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  background: #eef2f7;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-}
-
-.content {
-  flex: 1;
+.music-viewer.stage-mode .music-sheet {
+  background: #0f141c;
 }
 
 .music-line {
   display: flex;
   flex-wrap: wrap;
-  font-family: "Courier New", monospace;
-  font-size: var(--fs);
+  align-items: flex-start;
 }
 
 .cell {
+  width: 1ch;
   display: inline-flex;
   flex-direction: column;
-  min-width: 0.6em;
   align-items: center;
+  flex: 0 0 auto;
 }
 
 .chord {
+  height: 1.1em;
+  font-size: calc(var(--fontSize) * 0.8);
+  line-height: 1.1em;
   color: var(--chordColor);
   font-weight: var(--chordWeight);
-  font-size: 0.85em;
-  line-height: 1;
 }
 
 .lyric {
+  height: 1.2em;
+  line-height: 1.2em;
   font-weight: var(--lyricWeight);
-  line-height: 1.4;
+  white-space: pre;
 }
 
 .divider {
-  height: 16px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 12px 0;
 }
 
-.footer {
-  text-align: right;
-  font-size: 12px;
-  color: #666;
-  margin-top: 16px;
+.music-viewer.stage-mode .divider {
+  background: rgba(255, 255, 255, 0.12);
 }
 
-@media print {
-  .topbar {
-    display: none;
+.video-frame iframe {
+  width: 100%;
+  min-height: 360px;
+  border-radius: 12px;
+}
+
+.correction-box {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.music-viewer.stage-mode .correction-box {
+  border-top-color: #2a3140;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f9fafb;
+}
+
+.music-viewer.stage-mode .history-item {
+  border-color: #2a3140;
+  background: #111827;
+}
+
+.history-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.history-content {
+  white-space: pre-wrap;
+  max-height: 240px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.music-viewer.stage-mode .history-content {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 768px) {
+  .music-viewer {
+    padding: 16px;
   }
 
-  .pages-wrap {
-    padding: 0;
-    background: #fff;
+  .music-title h1 {
+    font-size: 22px;
   }
 
-  .page {
-    box-shadow: none;
-    margin: 0;
-    border-radius: 0;
-    page-break-after: always;
+  .panel {
+    padding: 16px;
   }
 }
 </style>

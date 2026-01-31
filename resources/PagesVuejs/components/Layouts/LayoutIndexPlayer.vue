@@ -4,6 +4,7 @@
 <NavBarPlayer />
     <div class="layoutPage">
         <div class="container-xl">
+            <OfflineStatus />
             <slot />
         </div>
     </div>
