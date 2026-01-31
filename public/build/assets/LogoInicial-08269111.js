@@ -1,1 +1,0 @@
-import{_ as e,c as a,B as c,o as t}from"./app-7df99663.js";const _={__name:"LogoInicial",props:{color:{type:String,default:"#ffffff"}},setup(o){return(f,s)=>(t(),a("div",{style:c({color:o.color||"#ffffff"}),class:"app-logo"}," Tocare Music ",4))}},n=e(_,[["__scopeId","data-v-1a10fba2"]]);export{n as default};

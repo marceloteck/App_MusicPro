@@ -1,0 +1,1 @@
+import{_ as c,a as n,c as r,b as o,d as t,e as d,F as l,o as _}from"./app-0b8657a5.js";const i={},p={class:"indexpage"};function m(u,e){const a=n("AppHead"),s=n("LayoutIndexPages");return _(),r(l,null,[o(a,{title:"Inicio"}),t("div",p,[o(s,null,{default:d(()=>e[0]||(e[0]=[t("h1",null,"menu mais",-1)])),_:1})])],64)}const f=c(i,[["render",m]]);export{f as default};
